@@ -5,18 +5,11 @@ import "styles/globals.css";
 import type { AppProps } from "next/app";
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const { modalInformation, setModalInformation } = useGlobalModal({
-    isModalOpen,
-    setIsModalOpen,
-  });
+  const { modalInformation, setModalInformation } = useGlobalModal();
 
   return (
     <>
-      <Modal
-        modalInformation={modalInformation}
-        setModalInformation={setModalInformation}
-      />
+      <Modal />
       <Component {...pageProps} />
     </>
   );

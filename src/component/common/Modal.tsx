@@ -1,10 +1,9 @@
 import styled from "@emotion/styled";
-import { ModalInformationType } from "@hook/useGlobalModal";
-import { Dispatch, SetStateAction } from "react";
+import useGlobalModal from "@hook/useGlobalModal";
 
-export const shouldNotForwardProp = (...args: string[]) => ({
-  shouldForwardProp: (propName: string) => !args.includes(propName),
-});
+// export const shouldNotForwardProp = (...args: string[]) => ({
+//   shouldForwardProp: (propName: string) => !args.includes(propName),
+// });
 
 const ModalBackground = styled.div({
   position: "fixed",
@@ -57,14 +56,8 @@ const ButtonWrapper = styled.div({
 const RigthButton = styled.button({});
 const LeftButton = styled.button({});
 
-const Modal = ({
-  modalInformation,
-  setModalInformation,
-}: {
-  modalInformation: ModalInformationType;
-  setModalInformation?: Dispatch<SetStateAction<ModalInformationType>>;
-}) => {
-  // useGlobalModal();
+const Modal = () => {
+  const { modalInformation, setModalInformation } = useGlobalModal();
 
   const {
     isModalOpen,

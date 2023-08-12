@@ -4,8 +4,6 @@ import {
   useState,
   MouseEvent,
   MouseEventHandler,
-  SetStateAction,
-  Dispatch,
 } from "react";
 
 export const ModalInformation = {
@@ -54,13 +52,7 @@ export type ModalInformationType = {
 
 // type ModalType = Confirm | Delete | Exit;
 
-const useGlobalModal = ({
-  isModalOpen,
-  setIsModalOpen,
-}: {
-  isModalOpen: boolean;
-  setIsModalOpen: Dispatch<SetStateAction<boolean>>;
-}) => {
+const useGlobalModal = () => {
   // 전역 상태 라이브러리 도입
   const [modalInformation, setModalInformation] =
     useState<ModalInformationType>(ModalInformation);
@@ -71,13 +63,12 @@ const useGlobalModal = ({
         e.stopPropagation();
         func && func();
         setModalInformation(ModalInformation);
-        setIsModalOpen(false);
       },
     []
   );
 
   useEffect(() => {
-    if (isModalOpen) {
+    if (ModalInformation) {
       setModalInformation({
         isModalOpen: true,
         leftBtnName: "취소",
@@ -94,7 +85,7 @@ const useGlobalModal = ({
         }),
       });
     }
-  }, [isModalOpen]);
+  }, [ModalInformation]);
 
   return { modalInformation, setModalInformation };
 };
