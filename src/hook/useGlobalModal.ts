@@ -8,15 +8,15 @@ import {
   Dispatch,
 } from "react";
 
-export const empty = {
+export const ModalInformation = {
   isModalOpen: false,
   rightBtnName: "",
   message: "",
   handleClickRightBtn: () => {},
-  handleClickDimmed: () => {},
+  handleClickModalBackground: () => {},
 };
 
-export type ModalInformation = {
+export type ModalInformationType = {
   isModalOpen: boolean;
   leftBtnName?: string;
   rightBtnName: string;
@@ -24,7 +24,7 @@ export type ModalInformation = {
   message: string;
   handleClickLeftBtn?: MouseEventHandler<HTMLButtonElement>;
   handleClickRightBtn: MouseEventHandler<HTMLButtonElement>;
-  handleClickDimmed: MouseEventHandler<HTMLDivElement>;
+  handleClickModalBackground: MouseEventHandler<HTMLDivElement>;
 };
 
 // type Confirm = {
@@ -63,14 +63,14 @@ const useGlobalModal = ({
 }) => {
   // 전역 상태 라이브러리 도입
   const [modalInformation, setModalInformation] =
-    useState<ModalInformation>(empty);
+    useState<ModalInformationType>(ModalInformation);
 
   const handleClickBtnInModal = useCallback(
     (func?: () => void) =>
       (e: MouseEvent<HTMLButtonElement | HTMLDivElement>) => {
         e.stopPropagation();
         func && func();
-        setModalInformation(empty);
+        setModalInformation(ModalInformation);
         setIsModalOpen(false);
       },
     []
@@ -89,7 +89,7 @@ const useGlobalModal = ({
         handleClickRightBtn: handleClickBtnInModal(() => {
           console.log("handleClickRightBtn");
         }),
-        handleClickDimmed: handleClickBtnInModal(() => {
+        handleClickModalBackground: handleClickBtnInModal(() => {
           console.log("handleClickDimmed");
         }),
       });

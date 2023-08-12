@@ -1,12 +1,12 @@
 import styled from "@emotion/styled";
-import { ModalInformation } from "@hook/useGlobalModal";
+import { ModalInformationType } from "@hook/useGlobalModal";
 import { Dispatch, SetStateAction } from "react";
 
 export const shouldNotForwardProp = (...args: string[]) => ({
   shouldForwardProp: (propName: string) => !args.includes(propName),
 });
 
-const Dimmed = styled.div({
+const ModalBackground = styled.div({
   position: "fixed",
   top: 0,
   left: 0,
@@ -61,14 +61,14 @@ const Modal = ({
   modalInformation,
   setModalInformation,
 }: {
-  modalInformation: ModalInformation;
-  setModalInformation: Dispatch<SetStateAction<ModalInformation>>;
+  modalInformation: ModalInformationType;
+  setModalInformation?: Dispatch<SetStateAction<ModalInformationType>>;
 }) => {
   // useGlobalModal();
 
   const {
     isModalOpen,
-    handleClickDimmed,
+    handleClickModalBackground,
     title,
     message,
     leftBtnName,
@@ -79,7 +79,7 @@ const Modal = ({
 
   return (
     isModalOpen && (
-      <Dimmed onClick={handleClickDimmed}>
+      <ModalBackground onClick={handleClickModalBackground}>
         <Container>
           <TextWrapper>
             {title && <Title>{title}</Title>}
@@ -96,7 +96,7 @@ const Modal = ({
             </RigthButton>
           </ButtonWrapper>
         </Container>
-      </Dimmed>
+      </ModalBackground>
     )
   );
 };

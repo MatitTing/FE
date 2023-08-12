@@ -13,7 +13,6 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <>
-      {/* <button onClick={() => setIsModalOpen(true)}>버튼</button> */}
       <Modal
         modalInformation={modalInformation}
         setModalInformation={setModalInformation}

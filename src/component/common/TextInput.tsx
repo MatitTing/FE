@@ -24,7 +24,7 @@ const ErrorText = styled.p({
 });
 
 interface InputProps {
-  register: UseFormRegisterReturn<string>;
+  register?: UseFormRegisterReturn<string>;
   value?: string;
   placeholder?: string;
   errorMessage?: string;
@@ -43,12 +43,9 @@ const TextInput = ({
   whiteSpace = true,
 }: InputProps) => {
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    const { onChange } = register;
     if (!whiteSpace) {
       e.target.value = e.target.value.replace(/\s/gi, "");
     }
-
-    onChange(e);
   };
 
   return (
