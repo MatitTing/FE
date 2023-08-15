@@ -4,18 +4,10 @@ import {
   useState,
   MouseEvent,
   MouseEventHandler,
+  createContext,
 } from "react";
 
-export const ModalInformation = {
-  isModalOpen: false,
-  rightBtnName: "",
-  message: "",
-  handleClickRightBtn: () => {},
-  handleClickModalBackground: () => {},
-};
-
 export type ModalInformationType = {
-  isModalOpen: boolean;
   leftBtnName?: string;
   rightBtnName: string;
   title?: string;
@@ -25,69 +17,70 @@ export type ModalInformationType = {
   handleClickModalBackground: MouseEventHandler<HTMLDivElement>;
 };
 
-// type Confirm = {
-//   type: "confirm";
-//   rightBtnName: "확인";
-//   message: string;
-//   handleClickRightBtn: () => void;
-// };
-
-// type Delete = {
-//   type: "delete";
-//   leftBtnName: "취소";
-//   rightBtnName: "삭제";
-//   message: "삭제하기";
-//   handleClickLeftBtn: () => void;
-//   handleClickRightBtn: () => void;
-// };
-
-// type Exit = {
-//   type: "exit";
-//   leftBtnName: "취소";
-//   rightBtnName: "나가기";
-//   message: "나가기";
-//   handleClickLeftBtn: () => void;
-//   handleClickRightBtn: () => void;
-// };
-
-// type ModalType = Confirm | Delete | Exit;
+export type ModalStateContextType = {
+  modaltype: "Confirm" | "Delete" | "Exit";
+  handleClickRightBtn: MouseEventHandler<HTMLButtonElement>;
+};
 
 const useGlobalModal = () => {
   // 전역 상태 라이브러리 도입
   const [modalInformation, setModalInformation] =
-    useState<ModalInformationType>(ModalInformation);
+    useState<ModalStateContextType | null>(null);
+  const [modalContents, setMOdalContents] = useState(null);
 
-  const handleClickBtnInModal = useCallback(
-    (func?: () => void) =>
-      (e: MouseEvent<HTMLButtonElement | HTMLDivElement>) => {
-        e.stopPropagation();
-        func && func();
-        setModalInformation(ModalInformation);
-      },
-    []
-  );
+  useEffect(() => {}, []);
 
-  useEffect(() => {
-    if (ModalInformation) {
-      setModalInformation({
-        isModalOpen: true,
-        leftBtnName: "취소",
-        rightBtnName: "확인",
-        message: "모달입니다.",
-        handleClickLeftBtn: handleClickBtnInModal(() => {
-          console.log("handleClickLeftBtn");
-        }),
-        handleClickRightBtn: handleClickBtnInModal(() => {
-          console.log("handleClickRightBtn");
-        }),
-        handleClickModalBackground: handleClickBtnInModal(() => {
-          console.log("handleClickDimmed");
-        }),
-      });
-    }
-  }, [ModalInformation]);
+  // useEffect(() => {
+  //   if (modalInformation) {
+  //     const { modaltype, handleClickRightBtn } = modalInformation;
 
-  return { modalInformation, setModalInformation };
+  //     switch (modaltype) {
+  //       case "Confirm":
+  //         console.log("확인 입니다.");
+  //         break;
+  //       case "Delete":
+  //         console.log();
+  //         break;
+  //       case "Exit":
+  //         console.log();
+  //         break;
+
+  //       default:
+  //         break;
+  //     }
+  //   }
+  // }, [modalInformation, setModalInformation]);
+
+  // const handleClickBtnInModal = useCallback(
+  //   (func?: () => void) =>
+  //     (e: MouseEvent<HTMLButtonElement | HTMLDivElement>) => {
+  //       e.stopPropagation();
+  //       func && func();
+  //       setModalInformation(null);
+  //     },
+  //   []
+  // );
+
+  // useEffect(() => {
+  //   if (modalInformation) {
+  //     setModalInformation({
+  //       leftBtnName: "취소",
+  //       rightBtnName: "확인",
+  //       message: "모달입니다.",
+  //       handleClickLeftBtn: handleClickBtnInModal(() => {
+  //         console.log("handleClickLeftBtn");
+  //       }),
+  //       handleClickRightBtn: handleClickBtnInModal(() => {
+  //         console.log("handleClickRightBtn");
+  //       }),
+  //       handleClickModalBackground: handleClickBtnInModal(() => {
+  //         console.log("handleClickDimmed");
+  //       }),
+  //     });
+  //   }
+  // }, [handleClickBtnInModal, modalInformation]);
+
+  return { modalContents, modalInformation, setModalInformation };
 };
 
 export default useGlobalModal;
