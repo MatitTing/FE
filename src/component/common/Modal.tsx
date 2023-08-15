@@ -1,5 +1,7 @@
 import styled from "@emotion/styled";
 import useGlobalModal from "@hook/useGlobalModal";
+import { useContext, useEffect, useState } from "react";
+import { ModalStateContext } from "src/contexts/ModalProvider";
 
 // export const shouldNotForwardProp = (...args: string[]) => ({
 //   shouldForwardProp: (propName: string) => !args.includes(propName),
@@ -57,21 +59,22 @@ const RigthButton = styled.button({});
 const LeftButton = styled.button({});
 
 const Modal = () => {
-  const { modalInformation, setModalInformation } = useGlobalModal();
+  const { modalContents } = useGlobalModal();
+
+  if (!modalContents) return;
 
   const {
-    isModalOpen,
     handleClickModalBackground,
     title,
     message,
     leftBtnName,
-    rightBtnName,
     handleClickLeftBtn,
     handleClickRightBtn,
-  } = modalInformation;
+    rightBtnName,
+  } = modalContents;
 
   return (
-    isModalOpen && (
+    modalContents && (
       <ModalBackground onClick={handleClickModalBackground}>
         <Container>
           <TextWrapper>
