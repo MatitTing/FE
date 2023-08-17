@@ -5,12 +5,10 @@ import ModalProvider from "src/contexts/ModalProvider";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <>
-      <ModalProvider>
-        <Modal />
-        <Component {...pageProps} />
-      </ModalProvider>
-    </>
+    <ModalProvider>
+      <Modal />
+      <Component {...pageProps} />
+    </ModalProvider>
   );
 }
 

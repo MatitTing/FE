@@ -1,11 +1,9 @@
 import styled from "@emotion/styled";
-import useGlobalModal from "@hook/useGlobalModal";
-import { useContext, useEffect, useState } from "react";
-import { ModalStateContext } from "src/contexts/ModalProvider";
-
-// export const shouldNotForwardProp = (...args: string[]) => ({
-//   shouldForwardProp: (propName: string) => !args.includes(propName),
-// });
+import { useContext } from "react";
+import {
+  ModalDispatchContext,
+  ModalStateContext,
+} from "src/contexts/ModalProvider";
 
 const ModalBackground = styled.div({
   position: "fixed",
@@ -45,8 +43,6 @@ const TextWrapper = styled.div({
   },
 });
 
-const Title = styled.h4({});
-
 const Description = styled.p({});
 
 const ButtonWrapper = styled.div({
@@ -59,36 +55,31 @@ const RigthButton = styled.button({});
 const LeftButton = styled.button({});
 
 const Modal = () => {
-  const { modalContents } = useGlobalModal();
+  const dispatch = useContext(ModalDispatchContext);
+  const modalInfo = useContext(ModalStateContext);
 
-  if (!modalContents) return;
+  if (!modalInfo) return;
 
-  const {
-    handleClickModalBackground,
-    title,
-    message,
-    leftBtnName,
-    handleClickLeftBtn,
-    handleClickRightBtn,
-    rightBtnName,
-  } = modalContents;
+  const handleModalCancel = (e: { stopPropagation: () => void }) => {
+    e.stopPropagation();
+    dispatch && dispatch({ modalType: "none" });
+  };
 
   return (
-    modalContents && (
-      <ModalBackground onClick={handleClickModalBackground}>
+    modalInfo && (
+      <ModalBackground onClick={handleModalCancel}>
         <Container>
           <TextWrapper>
-            {title && <Title>{title}</Title>}
-            <Description>{message}</Description>
+            <Description>{modalInfo?.contents}</Description>
           </TextWrapper>
           <ButtonWrapper>
-            {leftBtnName && (
-              <LeftButton onClick={handleClickLeftBtn}>
-                {leftBtnName}
+            {modalInfo?.leftBtnName && (
+              <LeftButton onClick={handleModalCancel}>
+                {modalInfo?.leftBtnName}
               </LeftButton>
             )}
-            <RigthButton onClick={handleClickRightBtn}>
-              {rightBtnName}
+            <RigthButton onClick={handleModalCancel}>
+              {modalInfo?.rightBtnName}
             </RigthButton>
           </ButtonWrapper>
         </Container>
