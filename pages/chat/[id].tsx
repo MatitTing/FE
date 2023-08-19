@@ -2,7 +2,7 @@ import BottomInputGroup from "@component/chat/BottomInputGroup";
 import HeaderBtnGroup from "@component/chat/HeaderBtnGroup";
 import MessageList from "@component/chat/MessageList";
 import styled from "@emotion/styled";
-import { ChangeEvent, ReactElement, MouseEvent, useState } from "react";
+import { ReactElement, MouseEvent, useState } from "react";
 
 const Wrapper = styled.div({
   display: "flex",
