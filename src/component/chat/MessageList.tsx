@@ -1,4 +1,7 @@
+import styled from "@emotion/styled";
 import { ReactElement } from "react";
+import { shouldNotForwardProp } from "@utils/common";
+// import Image from "next/image";
 
 const messages = [
   {
@@ -21,105 +24,106 @@ const messages = [
   },
 ];
 
-const MessageList = () => {
-  //  메세지 리스트
+const List = styled.ul({
+  padding: "0 2rem",
+  margin: "0 auto",
+  listStyle: "none",
+  width: "100%",
+  display: "flex",
+  flexDirection: "column",
+});
 
+const ListItem = styled(
+  "li",
+  shouldNotForwardProp("userCheck")
+)<{ userCheck?: string }>(({ userCheck }) => ({
+  display: "flex",
+  alignItems: "center",
+  flexDirection: userCheck === "me" ? "row-reverse" : "row",
+  margin: "1rem 0",
+}));
+
+const ImageBox = styled.div({
+  width: "50px",
+  height: "50px",
+  borderRadius: "50%",
+  overflow: "hidden",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  marginRight: "20px",
+});
+
+const MessageBox = styled(
+  "div",
+  shouldNotForwardProp("userCheck")
+)<{ userCheck?: string }>(({ userCheck }) => ({
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  padding: "1rem",
+  backgroundColor: userCheck === "me" ? "#efebec" : "#efebec",
+  borderRadius: "10px",
+}));
+
+const TextBox = styled.div({
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+});
+
+const NickName = styled(
+  "p",
+  shouldNotForwardProp("userCheck")
+)<{ userCheck?: string }>(({ userCheck }) => ({
+  marginTop: 0,
+  marginBottom: userCheck === "me" ? 0 : "10px",
+  fontSize: "18px",
+  fontWeight: "bold",
+}));
+
+const Message = styled(
+  "p",
+  shouldNotForwardProp("userCheck")
+)<{ userCheck?: string }>(({ userCheck }) => ({
+  margin: 0,
+  color: userCheck === "me" ? "#fff" : "#000",
+}));
+
+const ReadMark = styled(
+  "div",
+  shouldNotForwardProp("userCheck")
+)<{ userCheck?: string }>(({ userCheck }) => ({
+  marginLeft: userCheck === "me" ? "15px" : "0px",
+  marginRight: userCheck === "me" ? "0px" : "15px",
+  alignSelf: "flex-end",
+  color: "rosybrown",
+}));
+
+const MessageList = () => {
   return (
-    <ul
-      style={{
-        padding: 0,
-        margin: "0 auto",
-        listStyle: "none",
-        width: "100%",
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
+    <List>
       {messages
         .slice(0)
         .reverse()
         .map(({ img, nickName, readCheck, message, id }) => (
-          <li
-            key={nickName}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              flexDirection: id === "me" ? "row-reverse" : "row",
-              margin: "1rem 0",
-            }}
-          >
+          <ListItem key={nickName} userCheck={id}>
             {img && (
-              <div
-                style={{
-                  width: 30,
-                  height: 30,
-                  borderRadius: "50%",
-                  overflow: "hidden",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  marginRight: "5%",
-                }}
-              >
-                <img width="30" height="30" src={img} alt="profile" />
-              </div>
+              <ImageBox>
+                {/* nextjs 도메인 설정 후 next Image로 변경 */}
+                <img src={img} width="50" height="50" alt="profile" />
+              </ImageBox>
             )}
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                padding: "1rem",
-                backgroundColor: id === "me" ? "#f43b4b" : "#efebec",
-                borderRadius: "10px",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                  }}
-                >
-                  <p
-                    style={{
-                      marginTop: 0,
-                      marginBottom: id === "me" ? 0 : "10px",
-                      fontSize: "18px",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {nickName}
-                  </p>
-                  <p
-                    style={{
-                      margin: 0,
-                      color: id === "me" ? "#fff" : "#000",
-                    }}
-                  >
-                    {message}
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div
-              style={{
-                marginLeft: id === "me" ? "0px" : "30px",
-                marginRight: id === "me" ? "30px" : "0px",
-                alignSelf: "flex-end",
-                color: "rosybrown",
-              }}
-            >
-              {readCheck ? 1 : ""}
-            </div>
-          </li>
+            <MessageBox userCheck={id}>
+              <TextBox>
+                <NickName userCheck={id}>{nickName}</NickName>
+                <Message>{message}</Message>
+              </TextBox>
+            </MessageBox>
+            <ReadMark>{readCheck ? 1 : ""}</ReadMark>
+          </ListItem>
         ))}
-    </ul>
+    </List>
   );
 };
 

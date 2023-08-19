@@ -56,7 +56,7 @@ const TextInput = ({
       e.target.value = e.target.value.replace(/\s/gi, "");
     }
 
-    onChange && onChange;
+    onChange && onChange(e);
   };
 
   return (

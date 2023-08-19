@@ -1,126 +1,122 @@
-import { ChangeEvent, ReactElement, useEffect } from "react";
-import TextInput from "@component/common/TextInput";
+import styled from "@emotion/styled";
+import { shouldNotForwardProp } from "@utils/common";
+import { ReactElement } from "react";
 
 const userList = [
   {
     img: "",
-    readCheck: true,
-    message: "안녕하세요",
+    nickName: "아무개",
     id: "me",
   },
   {
     img: "",
-    readCheck: true,
-    message: "신청합니다.",
-    id: "me",
+    nickName: "아무개2",
+    id: 0,
   },
   {
     img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2Gz1Gq9Lp3gtG9pm5qT9W8D2PxWMCmb2FLBeoyPo&s",
-    nickName: "Habeeb",
-    readCheck: false,
-    message: "반갑습니다.",
+    nickName: "아무개3",
+    id: 1,
   },
 ];
 
-const PartyUserList = () => {
-  // 멤버 리스트 창 열기 버튼 (리스트에서 멤버 강퇴)
+const Wrapper = styled(
+  "div",
+  shouldNotForwardProp("isOpenUserList")
+)<{ isOpenUserList: boolean }>(({ isOpenUserList }) => ({
+  position: "fixed",
+  top: 0,
+  right: isOpenUserList ? 0 : "-40vw",
+  zIndex: 99999,
+  width: "40vw",
+  maxWidth: "310px",
+  height: "100%",
+  backgroundColor: "#fff",
+  transition: "all 0.5s ease-out",
+}));
+
+const Header = styled.header({
+  padding: "1rem 2rem",
+  height: "50px",
+});
+
+const List = styled.ul({
+  padding: "0 2rem",
+});
+
+const ListItem = styled.li({
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  margin: "10px 0",
+});
+
+const UserInfo = styled.div({
+  display: "flex",
+  alignItems: "center",
+});
+
+const ImageBox = styled.div({
+  width: "30px",
+  height: "30px",
+  borderRadius: "50%",
+  overflow: "hidden",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  marginRight: "10px",
+  backgroundColor: "skyblue",
+});
+
+const NickName = styled.p({});
+
+const Expulsion = styled.button({});
+
+const Label = styled.div({
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  marginRight: "5px",
+  width: "20px",
+  height: "20px",
+  borderRadius: "50%",
+  fontSize: "8px",
+  fontWeight: "bold",
+  color: "#fff",
+  backgroundColor: "#6c6c6c",
+});
+
+interface PartyUserListProps {
+  isOpenUserList: boolean;
+}
+
+const PartyUserList = ({ isOpenUserList }: PartyUserListProps) => {
+  const handleClickUserExpulsion = () => {};
 
   return (
-    <ul
-      style={{
-        padding: 0,
-        margin: "0 auto",
-        listStyle: "none",
-        width: "100%",
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
-      {userList
-        .slice(0)
-        .reverse()
-        .map(({ img, nickName, readCheck, message, id }) => (
-          <li
-            key={nickName}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              flexDirection: id === "me" ? "row-reverse" : "row",
-              margin: "1rem 0",
-            }}
-          >
-            {img && (
-              <div
-                style={{
-                  width: 30,
-                  height: 30,
-                  borderRadius: "50%",
-                  overflow: "hidden",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  marginRight: "5%",
-                }}
-              >
-                <img width="30" height="30" src={img} alt="profile" />
-              </div>
-            )}
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                padding: "1rem",
-                backgroundColor: id === "me" ? "#f43b4b" : "#efebec",
-                borderRadius: "10px",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                  }}
-                >
-                  <p
-                    style={{
-                      marginTop: 0,
-                      marginBottom: id === "me" ? 0 : "10px",
-                      fontSize: "18px",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {nickName}
-                  </p>
-                  <p
-                    style={{
-                      margin: 0,
-                      color: id === "me" ? "#fff" : "#000",
-                    }}
-                  >
-                    {message}
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div
-              style={{
-                marginLeft: id === "me" ? "0px" : "30px",
-                marginRight: id === "me" ? "30px" : "0px",
-                alignSelf: "flex-end",
-                color: "rosybrown",
-              }}
-            >
-              {readCheck ? 1 : ""}
-            </div>
-          </li>
-        ))}
-    </ul>
+    <Wrapper isOpenUserList={isOpenUserList}>
+      <Header>파티원 리스트 입니다.</Header>
+      <List>
+        {userList
+          .slice(0)
+          .reverse()
+          .map(({ img, nickName, id }) => (
+            <ListItem key={nickName}>
+              <UserInfo>
+                <ImageBox>
+                  {img && (
+                    <img width="30" height="30" src={img} alt="profile" />
+                  )}
+                </ImageBox>
+                {id === "me" && <Label>나</Label>}
+                <NickName>{nickName}</NickName>
+              </UserInfo>
+              {/* 방장일 경우 표시 */}
+              <Expulsion onClick={handleClickUserExpulsion}>강퇴하기</Expulsion>
+            </ListItem>
+          ))}
+      </List>
+    </Wrapper>
   );
 };
 

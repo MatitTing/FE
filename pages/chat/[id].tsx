@@ -1,42 +1,51 @@
 import BottomInputGroup from "@component/chat/BottomInputGroup";
 import HeaderBtnGroup from "@component/chat/HeaderBtnGroup";
 import MessageList from "@component/chat/MessageList";
-import { ChangeEvent, ReactElement, useEffect } from "react";
+import styled from "@emotion/styled";
+import { ChangeEvent, ReactElement, MouseEvent, useState } from "react";
 
-const ChatRoomPage = () => {
-  // 헤더
-  // 채팅 방 제목 설정(미정)
-  // 나가기
-  // 뒤로가기
-  // 멤버 리스트 창 열기 버튼 (리스트에서 멤버 강퇴)
+const Wrapper = styled.div({
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "space-between",
+  height: "100vh",
+});
 
-  const onChanegChat = (e: ChangeEvent<HTMLInputElement>) => {
-    //
+const Contents = styled.main({
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "flex-end",
+});
+
+const ChattingRoom = () => {
+  const [isOpenUserList, setIsOpenUserList] = useState(false);
+
+  const handleCloseUserList = (e: MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    setIsOpenUserList(false);
+  };
+
+  const handleOpenUserList = (e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    setIsOpenUserList(true);
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "flex-end",
-        padding: "2rem",
-        height: "100vh",
-      }}
-    >
-      <header>
-        <HeaderBtnGroup />
-      </header>
-      <main>
+    <Wrapper onClick={handleCloseUserList}>
+      <HeaderBtnGroup
+        isOpenUserList={isOpenUserList}
+        handleOpenUserList={handleOpenUserList}
+      />
+      <Contents>
         <MessageList />
-      </main>
-      <BottomInputGroup />
-    </div>
+        <BottomInputGroup />
+      </Contents>
+    </Wrapper>
   );
 };
 
-ChatRoomPage.getLayout = (page: ReactElement) => {
+ChattingRoom.getLayout = (page: ReactElement) => {
   return <>{page}</>;
 };
 
-export default ChatRoomPage;
+export default ChattingRoom;
