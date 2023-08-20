@@ -1,7 +1,7 @@
 import "../styles/globals.css";
-import Layout from "../src/component/layout";
+import Layout from "@components/common/layout";
 import ModalProvider from "src/contexts/ModalProvider";
-import Modal from "@component/common/Modal";
+import Modal from "src/components/common/Modal";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { NextPageWithLayout } from "../types/layout";
 import { Session } from "next-auth";
@@ -28,9 +28,11 @@ function MyApp({
     <QueryClientProvider client={queryClient}>
       <SessionProvider session={session}>
         <ModalProvider>
-      <Modal />
-        <ToastProvider>{getLayout(<Component {...pageProps} />)}</ToastProvider>
-          </ModalProvider>
+          <Modal />
+          <ToastProvider>
+            {getLayout(<Component {...pageProps} />)}
+          </ToastProvider>
+        </ModalProvider>
       </SessionProvider>
     </QueryClientProvider>
   );

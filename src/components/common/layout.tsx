@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import Bottombar from "./common/bottombar";
+import Bottombar from "@components/common/bottombar";
 import styled from "@emotion/styled";
 
 interface LayoutProps {

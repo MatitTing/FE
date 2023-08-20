@@ -1,4 +1,4 @@
-import useGlobalModal from "@hook/useGlobalModal";
+import useGlobalModal from "@hooks/useGlobalModal";
 import React, {
   Dispatch,
   MouseEventHandler,

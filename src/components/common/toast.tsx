@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
 import { ToastOption } from "types/toast";
-import InfoIcon from "@assets/icons/toast/info";
-import WarnIcon from "@assets/icons/toast/warn";
-import CloseIcon from "@assets/icons/toast/close";
+import InfoIcon from "@components/icons/toast/info";
+import WarnIcon from "@components/icons/toast/warn";
+import CloseIcon from "@components/icons/toast/close";
 
 interface ToastIconProps {
   type?: "info" | "warn";

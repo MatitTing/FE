@@ -1,9 +1,9 @@
 import styled from "@emotion/styled";
 import NavList from "./navList";
-import CreateIcon from "@assets/icons/bottombar/create";
-import HomeIcon from "@assets/icons/bottombar/home";
-import ProfileIcon from "@assets/icons/bottombar/profile";
-import SearchIcon from "@assets/icons/bottombar/search";
+import CreateIcon from "@components/icons/bottombar/create";
+import HomeIcon from "@components/icons/bottombar/home";
+import ProfileIcon from "@components/icons/bottombar/profile";
+import SearchIcon from "@components/icons/bottombar/search";
 
 const Container = styled.div`
   width: 768px;

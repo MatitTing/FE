@@ -1,7 +1,7 @@
-import { DefaultButton } from '@components/common/Button/DefaultButton';
-import { DefaultText } from '@components/common/Text/DefaultText';
-import styled from '@emotion/styled';
-import type { NextPage } from 'next';
+import { DefaultButton } from "src/components/common/DefaultButton";
+import { DefaultText } from "@components/common/Text/DefaultText";
+import styled from "@emotion/styled";
+import type { NextPage } from "next";
 
 const Container = styled.div`
   display: flex;
@@ -28,7 +28,7 @@ const Home: NextPage = () => {
         <DefaultText
           text={`맛잇팅 프로젝트 \n 공통 컴포넌트 \n 테스트`}
           style={{
-            width: '100%',
+            width: "100%",
             maxWidth: `calc(100% - 60px)`,
           }}
           align="center"
@@ -37,7 +37,7 @@ const Home: NextPage = () => {
           size={50}
         />
       </div>
-      <DefaultButton text="ssss" buttonType={'danger'} />
+      <DefaultButton text="ssss" buttonType={"danger"} />
     </Container>
   );
 };
