@@ -1,7 +1,11 @@
 import styled from "@emotion/styled";
-import Header from "@components/profile/header";
-import ProfileTabs from "@components/profile/profiletab";
-import ProfileInfo from "@components/profile/profileinfo";
+import Header from "src/component/profile/header";
+import { useState } from "react";
+import ProfileTabs from "src/component/profile/profiletab";
+import MannerDegree from "src/component/profile/mannerdegree";
+import LocationIcon from "@assets/icons/profile/location";
+import GenderIcon from "@assets/icons/profile/gender";
+import InfoIcon from "@assets/icons/profile/info";
 
 const Container = styled.div`
   display: flex;
