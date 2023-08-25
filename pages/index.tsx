@@ -1,13 +1,13 @@
-import { DefaultHeader } from '@components/common/DefaultHeader';
-import { DefaultText } from '@components/common/DefaultText';
-import SearchIcon from '@components/icons/bottombar/search';
-import { ArrowIcon } from '@components/icons/header/Arrow.icon';
-import { NotificationIcon } from '@components/icons/header/Notification.icon';
-import { HomeList } from '@components/pages/home/HomeList';
-import styled from '@emotion/styled';
-import type { NextPage } from 'next';
-import { useRouter } from 'next/router';
-import { Color } from 'styles/Color';
+import { DefaultHeader } from "@components/common/DefaultHeader";
+import { DefaultText } from "@components/common/DefaultText";
+import SearchIcon from "@components/icons/bottombar/search";
+import { ArrowIcon } from "@components/icons/header/Arrow.icon";
+import { NotificationIcon } from "@components/icons/header/Notification.icon";
+import { HomeList } from "@components/pages/home/HomeList";
+import styled from "@emotion/styled";
+import type { NextPage } from "next";
+import { useRouter } from "next/router";
+import { Color } from "styles/Color";
 
 const Container = styled.div`
   display: flex;
@@ -38,7 +38,7 @@ const Home: NextPage = () => {
         <DefaultText size={15} text="지역명 추후 지정" />
         <ArrowIcon
           styles={{
-            marginTop: '-1px',
+            marginTop: "-1px",
           }}
         />
       </HeaderAreaContainer>
@@ -47,13 +47,13 @@ const Home: NextPage = () => {
   const rightArea = () => {
     return (
       <HeaderAreaContainer>
-        <div onClick={() => router.push('/search')}>
+        <div onClick={() => router.push("/search")}>
           <SearchIcon />
         </div>
         <NotificationIcon
           notificationCount={0}
           styles={{
-            marginTop: '-5px',
+            marginTop: "-5px",
           }}
         />
       </HeaderAreaContainer>

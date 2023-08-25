@@ -2,7 +2,7 @@
 @import url("fonts.css");
 
 /* Reset */
-@import url('reset.css');
+@import url("reset.css");
 
 html {
   width: 100%;
@@ -33,11 +33,11 @@ a {
   box-sizing: border-box;
 }
 
-button{
+button {
   cursor: pointer;
 }
 
-ul{
+ul {
   margin: 0 auto;
   list-style: "none";
 }
