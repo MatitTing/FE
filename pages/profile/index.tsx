@@ -1,16 +1,21 @@
 import styled from "@emotion/styled";
-import Header from "src/component/profile/header";
-import { useState } from "react";
-import ProfileTabs from "src/component/profile/profiletab";
-import MannerDegree from "src/component/profile/mannerdegree";
-import LocationIcon from "@assets/icons/profile/location";
-import GenderIcon from "@assets/icons/profile/gender";
-import InfoIcon from "@assets/icons/profile/info";
+import Header from "@components/profile/header";
+import ProfileTabs from "@components/profile/profiletab";
+import MannerDegree from "@components/profile/mannerdegree";
+import LocationIcon from "@components/icons/profile/location";
+import GenderIcon from "@components/icons/profile/gender";
+import InfoIcon from "@components/icons/toast/info";
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  height: 100%;
 `;
+const Main = styled.div`
+  height: calc(100% - 136px);
+  overflow-y: auto;
+`;
+
 const ProfileInfo = styled.div`
   display: flex;
   width: 100%;
@@ -70,36 +75,36 @@ const userdata = {
 };
 
 const Profile = () => {
-  const [tabstate, setTabstate] = useState<string>("partystate");
-
   return (
     <Container>
       <Header></Header>
-      <ProfileInfo>
-        <ProfileImgContainer>
-          <img src="/images/profile/profile.png"></img>
-          {/* <ProfileImg></ProfileImg> */}
-        </ProfileImgContainer>
-        <ProfileDetail>
-          <div className="userinfo">
-            <div className="location">
-              <LocationIcon />
-              <span>{userdata.locaton}</span>
+      <Main>
+        <ProfileInfo>
+          <ProfileImgContainer>
+            <img src="/images/profile/profile.png"></img>
+            {/* <ProfileImg></ProfileImg> */}
+          </ProfileImgContainer>
+          <ProfileDetail>
+            <div className="userinfo">
+              <div className="location">
+                <LocationIcon />
+                <span>{userdata.locaton}</span>
+              </div>
+              <div className="gender">
+                <GenderIcon />
+                <span>{userdata.gender}</span>
+              </div>
+              <div className="age">
+                <InfoIcon />
+                <span>{userdata.age}</span>
+              </div>
             </div>
-            <div className="gender">
-              <GenderIcon />
-              <span>{userdata.gender}</span>
-            </div>
-            <div className="age">
-              <InfoIcon />
-              <span>{userdata.age}</span>
-            </div>
-          </div>
-          <div className="name">{userdata.name} </div>
-          <MannerDegree degree={userdata.mannerdegree}></MannerDegree>
-        </ProfileDetail>
-      </ProfileInfo>
-      <ProfileTabs></ProfileTabs>
+            <div className="name">{userdata.name} </div>
+            <MannerDegree degree={userdata.mannerdegree}></MannerDegree>
+          </ProfileDetail>
+        </ProfileInfo>
+        <ProfileTabs></ProfileTabs>
+      </Main>
     </Container>
   );
 };

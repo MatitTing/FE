@@ -1,5 +1,5 @@
 import React, { createContext, PropsWithChildren, useContext } from "react";
-import Toast from "src/component/common/toast";
+import Toast from "@components/common/toast";
 import useToast from "src/hooks/useToast";
 import styled from "@emotion/styled";
 import { ToastOption } from "types/toast";

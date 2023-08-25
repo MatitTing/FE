@@ -16,8 +16,7 @@ interface TabPanelProps {
 const BoxContainer = styled.div`
   position: -webkit-sticky;
   position: sticky;
-  top: 60px;
-
+  top: 0px;
   background-color: white;
 `;
 

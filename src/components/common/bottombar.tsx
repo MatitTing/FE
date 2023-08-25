@@ -10,8 +10,10 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   position: absolute;
+  position: fixed;
   bottom: 0;
   border-top: 1px solid #dddddd;
+  background-color: white;
 `;
 
 const NavContainer = styled.div`

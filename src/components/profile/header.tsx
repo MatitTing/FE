@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import BackIcon from "@assets/icons/common/close";
+import BackIcon from "@components/icons/common/close";
 
 const Container = styled.div`
   position: -webkit-sticky;
