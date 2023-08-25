@@ -1,24 +1,37 @@
-import React, { ReactNode } from "react";
-import Bottombar from "@components/common/bottombar";
-import styled from "@emotion/styled";
+import Bottombar from '@components/common/bottombar';
+import styled from '@emotion/styled';
+import { ReactNode } from 'react';
 
 interface LayoutProps {
   children: ReactNode;
 }
 
 const Container = styled.div`
-  position: relative;
   width: 768px;
+  position: relative;
+  width: 100%;
   height: 100%;
+  overflow-y: scroll;
   display: flex;
   flex-direction: column;
+  header {
+    height: calc(100% - 75px);
+    overflow-y: scroll;
+  }
+`;
+const BottomSection = styled.section`
+  width: 100%;
+  display: flex;
+  justify-content: center;
 `;
 
 function Layout({ children }: LayoutProps) {
   return (
     <Container>
-      {children}
-      <Bottombar />
+      <header>{children}</header>
+      <BottomSection>
+        <Bottombar />
+      </BottomSection>
     </Container>
   );
 }
