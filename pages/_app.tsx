@@ -1,14 +1,14 @@
-import Layout from '@components/common/layout';
-import { Session } from 'next-auth';
-import { SessionProvider } from 'next-auth/react';
-import type { AppProps } from 'next/app';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import { RecoilRoot } from 'recoil';
-import Modal from 'src/components/common/Modal';
-import ModalProvider from 'src/contexts/ModalProvider';
-import { ToastProvider } from '../src/contexts/ToastProvider';
-import '../styles/globals.css';
-import { NextPageWithLayout } from '../types/layout';
+import Layout from "@components/common/layout";
+import { Session } from "next-auth";
+import { SessionProvider } from "next-auth/react";
+import type { AppProps } from "next/app";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { RecoilRoot } from "recoil";
+import Modal from "src/components/common/Modal";
+import ModalProvider from "src/contexts/ModalProvider";
+import { ToastProvider } from "../src/contexts/ToastProvider";
+import "../styles/globals.css";
+import { NextPageWithLayout } from "../types/layout";
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
