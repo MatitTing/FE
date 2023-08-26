@@ -1,12 +1,12 @@
-import type { ReactElement, ReactNode } from "react";
-import type { NextPage } from "next";
+import type { NextPage } from 'next';
+import type { ReactElement, ReactNode } from 'react';
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
 
 interface BottomIconProps {
-  selected: boolean;
+  selected?: boolean;
 }
 
-export type { NextPageWithLayout, BottomIconProps };
+export type { BottomIconProps, NextPageWithLayout };

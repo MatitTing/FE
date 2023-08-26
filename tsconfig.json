@@ -18,8 +18,8 @@
     "paths": {
       "@components/*": ["./src/components/*"],
       "@pages/*": ["./pages/*"],
-      "@hooks/*" : ["./src/hooks/*"],
-      "@contexts/*" : ["./src/contexts/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@contexts/*": ["./src/contexts/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/**/*.tsx"],

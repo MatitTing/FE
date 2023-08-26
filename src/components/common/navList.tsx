@@ -1,5 +1,5 @@
-import { useRouter } from "next/router";
-import styled from "@emotion/styled";
+import styled from '@emotion/styled';
+import { useRouter } from 'next/router';
 
 interface NavListProps {
   title: string;
