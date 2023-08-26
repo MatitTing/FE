@@ -6,7 +6,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { RecoilRoot } from "recoil";
 import Modal from "src/components/common/Modal";
 import ModalProvider from "src/contexts/ModalProvider";
-import { ToastProvider } from "../src/contexts/ToastProvider";
+import ToastProvider from "@contexts/ToastProvider";
 import "../styles/globals.css";
 import { NextPageWithLayout } from "../types/layout";
 
@@ -31,9 +31,8 @@ function MyApp({
         <SessionProvider session={session}>
           <ModalProvider>
             <Modal />
-            <ToastProvider>
-              {getLayout(<Component {...pageProps} />)}
-            </ToastProvider>
+            {getLayout(<Component {...pageProps} />)}
+            <ToastProvider />
           </ModalProvider>
         </SessionProvider>
       </RecoilRoot>

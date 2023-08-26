@@ -1,10 +1,16 @@
-import { css } from '@emotion/react';
-import styled from '@emotion/styled';
-import { ButtonHTMLAttributes } from 'react';
-import { Color, ColorToken } from 'styles/Color';
-import { Typography } from 'styles/Typography';
+import { css } from "@emotion/react";
+import styled from "@emotion/styled";
+import { ButtonHTMLAttributes } from "react";
+import { Color, ColorToken } from "styles/Color";
+import { Typography } from "styles/Typography";
 
-type ButtonType = 'default' | 'primary' | 'secondary' | 'danger' | 'cancel';
+type ButtonType =
+  | "default"
+  | "primary"
+  | "secondary"
+  | "danger"
+  | "cancel"
+  | "toggle";
 
 interface ButtonProps {
   buttonType?: ButtonType;
@@ -13,7 +19,7 @@ interface ButtonProps {
 }
 
 const ButtonContainer = styled.button<{ buttonType: string; filled: boolean }>`
-  padding: 15px;
+  padding: ${(props) => (props.buttonType === "toggle" ? "10px" : "15px")};
   border: none;
   border-radius: 10px;
   cursor: pointer;
@@ -24,15 +30,19 @@ const ButtonContainer = styled.button<{ buttonType: string; filled: boolean }>`
     cursor: not-allowed;
   }
   ${(props) =>
-    props.buttonType === 'primary'
+    props.buttonType === "primary"
       ? props.filled
         ? FilledPrimaryButtonStyle
         : LinedPrimaryButtonStyle
-      : props.buttonType === 'secondary'
+      : props.buttonType === "toggle"
+      ? props.filled
+        ? FilledToggleButtonStyle
+        : LinedToggleButtonStyle
+      : props.buttonType === "secondary"
       ? SecondaryButtonStyle
-      : props.buttonType === 'default'
+      : props.buttonType === "default"
       ? DefaultButtonStyle
-      : props.buttonType === 'cancel'
+      : props.buttonType === "cancel"
       ? CancelButtonStyle
       : props.filled
       ? FilledDangerButtonStyle
@@ -150,8 +160,44 @@ const LinedDangerButtonStyle = css`
   }
 `;
 
+const FilledToggleButtonStyle = css`
+  background: ${ColorToken.grey7};
+  color: ${ColorToken.white};
+  border: solid 1px ${ColorToken.grey7};
+  :hover {
+    color: ${ColorToken.white};
+    border: solid 1px ${ColorToken.grey7};
+  }
+  :active {
+    color: ${ColorToken.white};
+    border: solid 1px ${ColorToken.grey7};
+  }
+  :disabled {
+    color: ${ColorToken.grey7};
+    border: solid 1px ${ColorToken.grey7};
+  }
+`;
+
+const LinedToggleButtonStyle = css`
+  background: ${ColorToken.grey4};
+  color: ${ColorToken.text_primary};
+  border: solid 1px ${ColorToken.grey4};
+  :hover {
+    color: ${ColorToken.text_primary};
+    border: solid 1px ${ColorToken.grey4};
+  }
+  :active {
+    color: ${ColorToken.text_primary};
+    border: solid 1px ${ColorToken.grey4};
+  }
+  :disabled {
+    color: ${ColorToken.grey4};
+    border: solid 1px ${ColorToken.grey4};
+  }
+`;
+
 export const DefaultButton = ({
-  buttonType = 'primary',
+  buttonType = "primary",
   filled = true,
   text,
   ...props

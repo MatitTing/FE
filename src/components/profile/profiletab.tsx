@@ -13,11 +13,12 @@ interface TabPanelProps {
   value: number;
 }
 
-const BoxContainer = styled.div`
+const TabContainer = styled.div`
   position: -webkit-sticky;
   position: sticky;
   top: 0px;
   background-color: white;
+  z-index: 999;
 `;
 
 function CustomTabPanel(props: TabPanelProps) {
@@ -32,7 +33,7 @@ function CustomTabPanel(props: TabPanelProps) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3 }}>
+        <Box>
           <Typography>{children}</Typography>
         </Box>
       )}
@@ -56,7 +57,7 @@ export default function ProfileTabs() {
 
   return (
     <Box sx={{ width: "100%" }}>
-      <BoxContainer>
+      <TabContainer>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <Tabs
             value={value}
@@ -67,7 +68,7 @@ export default function ProfileTabs() {
             <Tab label="설정" {...a11yProps(1)} />
           </Tabs>
         </Box>
-      </BoxContainer>
+      </TabContainer>
       <CustomTabPanel value={value} index={0}>
         <PartyState></PartyState>
       </CustomTabPanel>

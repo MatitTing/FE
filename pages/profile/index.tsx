@@ -33,6 +33,11 @@ const ProfileImgContainer = styled.div`
     border-radius: 50%;
   }
 `;
+const ProfileImg = styled.img`
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+`;
 
 const ProfileDetail = styled.div`
   display: flex;
@@ -55,17 +60,6 @@ const ProfileDetail = styled.div`
   }
 `;
 
-const tabList = [
-  {
-    title: "파티현황",
-    state: "partystate",
-  },
-  {
-    title: "설정",
-    state: "setting",
-  },
-];
-
 const userdata = {
   name: "username",
   locaton: "서울광역시",
@@ -81,8 +75,7 @@ const Profile = () => {
       <Main>
         <ProfileInfo>
           <ProfileImgContainer>
-            <img src="/images/profile/profile.png"></img>
-            {/* <ProfileImg></ProfileImg> */}
+            <ProfileImg src="/images/profile/profile.png"></ProfileImg>
           </ProfileImgContainer>
           <ProfileDetail>
             <div className="userinfo">
