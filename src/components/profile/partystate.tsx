@@ -3,18 +3,7 @@ import styled from "@emotion/styled";
 import ToggleButton from "./togglebutton";
 import { useState, useEffect } from "react";
 import PartyList from "./partylist";
-
-interface PartyData {
-  categoryId: string;
-  thumbnailUrl: string;
-  partyTitle: string;
-  region: string;
-  partyTime: string;
-  genderLimit: string;
-  agePreference: string;
-  partyMessage: string;
-  totalRecruitment: string;
-}
+import { PartyData } from "types/party";
 
 const Container = styled.div`
   display: flex;
@@ -32,10 +21,10 @@ const PartyListData1 = [
   {
     categoryId: "1",
     thumbnailUrl: "http://피자.com",
-    partyTitle: "연남 plop에서 피자드실분!",
+    partyTitle: "파티1",
     region: "서울 마포구 동교로38길 27-9 1층",
     partyTime: "2023.08.08:12:30:00",
-    genderLimit: "상관 없음",
+    genderLimit: "남성",
     agePreference: "20대",
     partyMessage: "피자 종류는 다 같이 정해봐요",
     totalRecruitment: "4명",
@@ -45,10 +34,10 @@ const PartyListData2 = [
   {
     categoryId: "2",
     thumbnailUrl: "http://피자.com",
-    partyTitle: "연남 plop에서 피자드실분!",
+    partyTitle: "파티2",
     region: "서울 마포구 동교로38길 27-9 1층",
     partyTime: "2023.08.08:12:30:00",
-    genderLimit: "상관 없음",
+    genderLimit: "여성",
     agePreference: "20대",
     partyMessage: "피자 종류는 다 같이 정해봐요",
     totalRecruitment: "4명",
@@ -56,10 +45,10 @@ const PartyListData2 = [
   {
     categoryId: "3",
     thumbnailUrl: "http://피자.com",
-    partyTitle: "연남 plop에서 피자드실분!",
+    partyTitle: "파티3",
     region: "서울 마포구 동교로38길 27-9 1층",
     partyTime: "2023.08.08:12:30:00",
-    genderLimit: "상관 없음",
+    genderLimit: "남성",
     agePreference: "20대",
     partyMessage: "피자 종류는 다 같이 정해봐요",
     totalRecruitment: "4명",
@@ -69,21 +58,10 @@ const PartyListData3 = [
   {
     categoryId: "4",
     thumbnailUrl: "http://피자.com",
-    partyTitle: "연남 plop에서 피자드실분!",
+    partyTitle: "파티4",
     region: "서울 마포구 동교로38길 27-9 1층",
     partyTime: "2023.08.08:12:30:00",
-    genderLimit: "상관 없음",
-    agePreference: "20대",
-    partyMessage: "피자 종류는 다 같이 정해봐요",
-    totalRecruitment: "4명",
-  },
-  {
-    categoryId: "5",
-    thumbnailUrl: "http://피자.com",
-    partyTitle: "연남 plop에서 피자드실분!",
-    region: "서울 마포구 동교로38길 27-9 1층",
-    partyTime: "2023.08.08:12:30:00",
-    genderLimit: "상관 없음",
+    genderLimit: "여성",
     agePreference: "20대",
     partyMessage: "피자 종류는 다 같이 정해봐요",
     totalRecruitment: "4명",
@@ -94,7 +72,7 @@ const PartyState = () => {
   const [partystate, setPartystate] = useState<string>("host");
 
   //react-qurry 임시대체
-  const [data, setData] = useState<any>();
+  const [data, setData] = useState<PartyData[]>();
 
   useEffect(() => {
     setData(
@@ -113,8 +91,8 @@ const PartyState = () => {
         setPartystate={setPartystate}
       ></ToggleButton>
       <PartyListContainer>
-        {data?.map((partydata: PartyData) => (
-          <PartyList {...partydata}></PartyList>
+        {data?.map((partydata) => (
+          <PartyList partydata={partydata}></PartyList>
         ))}
       </PartyListContainer>
     </Container>

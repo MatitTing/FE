@@ -52,8 +52,8 @@ const navList = [
 const Bottombar = () => (
   <Container>
     <NavContainer>
-      {navList.map(({ title, href, icon }) => (
-        <NavList key={href} title={title} href={href} icon={icon} />
+      {navList.map((item) => (
+        <NavList key={item.href} item={item} />
       ))}
     </NavContainer>
   </Container>

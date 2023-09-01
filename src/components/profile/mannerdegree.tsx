@@ -5,6 +5,10 @@ import LinearProgress, {
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 
+interface MannerDegreeProps {
+  degree: number;
+}
+
 function LinearProgressWithLabel(
   props: LinearProgressProps & { value: number }
 ) {
@@ -22,7 +26,7 @@ function LinearProgressWithLabel(
   );
 }
 
-export default function MannerDegree({ degree }: any) {
+export default function MannerDegree({ degree }: MannerDegreeProps) {
   return (
     <Box sx={{ width: "100%" }}>
       <LinearProgressWithLabel value={degree} />

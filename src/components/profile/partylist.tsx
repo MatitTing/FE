@@ -3,17 +3,11 @@ import styled from "@emotion/styled";
 import { ColorToken } from "styles/Color";
 import { DefaultText } from "@components/common/DefaultText";
 import useToast from "@hooks/useToast";
+import Image from "next/image";
+import { PartyData } from "types/party";
 
-interface PartyData {
-  categoryId: string;
-  thumbnailUrl: string;
-  partyTitle: string;
-  region: string;
-  partyTime: string;
-  genderLimit: string;
-  agePreference: string;
-  partyMessage: string;
-  totalRecruitment: string;
+interface PartyListProps {
+  partydata: PartyData;
 }
 
 const Container = styled.div`
@@ -24,6 +18,10 @@ const Container = styled.div`
   padding: 16px;
   border-radius: 16px;
   background-color: ${ColorToken.grey4};
+  .partyimg {
+    object-fit: cover;
+    object-position: center;
+  }
 `;
 const PartyDetail = styled.div`
   display: flex;
@@ -45,34 +43,34 @@ const Detail2 = styled.div`
   gap: 4px;
 `;
 
-const PartyImg = styled.img`
-  width: 160px;
-  height: 120px;
-  object-fit: cover;
-  object-position: center;
-`;
-
-const PartyList = ({
-  categoryId,
-  thumbnailUrl,
-  partyTitle,
-  region,
-  partyTime,
-  genderLimit,
-  agePreference,
-  partyMessage,
-  totalRecruitment,
-}: PartyData) => {
+const PartyList = ({ partydata }: PartyListProps) => {
+  const {
+    categoryId = "",
+    thumbnailUrl = "",
+    partyTitle = "",
+    region = "",
+    partyTime = "",
+    genderLimit = "",
+    agePreference = "",
+    partyMessage = "",
+    totalRecruitment = "",
+  } = partydata;
+  // 토스트 테스트용
   const { showToast } = useToast();
   return (
     <Container
       onClick={() => {
-        showToast("123");
+        showToast(partyTitle);
       }}
     >
-      <PartyImg src="/images/profile/profile.png"></PartyImg>
+      <Image
+        src="/images/profile/profile.png"
+        width={160}
+        height={120}
+        className="partyimg"
+      />
       <PartyDetail>
-        <Title className="title">
+        <Title>
           <DefaultText text={partyTitle} size={16}></DefaultText>
         </Title>
         <Detail1>

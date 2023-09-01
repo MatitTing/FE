@@ -32,37 +32,6 @@ a {
   box-sizing: border-box;
 }
 
-/* Scrollbars */
-section::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
-}
-
-section::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  background-color: #666666;
-}
-
-ul::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
-}
-
-ul::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  background-color: #666666;
-}
-
-div::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
-}
-
-div::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  background-color: #666666;
-}
-
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
