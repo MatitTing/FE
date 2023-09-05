@@ -20,6 +20,10 @@ const userList = [
   },
 ];
 
+interface PartyUserListProps {
+  isOpenUserList: boolean;
+}
+
 const Wrapper = styled(
   "div",
   shouldNotForwardProp("isOpenUserList")
@@ -85,10 +89,6 @@ const Label = styled.div({
   color: "#fff",
   backgroundColor: "#6c6c6c",
 });
-
-interface PartyUserListProps {
-  isOpenUserList: boolean;
-}
 
 const PartyUserList = ({ isOpenUserList }: PartyUserListProps) => {
   const handleClickUserExpulsion = () => {};

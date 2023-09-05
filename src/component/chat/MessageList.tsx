@@ -103,26 +103,23 @@ const ReadMark = styled(
 const MessageList = () => {
   return (
     <List>
-      {messages
-        .slice(0)
-        .reverse()
-        .map(({ img, nickName, readCheck, message, id }) => (
-          <ListItem key={nickName} userCheck={id}>
-            {img && (
-              <ImageBox>
-                {/* nextjs 도메인 설정 후 next Image로 변경 */}
-                <img src={img} width="50" height="50" alt="profile" />
-              </ImageBox>
-            )}
-            <MessageBox userCheck={id}>
-              <TextBox>
-                <NickName userCheck={id}>{nickName}</NickName>
-                <Message>{message}</Message>
-              </TextBox>
-            </MessageBox>
-            <ReadMark>{readCheck ? 1 : ""}</ReadMark>
-          </ListItem>
-        ))}
+      {messages.reverse().map(({ img, nickName, readCheck, message, id }) => (
+        <ListItem key={nickName} userCheck={id}>
+          {img && (
+            <ImageBox>
+              {/* nextjs 도메인 설정 후 next Image로 변경 */}
+              <img src={img} width="50" height="50" alt="profile" />
+            </ImageBox>
+          )}
+          <MessageBox userCheck={id}>
+            <TextBox>
+              <NickName userCheck={id}>{nickName}</NickName>
+              <Message>{message}</Message>
+            </TextBox>
+          </MessageBox>
+          <ReadMark>{readCheck ? 1 : ""}</ReadMark>
+        </ListItem>
+      ))}
     </List>
   );
 };

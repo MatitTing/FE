@@ -14,7 +14,7 @@ const Wrapper = styled.div({
   },
 });
 
-const ImageSubmit = styled.label({
+const ImageUploadButton = styled.label({
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
@@ -25,7 +25,7 @@ const ImageSubmit = styled.label({
   cursor: "pointer",
 });
 
-const MessageSubmit = styled.button({
+const SubmitButton = styled.button({
   width: "50px",
   border: "none",
   borderRadius: "10px",
@@ -42,9 +42,9 @@ const BottomInputGroup = () => {
   return (
     <Wrapper>
       <TextInput placeholder="message" />
-      <ImageSubmit aria-label="upload picture" htmlFor="add_image">
+      <ImageUploadButton aria-label="upload picture" htmlFor="add_image">
         +
-      </ImageSubmit>
+      </ImageUploadButton>
       <input
         hidden
         id="add_image"
@@ -52,7 +52,7 @@ const BottomInputGroup = () => {
         accept=".jpeg,.png"
         onChange={handleChangeImageFile}
       />
-      <MessageSubmit onClick={handleClickSubmit}>전송</MessageSubmit>
+      <SubmitButton onClick={handleClickSubmit}>전송</SubmitButton>
     </Wrapper>
   );
 };

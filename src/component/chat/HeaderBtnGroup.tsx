@@ -3,6 +3,11 @@ import PartyUserList from "./PartyUserList";
 import styled from "@emotion/styled";
 import router from "next/router";
 
+interface HeaderBtnGroupProps {
+  isOpenUserList: boolean;
+  handleOpenUserList: MouseEventHandler<HTMLButtonElement>;
+}
+
 const Wrapper = styled.header({
   display: "flex",
   justifyContent: "space-between",
@@ -19,11 +24,6 @@ const BackBtn = styled.button({
 
 const ChatTitle = styled.h3({});
 
-interface HeaderBtnGroupProps {
-  isOpenUserList: boolean;
-  handleOpenUserList: MouseEventHandler<HTMLButtonElement>;
-}
-
 const HeaderBtnGroup = ({
   isOpenUserList,
   handleOpenUserList,
@@ -33,7 +33,9 @@ const HeaderBtnGroup = ({
       <BackBtn onClick={() => router.back()}>뒤로가기</BackBtn>
       <ChatTitle>채팅 방 이름</ChatTitle>
       <BackBtn onClick={handleOpenUserList}>파티원 보기</BackBtn>
-      <PartyUserList isOpenUserList={isOpenUserList} />
+      {isOpenUserList ? (
+        <PartyUserList isOpenUserList={isOpenUserList} />
+      ) : null}
     </Wrapper>
   );
 };
