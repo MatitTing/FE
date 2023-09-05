@@ -14,14 +14,15 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "baseUrl": ".",
-    "types": ["@emotion/react/types/css-prop"],
-    "paths":{
-    	"@component/*" : ["src/component/*"],
-    	"@hook/*" : ["src/hook/*"],
-    	"@utils/*" : ["src/utils/*"],
+    "baseUrl": "./",
+    "paths": {
+      "@components/*": ["./src/components/*"],
+      "@pages/*": ["./pages/*"],
+      "@hooks/*" : ["./src/hooks/*"],
+      "@contexts/*" : ["./src/contexts/*"],
+      "@utils/*" : ["./src/utils/*"],
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/**/*.tsx"],
   "exclude": ["node_modules"]
 }
