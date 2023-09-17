@@ -2,9 +2,11 @@ import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
 
 interface NavListProps {
-  title: string;
-  href: string;
-  icon: any;
+  item: {
+    title: string;
+    href: string;
+    icon: (selected: boolean) => JSX.Element;
+  };
 }
 
 const Container = styled.div`
@@ -26,7 +28,8 @@ const TitleText = styled.div`
   font-size: 12px;
 `;
 
-const NavList = ({ title, href, icon }: NavListProps) => {
+const NavList = ({ item }: NavListProps) => {
+  const { title, href, icon } = item;
   const router = useRouter();
   const selected = router.pathname === href;
 

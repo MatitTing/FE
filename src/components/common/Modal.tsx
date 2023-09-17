@@ -3,7 +3,7 @@ import { useContext } from "react";
 import {
   ModalDispatchContext,
   ModalStateContext,
-} from "@contexts/ModalProvider";
+} from "src/contexts/ModalProvider";
 
 const ModalBackground = styled.div({
   position: "fixed",

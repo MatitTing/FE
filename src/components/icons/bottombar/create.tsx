@@ -1,6 +1,4 @@
-import { BottomIconProps } from 'types/layout';
-
-const CreateIcon = ({ selected = false }: BottomIconProps) =>
+const CreateIcon = (selected: boolean = false) =>
   selected ? (
     <svg
       xmlns="http://www.w3.org/2000/svg"
