@@ -1,5 +1,5 @@
 import { ChangeEvent, MouseEvent, ReactElement } from "react";
-import TextInput from "@component/common/TextInput";
+import TextInput from "@components/common/TextInput";
 import styled from "@emotion/styled";
 
 const Wrapper = styled.div({

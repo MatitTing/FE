@@ -1,6 +1,6 @@
-import BottomInputGroup from "@component/chat/BottomInputGroup";
-import HeaderBtnGroup from "@component/chat/HeaderBtnGroup";
-import MessageList from "@component/chat/MessageList";
+import BottomInputGroup from "@components/chat/BottomInputGroup";
+import HeaderBtnGroup from "@components/chat/HeaderBtnGroup";
+import MessageList from "@components/chat/MessageList";
 import styled from "@emotion/styled";
 import { ReactElement, MouseEvent, useState } from "react";
 
