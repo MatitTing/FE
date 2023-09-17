@@ -10,8 +10,10 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   position: absolute;
+  position: fixed;
   bottom: 0;
   border-top: 1px solid #dddddd;
+  background-color: white;
 `;
 
 const NavContainer = styled.div`
@@ -50,8 +52,8 @@ const navList = [
 const Bottombar = () => (
   <Container>
     <NavContainer>
-      {navList.map(({ title, href, icon }) => (
-        <NavList key={href} title={title} href={href} icon={icon} />
+      {navList.map((item) => (
+        <NavList key={item.href} item={item} />
       ))}
     </NavContainer>
   </Container>

@@ -1,5 +1,7 @@
 import { useRef, useState } from "react";
 import { ToastOption } from "types/toast";
+import { useSetRecoilState, useRecoilValue } from "recoil";
+import { toastRecoil } from "src/recoil-states/toastRecoil";
 
 interface Toast {
   id: number;
@@ -8,7 +10,8 @@ interface Toast {
 }
 
 const useToast = () => {
-  const [toasts, setToasts] = useState<Toast[]>([]);
+  const setToasts = useSetRecoilState(toastRecoil);
+  const toasts = useRecoilValue(toastRecoil);
   const toastCounter = useRef(0);
 
   const showToast = (message: string, option?: ToastOption) => {
