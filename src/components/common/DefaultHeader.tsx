@@ -1,5 +1,5 @@
-import styled from '@emotion/styled';
-import { ColorToken } from 'styles/Color';
+import styled from "@emotion/styled";
+import { ColorToken } from "styles/Color";
 
 interface HomeHeaderProps {
   leftArea?: React.ReactNode | string;

@@ -8,6 +8,7 @@ import ListItemText from "@mui/material/ListItemText";
 import Divider from "@mui/material/Divider";
 import LogoutIcon from "@components/icons/profile/logout";
 import WithdrawIcon from "@components/icons/profile/withdraw";
+import { signOut } from "next-auth/react";
 
 const SetList = () => {
   return (
@@ -15,7 +16,11 @@ const SetList = () => {
       <nav aria-label="main mailbox folders">
         <List>
           <ListItem disablePadding>
-            <ListItemButton>
+            <ListItemButton
+              onClick={() => {
+                signOut();
+              }}
+            >
               <ListItemIcon>
                 <LogoutIcon />
               </ListItemIcon>

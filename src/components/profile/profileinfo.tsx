@@ -1,24 +1,19 @@
 import React from "react";
 import styled from "@emotion/styled";
-import MannerDegree from "./mannerdegree";
+import MannerDegree from "../common/progressbar";
 import Image from "next/image";
+import ProfilebackGround from "./profilebackground";
 import LocationIcon from "@components/icons/profile/location";
 import GenderIcon from "@components/icons/profile/gender";
 import InfoIcon from "@components/icons/profile/info";
-
-interface ProfileInfoProps {
-  name: string;
-  locaton: string;
-  gender: string;
-  age: string;
-  mannerdegree: number;
-}
+import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 
 const Container = styled.div`
   display: flex;
   width: 100%;
-  flex-direction: row;
-  padding: 20px 0;
+  flex-direction: column;
+  padding-bottom: 20px;
 `;
 
 const ProfileImgContainer = styled.div`
@@ -30,12 +25,31 @@ const ProfileImgContainer = styled.div`
     border-radius: 50%;
   }
 `;
+
+const ProfileDetailContainer = styled.div`
+  width: 200px;
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  padding: 20px 0;
+  z-index: 99;
+  background-color: white;
+`;
+
+const MannerDegreeContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: center;
+`;
+
 const ProfileDetail = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   width: 60%;
   padding: 20px;
+  gap: 8px;
   .userinfo {
     color: #4b4b4b;
     display: flex;
@@ -44,43 +58,72 @@ const ProfileDetail = styled.div`
     margin-bottom: 8px;
   }
   .name {
-    font-size: 48px;
-    margin-bottom: 16px;
+    font-size: 32px;
+    margin-bottom: 8px;
   }
   span {
     margin-left: 4px;
   }
 `;
 
-const ProfileInfo = ({ userdata }: { userdata: ProfileInfoProps }) => {
+const userdata = {
+  name: "username",
+  locaton: "서울광역시",
+  gender: "남성",
+  age: "20대",
+  mannerdegree: 30,
+};
+
+const ProfileInfo = () => {
+  const { locaton, gender, age, name, mannerdegree } = userdata;
+  const { data: session, status }: any = useSession();
+  const logined = status === "authenticated";
+
+  console.log("session", session);
+
+  const router = useRouter();
   return (
     <Container>
-      <ProfileImgContainer>
-        <Image
-          src="/images/profile/profile.png"
-          width={160}
-          height={160}
-          className="profileimg"
-        ></Image>
-      </ProfileImgContainer>
-      <ProfileDetail>
-        <div className="userinfo">
-          <div className="location">
-            <LocationIcon />
-            <span>{userdata.locaton}</span>
-          </div>
-          <div className="gender">
-            <GenderIcon />
-            <span>{userdata.gender}</span>
-          </div>
-          <div className="age">
-            <InfoIcon />
-            <span>{userdata.age}</span>
-          </div>
-        </div>
-        <div className="name">{userdata.name}</div>
-        <MannerDegree degree={userdata.mannerdegree}></MannerDegree>
-      </ProfileDetail>
+      <ProfilebackGround />
+      <ProfileDetailContainer>
+        <ProfileImgContainer>
+          <Image
+            src={logined ? session?.user.image : "/images/profile/profile.png"}
+            width={128}
+            height={128}
+            className="profileimg"
+            onClick={() => {
+              router.push("/signin");
+            }}
+          ></Image>
+        </ProfileImgContainer>
+        <ProfileDetail>
+          {logined ? (
+            <>
+              <div className="userinfo">
+                <div className="location">
+                  <LocationIcon />
+                  <span>{locaton}</span>
+                </div>
+                <div className="gender">
+                  <GenderIcon />
+                  <span>{gender}</span>
+                </div>
+                <div className="age">
+                  <InfoIcon />
+                  <span>{age}</span>
+                </div>
+              </div>
+              <div className="name">{session?.user.name}</div>
+              <MannerDegreeContainer>
+                <MannerDegree value={mannerdegree} /> {mannerdegree}°C
+              </MannerDegreeContainer>
+            </>
+          ) : (
+            <div className="name">로그인을 해야합니다.</div>
+          )}
+        </ProfileDetail>
+      </ProfileDetailContainer>
     </Container>
   );
 };

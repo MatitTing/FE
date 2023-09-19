@@ -15,13 +15,19 @@ type ButtonType =
 interface ButtonProps {
   buttonType?: ButtonType;
   filled?: boolean;
+  customwidth?: boolean;
   text: string | React.ReactNode;
 }
 
-const ButtonContainer = styled.button<{ buttonType: string; filled: boolean }>`
+const ButtonContainer = styled.button<{
+  buttonType: string;
+  filled: boolean;
+  customwidth: boolean;
+}>`
   padding: ${(props) => (props.buttonType === "toggle" ? "10px" : "15px")};
   border: none;
   border-radius: 10px;
+  width: ${(props) => props.customwidth && "100%"};
   cursor: pointer;
 
   ${Typography.Button.Button2Bold};
@@ -199,10 +205,16 @@ const LinedToggleButtonStyle = css`
 export const DefaultButton = ({
   buttonType = "primary",
   filled = true,
+  customwidth = true,
   text,
   ...props
 }: ButtonHTMLAttributes<HTMLButtonElement> & ButtonProps) => (
-  <ButtonContainer buttonType={buttonType} filled={filled} {...props}>
+  <ButtonContainer
+    buttonType={buttonType}
+    filled={filled}
+    customwidth={customwidth}
+    {...props}
+  >
     {text}
   </ButtonContainer>
 );

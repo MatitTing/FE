@@ -1,11 +1,11 @@
 const BackIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    height="32"
+    height="24"
     viewBox="0 -960 960 960"
-    width="32"
+    width="24"
   >
-    <path d="M655-80 255-480l400-400 56 57-343 343 343 343-56 57Z" />
+    <path d="M384-96 0-480l384-384 68 68-316 316 316 316-68 68Z" />
   </svg>
 );
 
