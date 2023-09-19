@@ -1,17 +1,10 @@
 import { useRef, useState } from "react";
 import { ToastOption } from "types/toast";
-import { useSetRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { toastRecoil } from "src/recoil-states/toastRecoil";
 
-interface Toast {
-  id: number;
-  message: string;
-  option: ToastOption;
-}
-
 const useToast = () => {
-  const setToasts = useSetRecoilState(toastRecoil);
-  const toasts = useRecoilValue(toastRecoil);
+  const [toasts, setToasts] = useRecoilState(toastRecoil);
   const toastCounter = useRef(0);
 
   const showToast = (message: string, option?: ToastOption) => {

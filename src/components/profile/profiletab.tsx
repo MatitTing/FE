@@ -18,7 +18,7 @@ const TabContainer = styled.div`
   position: sticky;
   top: 0px;
   background-color: white;
-  z-index: 999;
+  z-index: 99;
 `;
 
 function CustomTabPanel(props: TabPanelProps) {
@@ -70,10 +70,10 @@ export default function ProfileTabs() {
         </Box>
       </TabContainer>
       <CustomTabPanel value={value} index={0}>
-        <PartyState></PartyState>
+        <PartyState />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        <Setting></Setting>
+        <Setting />
       </CustomTabPanel>
     </Box>
   );

@@ -18,7 +18,7 @@ const Container = styled.div<any>`
   flex-direction: row;
   gap: 10px;
   transition: top 0.3s ease;
-  z-index: 99;
+  z-index: 9;
 `;
 
 const ButtonList = [
@@ -45,6 +45,7 @@ const ToggleButton = ({ partystate, setPartystate }: ToggleButtonProps) => {
           text={text}
           buttonType="toggle"
           filled={partystate === value}
+          customwidth={false}
           onClick={() => {
             setPartystate(value);
           }}
