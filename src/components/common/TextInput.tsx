@@ -10,13 +10,12 @@ import styled from "@emotion/styled";
 const Container = styled.div({
   width: "100%",
   position: "relative",
-  width: "100%",
   height: "100%",
 });
 
 const Input = styled.input({
   width: "100%",
-  height: "100%",
+  height: "40px",
   padding: "10px 14px",
   border: "none",
   borderRadius: "10px",

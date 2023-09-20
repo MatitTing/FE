@@ -1,10 +1,7 @@
 import React from "react";
 import { DefaultButton } from "@components/common/DefaultButton";
-import { SetStateAction, Dispatch } from "react";
 import { useState } from "react";
 import styled from "@emotion/styled";
-
-interface GenderTypeProps {}
 
 const Container = styled.div`
   margin-top: 80px;
@@ -23,6 +20,7 @@ const GenderType = () => {
     <Container>
       {genders.map(({ type }, index) => (
         <DefaultButton
+          key={type}
           text={type}
           filled={index === seletedindex}
           onClick={() => {

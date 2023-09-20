@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "@emotion/styled";
-import ToggleButton from "./togglebutton";
+import ToggleButton from "./ToggleButton";
 import { useState, useEffect } from "react";
-import PartyList from "./partylist";
+import PartyList from "./PartyList";
 import { PartyData } from "types/party";
 
 const Container = styled.div`
@@ -68,7 +68,7 @@ const PartyListData3 = [
   },
 ];
 
-const PartyState = () => {
+const PartySituation = () => {
   const [partystate, setPartystate] = useState<string>("host");
 
   //react-qurry 임시대체
@@ -92,11 +92,14 @@ const PartyState = () => {
       ></ToggleButton>
       <PartyListContainer>
         {data?.map((partydata) => (
-          <PartyList partydata={partydata}></PartyList>
+          <PartyList
+            key={partydata.categoryId}
+            partydata={partydata}
+          ></PartyList>
         ))}
       </PartyListContainer>
     </Container>
   );
 };
 
-export default PartyState;
+export default PartySituation;

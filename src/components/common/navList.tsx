@@ -25,6 +25,7 @@ const Container = styled.div`
     background-color: #dddddd;
   }
 `;
+
 const TitleText = styled.div`
   font-size: 12px;
 `;

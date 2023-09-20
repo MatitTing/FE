@@ -7,10 +7,7 @@ interface ToggleButtonProps {
   setPartystate: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const Container = styled.div<any>`
-  /* position: -webkit-sticky;
-  position: sticky;
-  top: 48px; */
+const Container = styled.div`
   display: flex;
   width: 100%;
   background-color: white;

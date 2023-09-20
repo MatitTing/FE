@@ -12,7 +12,7 @@ interface AuthButtonProps {
   width?: number;
   height?: number;
   provider?: string;
-  onunload?: any;
+  onunload?: any; //수정예정
 }
 
 interface ContainerProps {

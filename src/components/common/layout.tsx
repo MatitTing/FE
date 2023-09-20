@@ -1,6 +1,6 @@
-import Bottombar from '@components/common/bottombar';
-import styled from '@emotion/styled';
-import { ReactNode } from 'react';
+import Bottombar from "./BottomBar";
+import styled from "@emotion/styled";
+import { ReactNode } from "react";
 
 interface LayoutProps {
   children: ReactNode;
@@ -28,7 +28,7 @@ const BottomSection = styled.section`
 function Layout({ children }: LayoutProps) {
   return (
     <Container>
-      <header>{children}</header>
+      <header id="main">{children}</header>
       <BottomSection>
         <Bottombar />
       </BottomSection>

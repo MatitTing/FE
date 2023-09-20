@@ -15,7 +15,6 @@ const Container = styled.div`
   border-top: 1px solid #dddddd;
   z-index: 999;
   background-color: white;
-  background-color: white;
 `;
 
 const NavContainer = styled.div`
@@ -35,14 +34,19 @@ const navList = [
     icon: HomeIcon,
   },
   {
+    title: "검색",
+    href: "/search",
+    icon: SearchIcon,
+  },
+  {
     title: "파티 생성",
     href: "/create",
     icon: CreateIcon,
   },
   {
-    title: "검색",
-    href: "/search",
-    icon: SearchIcon,
+    title: "파티 채팅",
+    href: "/chat",
+    icon: ChatIcon,
   },
   {
     title: "프로필",

@@ -5,7 +5,7 @@ import LinearProgress, {
   linearProgressClasses,
 } from "@mui/material/LinearProgress";
 
-interface ProgressbarProps {
+interface ProgressBarProps {
   value?: number;
 }
 
@@ -22,7 +22,7 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   },
 }));
 
-export default function Progressbar({ value }: ProgressbarProps) {
+export default function ProgressBar({ value }: ProgressBarProps) {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <BorderLinearProgress variant="determinate" value={value} />

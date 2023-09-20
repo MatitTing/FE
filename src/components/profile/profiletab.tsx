@@ -3,9 +3,9 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import PartyState from "./partystate";
+import PartySituation from "./PartySituation";
 import styled from "@emotion/styled";
-import Setting from "./setting";
+import PartyReview from "./PartyReview";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -65,15 +65,15 @@ export default function ProfileTabs() {
             aria-label="basic tabs example"
           >
             <Tab label="파티현황" {...a11yProps(0)} />
-            <Tab label="설정" {...a11yProps(1)} />
+            <Tab label="후기" {...a11yProps(1)} />
           </Tabs>
         </Box>
       </TabContainer>
       <CustomTabPanel value={value} index={0}>
-        <PartyState />
+        <PartySituation />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        <Setting />
+        <PartyReview />
       </CustomTabPanel>
     </Box>
   );

@@ -14,18 +14,24 @@ const Container = styled.div`
   }
 `;
 
-const ProfilebackGround = () => {
+const ProfileBackGround = () => {
   const [scrollPosition, setScrollPosition] = useState(0);
 
   useEffect(() => {
-    const main: any = document.querySelector("#main");
+    const main: HTMLDivElement | null = document.querySelector("#main");
     const handleScroll = () => {
-      const position = main.scrollTop;
-      setScrollPosition(position);
+      if (main) {
+        const position = main.scrollTop;
+        setScrollPosition(position);
+      }
     };
-    main.addEventListener("scroll", handleScroll);
+    if (main) {
+      main.addEventListener("scroll", handleScroll);
+    }
     return () => {
-      main.removeEventListener("scroll", handleScroll);
+      if (main) {
+        main.removeEventListener("scroll", handleScroll);
+      }
     };
   }, []);
 
@@ -41,4 +47,4 @@ const ProfilebackGround = () => {
   );
 };
 
-export default ProfilebackGround;
+export default ProfileBackGround;
