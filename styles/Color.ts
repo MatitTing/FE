@@ -15,9 +15,9 @@ export const Color = {
   DBlue: `#364AD5`,
   BlueGradient: `linear-gradient(99.81deg, #7F8EFB 0%, #5467F5 100%)`,
   YellowGradient: `linear-gradient(50.36deg, #FFD800 7.78%, #FFB400 100%)`,
-  Placeholder: '#BBBBBD',
-  TextSecondary: '#96989C',
-  Secondary: '#F6F8FF',
+  Placeholder: "#BBBBBD",
+  TextSecondary: "#96989C",
+  Secondary: "#F6F8FF",
   Background: `#F9F9F9`,
 };
 
@@ -69,22 +69,22 @@ export const ColorToken = {
   notice: `#58595B`,
 
   /* white */
-  white: '#FFFFFF',
+  white: "#FFFFFF",
 
   /*green */
-  green: '#65CB77',
-  secondaryGreen: '#00CF58',
+  green: "#65CB77",
+  secondaryGreen: "#00CF58",
   /* grey */
-  grey: '#D9DADB',
-  grey2: '#C2C3C4',
-  grey3: '#EBEBEB',
-  grey4: '#F5F5F5',
-  grey5: '#BCBCBC',
-  grey6: '#999999',
-  grey7: '#434343',
-  grey8: '#262626',
-  grey9: '#D7D7D7',
+  grey: "#D9DADB",
+  grey2: "#C2C3C4",
+  grey3: "#EBEBEB",
+  grey4: "#F5F5F5",
+  grey5: "#BCBCBC",
+  grey6: "#999999",
+  grey7: "#434343",
+  grey8: "#262626",
+  grey9: "#D7D7D7",
 
   /*yellow*/
-  yellow: '#FFD92D',
+  yellow: "#FFD92D",
 };

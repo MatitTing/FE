@@ -1,11 +1,12 @@
-import { useRouter } from "next/router";
 import styled from "@emotion/styled";
+import { useRouter } from "next/router";
+import { BottomIconProps } from "types/layout";
 
 interface NavListProps {
   item: {
     title: string;
     href: string;
-    icon: (selected: boolean) => JSX.Element;
+    icon: ({ selected }: BottomIconProps) => JSX.Element;
   };
 }
 
@@ -24,6 +25,7 @@ const Container = styled.div`
     background-color: #dddddd;
   }
 `;
+
 const TitleText = styled.div`
   font-size: 12px;
 `;
@@ -39,7 +41,7 @@ const NavList = ({ item }: NavListProps) => {
         router.push(href);
       }}
     >
-      {icon(selected)}
+      {icon({ selected })}
       <TitleText>{title}</TitleText>
     </Container>
   );

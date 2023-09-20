@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
-import SetList from "./setlist";
+import SetList from "../setting/SetList";
 
 const Container = styled.div`
   display: flex;
@@ -8,12 +8,8 @@ const Container = styled.div`
   flex-direction: column;
 `;
 
-const Setting = () => {
-  return (
-    <Container>
-      <SetList />
-    </Container>
-  );
+const PartyReview = () => {
+  return <Container>PartyReview</Container>;
 };
 
-export default Setting;
+export default PartyReview;

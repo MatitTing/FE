@@ -1,4 +1,4 @@
-import Toast from "@components/common/toast";
+import Toast from "@components/common/Toast";
 import useToast from "src/hooks/useToast";
 import styled from "@emotion/styled";
 

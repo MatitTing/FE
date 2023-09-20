@@ -1,11 +1,11 @@
 import styled from "@emotion/styled";
 import { DefaultHeader } from "@components/common/DefaultHeader";
 import { useState } from "react";
-import BackIcon from "@components/icons/common/close";
-import Progressbar from "@components/common/progressbar";
-import GenderType from "@components/profileinput/gendertype";
-import SetBirthday from "@components/profileinput/setbirthday";
-import SetNickname from "@components/profileinput/setnickname";
+import BackIcon from "@components/icons/common/Back.icon";
+import Progressbar from "@components/common/ProgressBar";
+import GenderType from "@components/profileinput/GenderType";
+import SetBirthday from "@components/profileinput/SetBirthday";
+import SetNickname from "@components/profileinput/SetNickname";
 import { DefaultButton } from "@components/common/DefaultButton";
 
 const Container = styled.div`

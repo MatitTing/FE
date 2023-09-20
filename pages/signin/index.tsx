@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
 import { DefaultHeader } from "@components/common/DefaultHeader";
-import BackIcon from "@components/icons/common/close";
-import AuthButton from "@components/signin/signinbutton";
-import Link from "next/link";
+import BackIcon from "@components/icons/common/Back.icon";
+import AuthButton from "@components/signin/SigninButton";
+import { useRouter } from "next/router";
 
 const Container = styled.div`
   display: flex;
@@ -17,12 +17,6 @@ const AuthButtonList = styled.div`
   flex-direction: column;
   width: 100%;
   gap: 16px;
-`;
-
-const SignupLink = styled.div`
-  margin-top: 16px;
-  display: flex;
-  flex-direction: row-reverse;
 `;
 
 const Main = styled.div`
@@ -46,13 +40,24 @@ const HeaderAreaContainer = styled.div`
   height: 100%;
   padding: 0 15px;
   align-items: center;
+  cursor: pointer;
 `;
 
-const leftArea = () => {
-  return <HeaderAreaContainer>{BackIcon()}</HeaderAreaContainer>;
-};
-
 const Profile = () => {
+  const router = useRouter();
+
+  const leftArea = () => {
+    return (
+      <HeaderAreaContainer
+        onClick={() => {
+          router.back();
+        }}
+      >
+        {BackIcon()}
+      </HeaderAreaContainer>
+    );
+  };
+
   return (
     <Container>
       <DefaultHeader leftArea={leftArea()} />
@@ -76,9 +81,6 @@ const Profile = () => {
             provider="naver"
           />
         </AuthButtonList>
-        <SignupLink>
-          <Link href={"/profileinput"}>회원가입</Link>
-        </SignupLink>
       </Main>
     </Container>
   );

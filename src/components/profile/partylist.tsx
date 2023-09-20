@@ -44,6 +44,7 @@ const Detail2 = styled.div`
 `;
 
 const PartyList = ({ partydata }: PartyListProps) => {
+  //데이터 구조 추후 변경
   const {
     categoryId = "",
     thumbnailUrl = "",
@@ -65,6 +66,7 @@ const PartyList = ({ partydata }: PartyListProps) => {
     >
       <Image
         src="/images/profile/profile.png"
+        alt="프로필사진"
         width={160}
         height={120}
         className="partyimg"

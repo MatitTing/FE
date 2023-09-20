@@ -33,14 +33,21 @@ const Container = styled.div`
 `;
 
 const LeftSection = styled.div`
+  display: flex;
+  align-items: center;
   width: calc(100% / 3);
 `;
 const CenterSection = styled.div`
   display: flex;
   justify-content: center;
+  align-items: center;
+
   width: calc(100% / 3);
 `;
 const RightSection = styled.div`
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
   width: calc(100% / 3);
 `;
 

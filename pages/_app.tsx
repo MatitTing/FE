@@ -1,4 +1,4 @@
-import Layout from "@components/common/layout";
+import Layout from "@components/common/Layout";
 import { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import type { AppProps } from "next/app";

@@ -1,13 +1,14 @@
 import React from "react";
 import styled from "@emotion/styled";
-import MannerDegree from "../common/progressbar";
+import Progressbar from "@components/common/ProgressBar";
 import Image from "next/image";
-import ProfilebackGround from "./profilebackground";
-import LocationIcon from "@components/icons/profile/location";
-import GenderIcon from "@components/icons/profile/gender";
-import InfoIcon from "@components/icons/profile/info";
+import ProfilebackGround from "./ProfileBackground";
+import LocationIcon from "@components/icons/profile/Location.icon";
+import GenderIcon from "@components/icons/profile/Gender.icon";
+import InfoIcon from "@components/icons/profile/Info.icon";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
+import { Session } from "next-auth";
 
 const Container = styled.div`
   display: flex;
@@ -76,10 +77,8 @@ const userdata = {
 
 const ProfileInfo = () => {
   const { locaton, gender, age, name, mannerdegree } = userdata;
-  const { data: session, status }: any = useSession();
+  const { data: session, status } = useSession();
   const logined = status === "authenticated";
-
-  console.log("session", session);
 
   const router = useRouter();
   return (
@@ -88,39 +87,39 @@ const ProfileInfo = () => {
       <ProfileDetailContainer>
         <ProfileImgContainer>
           <Image
-            src={logined ? session?.user.image : "/images/profile/profile.png"}
+            src={session?.user?.image || "/images/profile/profile.png"}
             width={128}
             height={128}
             className="profileimg"
             onClick={() => {
               router.push("/signin");
             }}
-          ></Image>
+          />
         </ProfileImgContainer>
         <ProfileDetail>
-          {logined ? (
-            <>
-              <div className="userinfo">
-                <div className="location">
-                  <LocationIcon />
-                  <span>{locaton}</span>
-                </div>
-                <div className="gender">
-                  <GenderIcon />
-                  <span>{gender}</span>
-                </div>
-                <div className="age">
-                  <InfoIcon />
-                  <span>{age}</span>
-                </div>
+          {logined && (
+            <div className="userinfo">
+              <div className="location">
+                <LocationIcon />
+                <span>{locaton}</span>
               </div>
-              <div className="name">{session?.user.name}</div>
-              <MannerDegreeContainer>
-                <MannerDegree value={mannerdegree} /> {mannerdegree}°C
-              </MannerDegreeContainer>
-            </>
-          ) : (
-            <div className="name">로그인을 해야합니다.</div>
+              <div className="gender">
+                <GenderIcon />
+                <span>{gender}</span>
+              </div>
+              <div className="age">
+                <InfoIcon />
+                <span>{age}</span>
+              </div>
+            </div>
+          )}
+          <div className="name">
+            {session?.user?.name || "로그인을 해야합니다."}
+          </div>
+          {logined && (
+            <MannerDegreeContainer>
+              <Progressbar value={mannerdegree} /> {mannerdegree}°C
+            </MannerDegreeContainer>
           )}
         </ProfileDetail>
       </ProfileDetailContainer>

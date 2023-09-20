@@ -1,15 +1,21 @@
-import { ChangeEvent, FocusEventHandler, KeyboardEventHandler } from "react";
+import {
+  ChangeEvent,
+  ChangeEventHandler,
+  FocusEventHandler,
+  KeyboardEventHandler,
+} from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
 import styled from "@emotion/styled";
 
 const Container = styled.div({
   width: "100%",
   position: "relative",
+  height: "100%",
 });
 
 const Input = styled.input({
   width: "100%",
-  height: "40px",
+  height: "100%",
   padding: "10px 14px",
   border: "none",
   borderRadius: "10px",
@@ -29,6 +35,7 @@ interface InputProps {
   value?: string;
   placeholder?: string;
   errorMessage?: string;
+  onChange?: ChangeEventHandler<HTMLInputElement>;
   onFocus?: FocusEventHandler<HTMLInputElement>;
   onKeyDown?: KeyboardEventHandler<HTMLInputElement>;
   whiteSpace?: boolean;
@@ -39,6 +46,7 @@ const TextInput = ({
   value,
   placeholder,
   errorMessage,
+  onChange,
   onFocus,
   onKeyDown,
   whiteSpace = true,
@@ -47,6 +55,8 @@ const TextInput = ({
     if (!whiteSpace) {
       e.target.value = e.target.value.replace(/\s/gi, "");
     }
+
+    onChange && onChange(e);
   };
 
   return (
