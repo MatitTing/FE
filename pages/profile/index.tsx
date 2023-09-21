@@ -1,11 +1,10 @@
 import styled from "@emotion/styled";
-import Header from "src/component/profile/header";
-import { useState } from "react";
-import ProfileTabs from "src/component/profile/profiletab";
-import MannerDegree from "src/component/profile/mannerdegree";
-import LocationIcon from "@assets/icons/profile/location";
-import GenderIcon from "@assets/icons/profile/gender";
-import InfoIcon from "@assets/icons/profile/info";
+import ProfileTab from "@components/profile/ProfileTab";
+import SettingIcon from "@components/icons/common/Setting.icon";
+import { useRouter } from "next/router";
+import BackButton from "@components/common/BackButton";
+import { DefaultHeader } from "@components/common/DefaultHeader";
+import ProfileInfo from "@components/profile/ProfileInfo";
 
 const Container = styled.div`
   display: flex;
@@ -53,7 +52,7 @@ const Profile = () => {
     <Container>
       <DefaultHeader leftArea={BackButton()} rightArea={rightArea()} />
       <ProfileInfo />
-      <ProfileTabs />
+      <ProfileTab />
     </Container>
   );
 };

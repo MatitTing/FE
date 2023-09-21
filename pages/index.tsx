@@ -1,6 +1,6 @@
 import { DefaultHeader } from "@components/common/DefaultHeader";
 import { DefaultText } from "@components/common/DefaultText";
-import SearchIcon from "@components/icons/bottombar/search";
+import SearchIcon from "@components/icons/bottombar/Search.icon";
 import { ArrowIcon } from "@components/icons/header/Arrow.icon";
 import { NotificationIcon } from "@components/icons/header/Notification.icon";
 import { HomeList } from "@components/pages/home/HomeList";
