@@ -56,7 +56,7 @@ const navList = [
   },
 ];
 
-const Bottombar = () => (
+const BottomBar = () => (
   <Container>
     <NavContainer>
       {navList.map((item) => (
@@ -66,4 +66,4 @@ const Bottombar = () => (
   </Container>
 );
 
-export default Bottombar;
+export default BottomBar;

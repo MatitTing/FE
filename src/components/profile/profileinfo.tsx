@@ -8,7 +8,6 @@ import GenderIcon from "@components/icons/profile/Gender.icon";
 import InfoIcon from "@components/icons/profile/Info.icon";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
-import { Session } from "next-auth";
 
 const Container = styled.div`
   display: flex;
