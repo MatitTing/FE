@@ -1,6 +1,5 @@
 import styled from "@emotion/styled";
 import { DefaultButton } from "@components/common/DefaultButton";
-import { useState, useEffect } from "react";
 
 interface ToggleButtonProps {
   partystate: string;

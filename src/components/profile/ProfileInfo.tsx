@@ -2,13 +2,12 @@ import React from "react";
 import styled from "@emotion/styled";
 import Progressbar from "@components/common/ProgressBar";
 import Image from "next/image";
-import ProfilebackGround from "./ProfileBackground";
+import ProfileBackGround from "./ProfileBackGround";
 import LocationIcon from "@components/icons/profile/Location.icon";
 import GenderIcon from "@components/icons/profile/Gender.icon";
 import InfoIcon from "@components/icons/profile/Info.icon";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
-import { Session } from "next-auth";
 
 const Container = styled.div`
   display: flex;
@@ -83,7 +82,7 @@ const ProfileInfo = () => {
   const router = useRouter();
   return (
     <Container>
-      <ProfilebackGround />
+      <ProfileBackGround />
       <ProfileDetailContainer>
         <ProfileImgContainer>
           <Image
