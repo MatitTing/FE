@@ -6,25 +6,27 @@ import {
 } from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
 import styled from "@emotion/styled";
+import { shouldNotForwardProp } from "@utils/common";
 
 const Container = styled.div({
   position: "relative",
   width: "100%",
-  height: "100%",
 });
 
-const Input = styled.input({
+const Input = styled(
+  "input",
+  shouldNotForwardProp("isBorderRadius")
+)<{ isBorderRadius?: boolean }>(({ isBorderRadius }) => ({
   width: "100%",
   height: "100%",
   padding: "10px 14px",
   border: "none",
-  borderRadius: "10px",
   backgroundColor: "#f9f9f9",
-
+  borderRadius: isBorderRadius ? "10px" : 0,
   "&:focus": {
     outline: "none",
   },
-});
+}));
 
 const ErrorText = styled.p({
   color: "red",
@@ -33,25 +35,33 @@ const ErrorText = styled.p({
 interface InputProps {
   register?: UseFormRegisterReturn<string>;
   value?: string;
+  name?: string;
   placeholder?: string;
   errorMessage?: string;
+  maxLength?: number;
   onChange?: ChangeEventHandler<HTMLInputElement>;
   onFocus?: FocusEventHandler<HTMLInputElement>;
   onKeyDown?: KeyboardEventHandler<HTMLInputElement>;
   whiteSpace?: boolean;
+  isBorderRadius?: boolean;
 }
 
 const TextInput = ({
   register,
   value,
+  name,
   placeholder,
   errorMessage,
+  maxLength,
   onChange,
   onFocus,
   onKeyDown,
   whiteSpace = true,
+  isBorderRadius = false,
 }: InputProps) => {
-  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+  const onChangeHandler = (
+    e: ChangeEvent<HTMLInputElement>
+  ) => {
     if (!whiteSpace) {
       e.target.value = e.target.value.replace(/\s/gi, "");
     }
@@ -63,14 +73,19 @@ const TextInput = ({
     <Container>
       <Input
         type="text"
+        name={name}
         {...register}
         value={value}
         placeholder={placeholder}
         onChange={onChangeHandler}
         onFocus={onFocus}
         onKeyDown={onKeyDown}
+        isBorderRadius={isBorderRadius}
+        maxLength={maxLength}
       />
-      {errorMessage && <ErrorText>{errorMessage}</ErrorText>}
+      {errorMessage && (
+        <ErrorText>{errorMessage}</ErrorText>
+      )}
     </Container>
   );
 };

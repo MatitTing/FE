@@ -11,13 +11,15 @@ import WithdrawIcon from "@components/icons/profile/withdraw";
 
 const SetList = () => {
   return (
-    <Box sx={{ width: "100%", bgcolor: "background.paper" }}>
+    <Box
+      sx={{ width: "100%", bgcolor: "background.paper" }}
+    >
       <nav aria-label="main mailbox folders">
         <List>
           <ListItem disablePadding>
             <ListItemButton>
               <ListItemIcon>
-                <LogoutIcon />
+                <Logout />
               </ListItemIcon>
               <ListItemText primary="로그아웃" />
             </ListItemButton>
