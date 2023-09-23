@@ -36,6 +36,7 @@
     "eslint": "8.45.0",
     "eslint-config-next": "13.4.12",
     "react-use": "^17.4.0",
+    "kakao.maps.d.ts": "^0.1.39",
     "recoil": "^0.7.7",
     "recoil-persist": "^5.1.0",
     "typescript": "5.1.6"
