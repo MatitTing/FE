@@ -24,7 +24,17 @@ const mockupData = [
   },
 ];
 
-const Wrapper = styled.div({
+const Wrapper = styled.div({});
+
+const Header = styled.header({
+  height: "45px !important",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  boxShadow: "0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24)",
+});
+
+const Contents = styled.div({
   padding: "2rem",
 });
 
@@ -61,10 +71,11 @@ const ImageBox = styled.div({
   marginRight: "5%",
 });
 
-const Contents = styled.div({
+const RightBox = styled.div({
   width: "calc(100% - 60px)",
   display: "flex",
   justifyContent: "space-between",
+  alignItems: "center",
 });
 
 const TextBox = styled.div({
@@ -83,36 +94,44 @@ const Message = styled.p({
   margin: 0,
 });
 
-const Recentㅆime = styled.p({});
+const Recentime = styled.p({});
 
 const ChatListPage: NextPage = () => {
+  const handleOnChangeSearch = () => {};
+  const handleOnClickSearch = () => {};
+
   return (
     <Wrapper>
-      <SearchBox>
-        <TextInput />
-        <SearchButton>검색</SearchButton>
-      </SearchBox>
+      <Header>채팅방</Header>
+      <Contents>
+        <SearchBox>
+          <TextInput
+            placeholder="채팅방 검색"
+            onChange={handleOnChangeSearch}
+          />
+          <SearchButton onClick={handleOnClickSearch}>검색</SearchButton>
+        </SearchBox>
+        <RoomList>
+          {mockupData.map((item) => {
+            const { img, nickName, time, message } = item;
 
-      <RoomList>
-        {mockupData.map((item) => {
-          const { img, nickName, time, message } = item;
-
-          return (
-            <Room key={nickName}>
-              <ImageBox style={{}}>
-                <Image width="70" height="70" src={img} alt="profile" />
-              </ImageBox>
-              <Contents>
-                <TextBox>
-                  <NickName>{nickName}</NickName>
-                  <Message>{message}</Message>
-                </TextBox>
-                <Recentㅆime>{time}</Recentㅆime>
-              </Contents>
-            </Room>
-          );
-        })}
-      </RoomList>
+            return (
+              <Room key={nickName}>
+                <ImageBox style={{}}>
+                  <Image width="70" height="70" src={img} alt="profile" />
+                </ImageBox>
+                <RightBox>
+                  <TextBox>
+                    <NickName>{nickName}</NickName>
+                    <Message>{message}</Message>
+                  </TextBox>
+                  <Recentime>{time}</Recentime>
+                </RightBox>
+              </Room>
+            );
+          })}
+        </RoomList>
+      </Contents>
     </Wrapper>
   );
 };
