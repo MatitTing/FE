@@ -1,8 +1,8 @@
-import { DefaultText } from '@components/common/DefaultText';
-import styled from '@emotion/styled';
-import Image from 'next/image';
-import { ColorToken } from 'styles/Color';
-import { PartyListDataType } from './HomeList';
+import { DefaultText } from "@components/common/DefaultText";
+import styled from "@emotion/styled";
+import Image from "next/image";
+import { ColorToken } from "styles/Color";
+import { PartyListDataType } from "./HomeList";
 
 interface PartyCardProps {
   partyData: PartyListDataType;
@@ -19,9 +19,10 @@ const Container = styled.div`
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 `;
 const InformationSection = styled.section`
-  padding: 20px;
+  padding: 8px 15px;
   display: flex;
   flex-direction: column;
+
   gap: 10px;
 `;
 const Title = styled.div``;
@@ -31,17 +32,26 @@ const OtherInformation = styled.div`
   justify-content: space-between;
 `;
 
+const ImageSection = styled.section`
+  width: 100%;
+  height: 100%;
+`;
+
 export const PartyCard = ({ partyData }: PartyCardProps) => {
   return (
     <Container>
-      <Image
-        width={500}
-        height={250}
-        src={partyData.image}
-        placeholder="blur"
-        blurDataURL={partyData.image}
-        alt={'part-image'}
-      />
+      <ImageSection>
+        <Image
+          width={500}
+          height={300}
+          layout="responsive"
+          src={partyData.image}
+          placeholder="blur"
+          blurDataURL={partyData.image}
+          alt={"party-image"}
+          objectFit="cover"
+        />
+      </ImageSection>
       <InformationSection>
         <Title>
           <DefaultText text={partyData.title} size={24} weight={700} />
@@ -57,7 +67,7 @@ export const PartyCard = ({ partyData }: PartyCardProps) => {
           />
           <DefaultText text={partyData.location} size={15} weight={500} />
           <DefaultText
-            text={`${partyData.isWomenOnly ? '여성전용' : ''}`}
+            text={`${partyData.isWomenOnly ? "여성전용" : ""}`}
             size={15}
             weight={500}
           />
