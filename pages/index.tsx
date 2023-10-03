@@ -11,6 +11,7 @@ import { useGetLocationAddressMutation } from "@hooks/react-query/useGetCurrentA
 import useToast from "@hooks/useToast";
 import { Transition } from "@mantine/core";
 import type { NextPage } from "next";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
@@ -68,12 +69,15 @@ const Home: NextPage = () => {
       </HeaderAreaContainer>
     );
   };
+
   const rightArea = () => {
     return (
       <HeaderAreaContainer>
-        <div onClick={() => router.push("/search")}>
-          <SearchIcon />
-        </div>
+        <Link href={"/search"}>
+          <a>
+            <SearchIcon />
+          </a>
+        </Link>
         <NotificationIcon
           notificationCount={0}
           styles={{
@@ -98,17 +102,20 @@ const Home: NextPage = () => {
             setIsClickPosition(false);
           }}
         />
-        <DefaultText
-          text="지도에서 위치 지정"
-          size={15}
-          style={{
-            cursor: "pointer",
-          }}
-          onClick={() => {
-            setIsClickPosition(false);
-            router.push("/location-setting");
-          }}
-        />
+        <Link href={"/location-setting"}>
+          <a>
+            <DefaultText
+              text="지도에서 위치 지정"
+              size={15}
+              style={{
+                cursor: "pointer",
+              }}
+              onClick={() => {
+                setIsClickPosition(false);
+              }}
+            />
+          </a>
+        </Link>
       </PositionTextContainer>
     );
   };

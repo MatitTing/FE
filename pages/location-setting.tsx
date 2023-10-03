@@ -20,6 +20,10 @@ import { Typography } from "styles/Typography";
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  #go-back,
+  #position-setting {
+    cursor: pointer;
+  }
 `;
 
 const MapSection = styled.section`
@@ -58,6 +62,17 @@ const LocationSettingPage = () => {
   const [mapPosition, setMapPosition] = useState<PositionDataType>();
   const [isKeywordError, setIsKeywordError] = useState(false);
 
+  const clickGoBackButton = () => {
+    router.back();
+  };
+  const clickPositionSettingButton = () => {
+    if (!mapPosition) {
+      return;
+    }
+    setPosition(mapPosition);
+    router.push("/");
+  };
+
   // 저장된 키 이후, 사용자 엔터 입력 시, 카카오 서버 측에 해당 키워드 기반 위치 정보 요청.
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
@@ -65,7 +80,7 @@ const LocationSettingPage = () => {
         keyword: inputRef.current?.value || "",
         kakaoRestApiKey: process.env.KAKAO_RESTAPI_KEY || "",
       }).then((locationData) => {
-        // 예외 처리로 분기 처리. 검색 키워드가 네이버 db 정보에 있는 경우만 요청.
+        // 예외 처리로 분기 처리. 검색 키워드가 카카오 db 정보에 있는 경우만 요청.
         if (locationData.meta.total_count !== 0) {
           setMapPosition({
             coords: {
@@ -76,7 +91,7 @@ const LocationSettingPage = () => {
           });
           setIsKeywordError(false);
         }
-        // 네이버 정보에 없는 경우 사용자에게 주지 시키는 알러트!
+        // 카카오 정보에 없는 경우 사용자에게 주지 시키는 알러트!
         else {
           setIsKeywordError(true);
         }
@@ -84,6 +99,7 @@ const LocationSettingPage = () => {
     }
   };
 
+  // 최초 멥 마운트 시,포지션 업데이트.
   useEffect(() => {
     setMapPosition(position);
   }, [position]);
@@ -124,24 +140,12 @@ const LocationSettingPage = () => {
     <Container>
       <DefaultHeader
         leftArea={
-          <div
-            onClick={() => {
-              router.back();
-            }}
-          >
+          <div id="go-back" onClick={clickGoBackButton}>
             뒤로가기
           </div>
         }
         rightArea={
-          <div
-            onClick={() => {
-              if (!mapPosition) {
-                return;
-              }
-              setPosition(mapPosition);
-              router.push("/");
-            }}
-          >
+          <div id="position-setting" onClick={clickPositionSettingButton}>
             위치지정
           </div>
         }
