@@ -23,7 +23,7 @@ const Wrapper = styled.div`
 const Container = styled.div`
   display: flex;
   justify-content: space-between;
-  flex: 1 1 1;
+  gap: 15px;
   background: ${ColorToken.white};
   width: 100%;
   max-width: 768px;
@@ -34,17 +34,13 @@ const Container = styled.div`
   height: 45px;
 `;
 
-const LeftSection = styled.div`
-  width: calc(100% / 3) px;
-`;
+const LeftSection = styled.div``;
 const CenterSection = styled.div`
+  width: 100%;
   display: flex;
   justify-content: center;
-  width: calc(100% / 3) px;
 `;
-const RightSection = styled.div`
-  width: calc(100% / 3) px;
-`;
+const RightSection = styled.div``;
 
 export const DefaultHeader = ({
   leftArea,
@@ -54,9 +50,9 @@ export const DefaultHeader = ({
   return (
     <Wrapper>
       <Container>
-        <LeftSection>{leftArea}</LeftSection>
-        <CenterSection>{centerArea}</CenterSection>
-        <RightSection>{rightArea}</RightSection>
+        {leftArea ? <LeftSection>{leftArea}</LeftSection> : null}
+        {centerArea ? <CenterSection>{centerArea}</CenterSection> : null}
+        {rightArea ? <RightSection>{rightArea}</RightSection> : null}
       </Container>
     </Wrapper>
   );
