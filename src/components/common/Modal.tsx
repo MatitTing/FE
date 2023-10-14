@@ -1,91 +1,40 @@
 import styled from "@emotion/styled";
-import { useContext } from "react";
-import {
-  ModalDispatchContext,
-  ModalStateContext,
-} from "src/contexts/ModalProvider";
+import useModal from "@hooks/useModal";
 
-const ModalBackground = styled.div({
-  position: "fixed",
-  top: 0,
-  left: 0,
-  width: "100%",
-  height: "100%",
-  backgroundColor: "rgb(0,0,0,0.4)",
-  zIndex: 999999,
-});
+const ModalBackground = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+`;
 
-const Container = styled.div({
-  display: "flex",
-  justifyContent: "space-around",
-  flexDirection: "column",
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  padding: "10px",
-  width: "fit-content",
-  height: "fit-content",
-  minWidth: "220px",
-  minHeight: "120px",
-  backgroundColor: "#fff",
-  borderRadius: "10px",
-});
-
-const TextWrapper = styled.div({
-  display: "flex",
-  justifyContent: "space-between",
-  flexDirection: "column",
-  gap: "10px",
-
-  "& > *": {
-    margin: 0,
-  },
-});
-
-const Description = styled.p({});
-
-const ButtonWrapper = styled.div({
-  display: "flex",
-  justifyContent: "flex-end",
-  gap: "10px",
-});
-
-const RigthButton = styled.button({});
-const LeftButton = styled.button({});
+const Container = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  max-width: 800px;
+  max-height: 600px;
+  min-width: 300px;
+  min-height: 100px;
+  background-color: #ffffff;
+  border: 1px solid #cbcbcb;
+  border-radius: 10px;
+`;
 
 const Modal = () => {
-  const dispatch = useContext(ModalDispatchContext);
-  const modalInfo = useContext(ModalStateContext);
+  const { modalContents, closeModal } = useModal();
 
-  if (!modalInfo) return;
-
-  const handleModalCancel = (e: { stopPropagation: () => void }) => {
-    e.stopPropagation();
-    dispatch && dispatch({ modalType: "none" });
-  };
-
-  return (
-    modalInfo && (
-      <ModalBackground onClick={handleModalCancel}>
-        <Container>
-          <TextWrapper>
-            <Description>{modalInfo?.contents}</Description>
-          </TextWrapper>
-          <ButtonWrapper>
-            {modalInfo?.leftBtnName && (
-              <LeftButton onClick={handleModalCancel}>
-                {modalInfo?.leftBtnName}
-              </LeftButton>
-            )}
-            <RigthButton onClick={handleModalCancel}>
-              {modalInfo?.rightBtnName}
-            </RigthButton>
-          </ButtonWrapper>
-        </Container>
-      </ModalBackground>
-    )
-  );
+  return modalContents.isOpen ? (
+    <ModalBackground onClick={closeModal}>
+      <Container>{modalContents.content}</Container>
+    </ModalBackground>
+  ) : null;
 };
 
 export default Modal;
