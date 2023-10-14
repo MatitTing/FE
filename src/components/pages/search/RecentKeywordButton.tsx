@@ -5,6 +5,7 @@ import { useCallback } from "react";
 
 interface RecentKeywordButtonProps {
   keyword: string;
+  onClickKeyword: (keyword: string) => void;
   onClickDeleteBtn: (keyword: string) => void;
 }
 
@@ -15,6 +16,7 @@ const Container = styled.div`
     display: flex;
     gap: 15px;
     align-items: center;
+    cursor: pointer;
   }
   #keyword-deletebtn-area {
     display: flex;
@@ -25,9 +27,14 @@ const Container = styled.div`
 
 export const RecentKeywordButton = ({
   keyword,
+  onClickKeyword,
   onClickDeleteBtn,
 }: RecentKeywordButtonProps) => {
-  const onClickHandler = useCallback(() => {
+  const onClickKeywordHandler = useCallback(() => {
+    onClickKeyword(keyword);
+  }, [keyword, onClickKeyword]);
+
+  const onClickDeleteHandler = useCallback(() => {
     onClickDeleteBtn(keyword);
   }, [keyword, onClickDeleteBtn]);
 
@@ -35,10 +42,10 @@ export const RecentKeywordButton = ({
     <Container>
       <div id="keyword-area">
         <TimeMachineIcon />
-        <DefaultText text={keyword} size={15} />
+        <DefaultText text={keyword} size={15} onClick={onClickKeywordHandler} />
       </div>
       <div id="keyword-deletebtn-area">
-        <DefaultText text="삭제" size={15} onClick={onClickHandler} />
+        <DefaultText text="삭제" size={15} onClick={onClickDeleteHandler} />
       </div>
     </Container>
   );

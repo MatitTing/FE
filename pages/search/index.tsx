@@ -4,11 +4,10 @@ import BackIcon from "@components/icons/common/close";
 import { HotKeywordTagButton } from "@components/pages/search/HotKeywordTagButton";
 import { RecentKeywordButton } from "@components/pages/search/RecentKeywordButton";
 import styled from "@emotion/styled";
+import { useSearchKeyword } from "@hooks/useSearchKeyword";
 import { useRouter } from "next/router";
-import React, { useCallback, useRef } from "react";
+import { useCallback } from "react";
 import ScrollContainer from "react-indiana-drag-scroll";
-import { useRecoilState, useResetRecoilState } from "recoil";
-import { recentKeywordStates } from "src/recoil-states/recentKeywordStates";
 import { Color } from "styles/Color";
 
 const mockHotkeywordData = [
@@ -80,57 +79,44 @@ const RecentKeywordSection = styled.section`
     margin-top: 30px;
     overflow-x: hidden;
     overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
   }
 `;
 
 const SearchPage = () => {
-  const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
-  const [recentKeywords, setRecentKeywords] =
-    useRecoilState(recentKeywordStates);
-  const resetRecentKeywords = useResetRecoilState(recentKeywordStates);
+  const {
+    updateKeywords,
+    searchKeyword,
+    recentKeywords,
+    setRecentKeywords,
+    inputRef,
+    resetRecentKeywords,
+  } = useSearchKeyword();
 
-  const updateKeywords = useCallback(
-    (keyword: string) => {
-      if (!recentKeywords.includes(keyword)) {
-        // 최신 순으로 배열의 맨 앞에 추가
-        const updatedKeywords = [keyword, ...recentKeywords];
-        // 최대 저장 개수를 유지하도록 자르기
-        const maxKeywords = 10; // 원하는 최대 키워드 개수 설정
-        const trimmedKeywords = updatedKeywords.slice(0, maxKeywords);
-        setRecentKeywords(trimmedKeywords);
-      }
-    },
-    [recentKeywords, setRecentKeywords]
-  );
-
-  const searchKeyword = useCallback(
-    (event: React.KeyboardEvent) => {
-      if (event.key !== "Enter") {
-        return;
-      }
-
-      if (!inputRef.current?.value) {
-        return;
-      }
-      const keyword = inputRef.current.value;
-      // 중복되지 않는 키워드인지 확인
-      updateKeywords(keyword);
-      router.push(`/search/${keyword}`);
-    },
-    [router, updateKeywords]
-  );
-
-  const onClickTagBtn = useCallback(
+  const onClickKeyword = useCallback(
     (keyword: string) => {
       updateKeywords(keyword);
       router.push(`/search/${keyword}`);
     },
     [router, updateKeywords]
   );
+
   const onClickBackBtn = () => {
     router.back();
   };
+
+  const onClickIndividualRemoveBtn = useCallback(
+    (keyword: string) => {
+      const updatedKeywords = [...(recentKeywords ?? [])].filter(
+        (value) => value !== keyword
+      );
+      setRecentKeywords?.(updatedKeywords);
+    },
+    [recentKeywords, setRecentKeywords]
+  );
 
   const HeaderLeftArea = () => {
     return (
@@ -152,16 +138,6 @@ const SearchPage = () => {
     );
   };
 
-  const onClickIndividualRemoveBtn = useCallback(
-    (keyword: string) => {
-      const updatedKeywords = [...recentKeywords].filter(
-        (value) => value !== keyword
-      );
-      setRecentKeywords(updatedKeywords);
-    },
-    [recentKeywords, setRecentKeywords]
-  );
-
   return (
     <Container>
       <DefaultHeader
@@ -181,14 +157,14 @@ const SearchPage = () => {
             }}
           >
             {mockHotkeywordData.map((value) => (
-              <div key={value.id} onClick={() => onClickTagBtn(value.name)}>
+              <div key={value.id} onClick={() => onClickKeyword(value.name)}>
                 <HotKeywordTagButton key={value.id} text={value.name} />
               </div>
             ))}
           </ScrollContainer>
         </HotKeywordSection>
         <RecentKeywordSection>
-          {recentKeywords.length > 0 ? (
+          {recentKeywords ?? [].length > 0 ? (
             <>
               <div id="recent-keyword-header">
                 <DefaultText text="최근 검색" size={15} weight={700} />
@@ -204,10 +180,11 @@ const SearchPage = () => {
                 />
               </div>
               <div id="recent-keyword-list">
-                {recentKeywords.map((value, index) => (
+                {recentKeywords?.map((value, index) => (
                   <RecentKeywordButton
                     key={value + index}
                     keyword={value}
+                    onClickKeyword={onClickKeyword}
                     onClickDeleteBtn={onClickIndividualRemoveBtn}
                   />
                 ))}
