@@ -3,7 +3,6 @@ import { atom } from "recoil";
 type ModalType = {
   isOpen: boolean;
   content: JSX.Element | string;
-  callBack?: () => any;
 };
 
 export const modalState = atom<ModalType>({
