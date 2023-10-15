@@ -1,5 +1,6 @@
 import { DefaultHeader } from "@components/common/DefaultHeader";
 import { DefaultText } from "@components/common/DefaultText";
+import { HeaderBackButton } from "@components/common/HeaderBackButton";
 import BackIcon from "@components/icons/common/close";
 import { HotKeywordTagButton } from "@components/pages/search/HotKeywordTagButton";
 import { RecentKeywordButton } from "@components/pages/search/RecentKeywordButton";
@@ -37,10 +38,6 @@ const Container = styled.div`
   background: ${Color.Grey};
   display: flex;
   flex-direction: column;
-  #back-btn {
-    cursor: pointer;
-    margin-top: -5px;
-  }
   #search-input {
     position: relative;
     width: 100%;
@@ -141,7 +138,7 @@ const SearchPage = () => {
   return (
     <Container>
       <DefaultHeader
-        leftArea={<HeaderLeftArea />}
+        leftArea={<HeaderBackButton />}
         centerArea={<HeaderCenterArea />}
       />
       <Contents>

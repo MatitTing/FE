@@ -1,4 +1,5 @@
 import { DefaultHeader } from "@components/common/DefaultHeader";
+import { HeaderBackButton } from "@components/common/HeaderBackButton";
 import BackIcon from "@components/icons/common/close";
 import styled from "@emotion/styled";
 import { useSearchKeyword } from "@hooks/useSearchKeyword";
@@ -48,13 +49,6 @@ const SearchResultPage = () => {
     }
   }, [keyword]);
 
-  const HeaderLeftArea = () => {
-    return (
-      <div id="back-btn" onClick={onClickBackBtn}>
-        <BackIcon />
-      </div>
-    );
-  };
   const HeaderCenterArea = () => {
     return (
       <div id="search-input">
@@ -70,7 +64,7 @@ const SearchResultPage = () => {
   return (
     <Container>
       <DefaultHeader
-        leftArea={<HeaderLeftArea />}
+        leftArea={<HeaderBackButton routerPath="/search" />}
         centerArea={<HeaderCenterArea />}
       />
     </Container>
