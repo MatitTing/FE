@@ -1,11 +1,12 @@
 import Layout from "@components/common/layout";
+import ToastProvider from "@contexts/ToastProvider";
+import { MantineProvider } from "@mantine/core";
 import { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import type { AppProps } from "next/app";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { RecoilRoot } from "recoil";
 import Modal from "src/components/common/Modal";
-
 import ToastProvider from "@contexts/ToastProvider";
 import "../styles/globals.css";
 import { NextPageWithLayout } from "../types/layout";
@@ -28,11 +29,13 @@ function MyApp({
   return (
     <QueryClientProvider client={queryClient}>
       <RecoilRoot>
-        <SessionProvider session={session}>
-          <Modal />
-          {getLayout(<Component {...pageProps} />)}
-          <ToastProvider />
-        </SessionProvider>
+        <MantineProvider>
+          <SessionProvider session={session}>
+              <Modal />
+              {getLayout(<Component {...pageProps} />)}
+              <ToastProvider />
+          </SessionProvider>
+        </MantineProvider>
       </RecoilRoot>
     </QueryClientProvider>
   );
