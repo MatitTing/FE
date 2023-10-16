@@ -54,6 +54,7 @@ const SearchResultPage = () => {
       <div id="search-input">
         <input
           placeholder="검색어를 입력해 주세요."
+          defaultValue={inputRef.current?.value}
           ref={inputRef}
           onKeyUp={searchKeyword}
         />

@@ -20,7 +20,7 @@ export const HeaderBackButton = ({
   const rouetr = useRouter();
   const onClickIcon = useCallback(() => {
     if (routerPath) {
-      rouetr.replace(routerPath);
+      rouetr.push(routerPath);
     }
     rouetr.back();
   }, [rouetr, routerPath]);

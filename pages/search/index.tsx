@@ -8,8 +8,8 @@ import styled from "@emotion/styled";
 import { useSearchKeyword } from "@hooks/useSearchKeyword";
 import { useRouter } from "next/router";
 import { useCallback } from "react";
-import ScrollContainer from "react-indiana-drag-scroll";
 import { Color } from "styles/Color";
+import ScrollContainer from "react-indiana-drag-scroll";
 
 const mockHotkeywordData = [
   { id: 1, name: "강북구 맛집" },
@@ -114,14 +114,6 @@ const SearchPage = () => {
     },
     [recentKeywords, setRecentKeywords]
   );
-
-  const HeaderLeftArea = () => {
-    return (
-      <div id="back-btn" onClick={onClickBackBtn}>
-        <BackIcon />
-      </div>
-    );
-  };
 
   const HeaderCenterArea = () => {
     return (
