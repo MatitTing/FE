@@ -5,9 +5,7 @@ const useSearchPlace = () => {
   const [map, setMap] = useState<kakao.maps.Map>();
   const [keyword, setKeyword] = useState("");
   const [resultList, setResultList] =
-    useState<kakao.maps.services.PlacesSearchResult | null>(
-      null
-    );
+    useState<kakao.maps.services.PlacesSearchResult | null>(null);
 
   const reset = () => {
     setKeyword("");
@@ -19,12 +17,7 @@ const useSearchPlace = () => {
       if (!map) return;
       const bounds = new kakao.maps.LatLngBounds();
 
-      bounds.extend(
-        new kakao.maps.LatLng(
-          Number(place.y),
-          Number(place.x)
-        )
-      );
+      bounds.extend(new kakao.maps.LatLng(Number(place.y), Number(place.x)));
 
       setKeyword(place.place_name);
       setResultList(null);
@@ -44,11 +37,11 @@ const useSearchPlace = () => {
   const handleChangeSearchBox = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       if (!map) return;
-      const ps = new kakao.maps.services.Places();
+      const places = new kakao.maps.services.Places();
 
       setKeyword(e.target.value);
 
-      ps.keywordSearch(
+      places.keywordSearch(
         e.target.value,
         (data, status, _pagination) => {
           const resultStatus = kakao.maps.services.Status;

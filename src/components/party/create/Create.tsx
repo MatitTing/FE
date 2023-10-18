@@ -3,10 +3,7 @@ import TextInput from "@components/common/TextInput";
 import CheckBox from "./CheckBox";
 import { useRouter } from "next/router";
 import Thumbnail from "./Thumbnail";
-import {
-  partyAgeInfo,
-  partyRecruitInfo,
-} from "./CheckBoxInfo";
+import { partyAgeInfo, partyRecruitInfo } from "./CheckBoxInfo";
 import { ReactNode } from "react";
 
 const Wrapper = styled.div({
@@ -44,7 +41,7 @@ interface CreateProps {
   children: ReactNode;
 }
 
-const Create = ({ children: searchMap }: CreateProps) => {
+const Create = ({ children }: CreateProps) => {
   const { query: partyId } = useRouter();
 
   return (
@@ -61,7 +58,7 @@ const Create = ({ children: searchMap }: CreateProps) => {
         placeholder="내용을 입력하세요."
         rows={5}
       />
-      {searchMap}
+      {children}
       <Thumbnail />
 
       <DateContents>
@@ -69,15 +66,9 @@ const Create = ({ children: searchMap }: CreateProps) => {
         <input type="date" name="date" />
       </DateContents>
 
-      <CheckBox
-        title="연령(선택)"
-        contents={partyAgeInfo}
-      />
+      <CheckBox title="연령(선택)" contents={partyAgeInfo} />
       {partyId ? (
-        <CheckBox
-          title="모집 상태"
-          contents={partyRecruitInfo}
-        />
+        <CheckBox title="모집 상태" contents={partyRecruitInfo} />
       ) : null}
     </Wrapper>
   );
