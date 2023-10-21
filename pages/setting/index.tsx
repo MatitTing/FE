@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { DefaultHeader } from "@components/common/DefaultHeader";
 import SetList from "@components/setting/SetList";
-import BackButton from "@components/common/BackButton";
+import { HeaderBackButton } from "@components/common/HeaderBackButton";
 
 const Container = styled.div`
   display: flex;
@@ -18,7 +18,7 @@ const Container = styled.div`
 const Profile = () => {
   return (
     <Container>
-      <DefaultHeader leftArea={BackButton()} />
+      <DefaultHeader leftArea={<HeaderBackButton />} />
       <SetList />
     </Container>
   );

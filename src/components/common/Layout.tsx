@@ -34,10 +34,12 @@ function Layout({ children }: LayoutProps) {
     return router.pathname === ("/" || "/search" || "/profile" || "/create");
   }, [router.pathname]);
 
+  console.log(router.pathname);
+
   return (
     <Container isVisibleBottom={isVisibleBottom}>
       <header>{children}</header>
-      {isVisibleBottom ? (
+      {true ? (
         <BottomSection>
           <BottomBar />
         </BottomSection>

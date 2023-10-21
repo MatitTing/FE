@@ -5,7 +5,6 @@ import SearchIcon from "@components/icons/bottombar/Search.icon";
 import ChatIcon from "@components/icons/bottombar/Chat.icon";
 import styled from "@emotion/styled";
 import NavList from "./NavList";
-import Link from "next/link";
 
 const Container = styled.div`
   width: 768px;

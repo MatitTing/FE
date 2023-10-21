@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import ProfileTab from "@components/profile/ProfileTab";
 import SettingIcon from "@components/icons/common/Setting.icon";
-import BackButton from "@components/common/BackButton";
+import { HeaderBackButton } from "@components/common/HeaderBackButton";
 import { DefaultHeader } from "@components/common/DefaultHeader";
 import ProfileInfo from "@components/profile/ProfileInfo";
 import { useScroll } from "react-use";
@@ -14,7 +14,6 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   margin: 0 auto;
-  padding-top: 45px;
   height: 100%;
   width: 100%;
   max-width: 768px;
@@ -43,7 +42,7 @@ const Profile = () => {
   const scrollRef = useRef(null);
   const { y } = useScroll(scrollRef);
 
-  const rightArea = () => {
+  const RightArea = () => {
     return (
       <Link href={"/setting"}>
         <RightAreaContainer>{SettingIcon()}</RightAreaContainer>
@@ -53,7 +52,10 @@ const Profile = () => {
 
   return (
     <Container ref={scrollRef}>
-      <DefaultHeader leftArea={BackButton()} rightArea={rightArea()} />
+      <DefaultHeader
+        leftArea={<HeaderBackButton />}
+        rightArea={<RightArea />}
+      />
       <BackGroundImgContainer scrollY={y}>
         <Image
           src="/images/profile/profilebackground.jpg"

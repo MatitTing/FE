@@ -2,9 +2,9 @@ import React from "react";
 import styled from "@emotion/styled";
 import { ColorToken } from "styles/Color";
 import { DefaultText } from "@components/common/DefaultText";
-import useToast from "@hooks/useToast";
 import Image from "next/image";
 import { PartyData } from "types/party";
+import { useRouter } from "next/router";
 
 interface PartyListProps {
   partydata: PartyData;
@@ -44,6 +44,7 @@ const Detail2 = styled.div`
 `;
 
 const PartyList = ({ partydata }: PartyListProps) => {
+  const router = useRouter();
   //데이터 구조 추후 변경
   const {
     categoryId = "",
@@ -56,12 +57,11 @@ const PartyList = ({ partydata }: PartyListProps) => {
     partyMessage = "",
     totalRecruitment = "",
   } = partydata;
-  // 토스트 테스트용
-  const { showToast } = useToast();
+
   return (
     <Container
       onClick={() => {
-        showToast(partyTitle);
+        router.push(`/partydetail/${categoryId}`);
       }}
     >
       <Image
