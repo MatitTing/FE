@@ -78,12 +78,16 @@ const Home: NextPage = () => {
             <SearchIcon />
           </a>
         </Link>
-        <NotificationIcon
-          notificationCount={0}
-          styles={{
-            marginTop: "-5px",
-          }}
-        />
+        <Link href={"/notification"}>
+          <a>
+            <NotificationIcon
+              notificationCount={0}
+              styles={{
+                marginTop: "-5px",
+              }}
+            />
+          </a>
+        </Link>
       </HeaderAreaContainer>
     );
   };
