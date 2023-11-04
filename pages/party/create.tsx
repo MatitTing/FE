@@ -4,30 +4,14 @@ import styled from "@emotion/styled";
 import Create from "@components/party/create/Create";
 import SearchMap from "@components/party/create/SearchMap";
 import useSearchPlace from "@hooks/useSearchPlace";
+import { DefaultHeader } from "@components/common/DefaultHeader";
 
 const Wrapper = styled.form`
-display: flex;
-flex0direction: column;
-justify-content: space-between:
-height: 100%;`;
-
-const Header = styled.header({
-  position: "relative",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  height: "45px !important",
-  boxShadow:
-    "0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24)",
-});
-
-const BackBtn = styled.button({
-  position: "absolute",
-  top: "50%",
-  left: 0,
-  transform: "translateY(-50%)",
-  padding: "10px 14px",
-});
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: calc(100vh - 72px - 45px);
+`;
 
 const SubmitBtn = styled.button`
   display: flex;
@@ -60,10 +44,7 @@ const CreatePage: NextPage = () => {
 
   return (
     <Wrapper ref={formRef} onSubmit={handleSubmit}>
-      <Header>
-        <BackBtn>뒤로가기</BackBtn>
-        <div>파티 생성</div>
-      </Header>
+      <DefaultHeader centerArea="파티 생성" />
       <Create>
         <SearchMap
           marker={marker}

@@ -1,25 +1,25 @@
 export const partyAgeInfo = [
   {
-    id: "ageA",
+    id: "2030",
     label: "20대 ~ 30대",
   },
   {
-    id: "ageB",
+    id: "3040",
     label: "30대 ~ 40대",
   },
   {
-    id: "ageC",
+    id: "40",
     label: "40대 ~",
   },
 ];
 
-export const partyRecruitInfo = [
+export const partyGenderInfo = [
   {
-    id: "on",
-    label: "모집중",
+    id: "MALE",
+    label: "MALE",
   },
   {
-    id: "off",
-    label: "모집 중단",
+    id: "FEMALE",
+    label: "FEMALE",
   },
 ];
