@@ -29,52 +29,48 @@ const AddressText = styled.div`
   font-size: 14px;
 `;
 
+const Keyword = styled.span`
+  color: orange;
+`;
+
 interface SearchBoxProps {
   resultList: kakao.maps.services.PlacesSearchResult | null;
   keyword: string;
-  handleClickPlace: (
-    place: kakao.maps.services.PlacesSearchResultItem
-  ) => void;
+  handleClickPlace: (place: kakao.maps.services.PlacesSearchResultItem) => void;
 }
 
-const SearchBox = ({
-  resultList,
-  keyword,
-  handleClickPlace,
-}: SearchBoxProps) =>
+const SearchBox = ({ resultList, keyword, handleClickPlace }: SearchBoxProps) =>
   resultList && keyword ? (
     <Wrapper id="search-box">
       {resultList.map((place) => {
-        const {
-          address_name: address,
-          place_name: placeName,
-          id,
-        } = place;
+        const { address_name: address, place_name: placeName, id } = place;
+        // gi: 소문자, 대문자 구분 없이 키워드 찾기
+        const keywordRegExp = new RegExp(keyword, "gi");
 
-        const addressElement = address.replace(
-          new RegExp(keyword, "gi"),
-          `<span style="color: orange;">${keyword}</span>`
-        );
-
-        const placeNameElement = placeName.replace(
-          new RegExp(keyword, "gi"),
-          `<span style="color: orange;">${keyword}</span>`
-        );
         return (
-          <TextBox
-            key={id}
-            onClick={() => handleClickPlace(place)}
-          >
-            <div
-              dangerouslySetInnerHTML={{
-                __html: placeNameElement.toLowerCase(),
-              }}
-            />
-            <AddressText
-              dangerouslySetInnerHTML={{
-                __html: addressElement.toLowerCase(),
-              }}
-            />
+          <TextBox key={id} onClick={() => handleClickPlace(place)}>
+            {keywordRegExp.test(placeName) ? (
+              <div>
+                {placeName.split(keywordRegExp)[0]}
+                <Keyword style={{ color: "orange" }}>
+                  {keyword.toLocaleUpperCase()}
+                </Keyword>
+                {placeName.split(keywordRegExp)[1]}
+              </div>
+            ) : (
+              placeName
+            )}
+            {keywordRegExp.test(address) ? (
+              <AddressText>
+                {address.split(keywordRegExp)[0]}
+                <Keyword style={{ color: "orange" }}>
+                  {keyword.toLocaleUpperCase()}
+                </Keyword>
+                {address.split(keywordRegExp)[1]}
+              </AddressText>
+            ) : (
+              address
+            )}
           </TextBox>
         );
       })}
