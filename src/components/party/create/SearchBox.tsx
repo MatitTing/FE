@@ -33,47 +33,56 @@ const Keyword = styled.span`
   color: orange;
 `;
 
+const NotResult = styled.div`
+  width: 100%;
+  height: 100px;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  color: #bbb;
+`;
 interface SearchBoxProps {
   resultList: kakao.maps.services.PlacesSearchResult | null;
   keyword: string;
   handleClickPlace: (place: kakao.maps.services.PlacesSearchResultItem) => void;
 }
 
-const SearchBox = ({ resultList, keyword, handleClickPlace }: SearchBoxProps) =>
-  resultList && keyword ? (
-    <Wrapper id="search-box">
-      {resultList.map((place) => {
-        const { address_name: address, place_name: placeName, id } = place;
-        // gi: 소문자, 대문자 구분 없이 키워드 찾기
-        const keywordRegExp = new RegExp(keyword, "gi");
+const highlightKeyword = (text: string, keyword: string) => {
+  // gi: 소문자, 대문자 구분 없이 키워드 찾기
+  const keywordRegExp = new RegExp(keyword, "gi");
 
-        return (
-          <TextBox key={id} onClick={() => handleClickPlace(place)}>
-            {keywordRegExp.test(placeName) ? (
-              <div>
-                {placeName.split(keywordRegExp)[0]}
-                <Keyword style={{ color: "orange" }}>
-                  {keyword.toLocaleUpperCase()}
-                </Keyword>
-                {placeName.split(keywordRegExp)[1]}
-              </div>
-            ) : (
-              placeName
-            )}
-            {keywordRegExp.test(address) ? (
-              <AddressText>
-                {address.split(keywordRegExp)[0]}
-                <Keyword style={{ color: "orange" }}>
-                  {keyword.toLocaleUpperCase()}
-                </Keyword>
-                {address.split(keywordRegExp)[1]}
-              </AddressText>
-            ) : (
-              address
-            )}
-          </TextBox>
-        );
-      })}
+  return keywordRegExp.test(text)
+    ? text
+        .split(keywordRegExp)
+        .map((part, index) =>
+          index % 2 === 0 ? (
+            <span key={part + index}>{part}</span>
+          ) : (
+            <Keyword key={part + index}>{keyword.toLocaleUpperCase()}</Keyword>
+          )
+        )
+    : text;
+};
+
+const SearchBox = ({ resultList, keyword, handleClickPlace }: SearchBoxProps) =>
+  keyword ? (
+    <Wrapper id="search-box">
+      {resultList?.length ? (
+        resultList.map((place) => {
+          const { address_name: address, place_name: placeName, id } = place;
+
+          return (
+            <TextBox key={id} onClick={() => handleClickPlace(place)}>
+              <div>{highlightKeyword(placeName, keyword)}</div>
+              <AddressText>{highlightKeyword(address, keyword)}</AddressText>
+            </TextBox>
+          );
+        })
+      ) : (
+        <NotResult>검색 결과가 없습니다.</NotResult>
+      )}
     </Wrapper>
   ) : null;
 
