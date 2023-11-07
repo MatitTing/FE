@@ -1,4 +1,4 @@
-export const partyAgeInfo = [
+export const PARTY_AGE_LABEL = [
   {
     id: "2030",
     label: "20대 ~ 30대",
@@ -13,7 +13,7 @@ export const partyAgeInfo = [
   },
 ];
 
-export const partyGenderInfo = [
+export const PARTY_GENDER_LABEL = [
   {
     id: "MALE",
     label: "MALE",
