@@ -8,6 +8,9 @@ import SetBirthday from "@components/profileinput/SetBirthday";
 import SetNickname from "@components/profileinput/SetNickname";
 import { DefaultButton } from "@components/common/DefaultButton";
 import { useRouter } from "next/router";
+interface HeaderLeftAreaProps {
+  onClick: () => void;
+}
 
 const Container = styled.div`
   display: flex;
@@ -44,6 +47,12 @@ const NextButtonContainer = styled.div`
   margin-top: auto;
 `;
 
+const LeftArea = ({ onClick }: HeaderLeftAreaProps) => {
+  return (
+    <HeaderAreaContainer onClick={onClick}>{BackIcon()}</HeaderAreaContainer>
+  );
+};
+
 const ProfileInput = () => {
   const [step, setStep] = useState(0);
   const router = useRouter();
@@ -58,12 +67,6 @@ const ProfileInput = () => {
 
   const registerInfo = () => {
     //유저정보등록
-  };
-
-  const leftArea = () => {
-    return (
-      <HeaderAreaContainer onClick={backStep}>{BackIcon()}</HeaderAreaContainer>
-    );
   };
 
   const signupSteps = [
@@ -83,7 +86,7 @@ const ProfileInput = () => {
 
   return (
     <Container>
-      <DefaultHeader leftArea={leftArea()} />
+      <DefaultHeader leftArea={<LeftArea onClick={backStep} />} />
       <ProgressbarContainer>
         <Progressbar value={((step + 1) / signupSteps.length) * 100} />
       </ProgressbarContainer>

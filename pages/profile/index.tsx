@@ -38,17 +38,17 @@ const BackGroundImgContainer = styled.div<{ scrollY: number }>`
   transform: ${({ scrollY }) => `translateY(${scrollY * 0.4}px)`};
 `;
 
+const RightArea = () => {
+  return (
+    <Link href={"/setting"}>
+      <RightAreaContainer>{SettingIcon()}</RightAreaContainer>
+    </Link>
+  );
+};
+
 const Profile = () => {
   const scrollRef = useRef(null);
   const { y } = useScroll(scrollRef);
-
-  const RightArea = () => {
-    return (
-      <Link href={"/setting"}>
-        <RightAreaContainer>{SettingIcon()}</RightAreaContainer>
-      </Link>
-    );
-  };
 
   return (
     <Container ref={scrollRef}>

@@ -1,5 +1,6 @@
 import { DefaultHeader } from "@components/common/DefaultHeader";
 import { DefaultText } from "@components/common/DefaultText";
+import { HeaderBackButton } from "@components/common/HeaderBackButton";
 import { MapCurrentPositionIcon } from "@components/icons/map/MapCurrentPositon.icon";
 import styled from "@emotion/styled";
 import { useGetLocationAddressMutation } from "@hooks/react-query/useGetCurrentAddressMutation";
@@ -139,11 +140,7 @@ const LocationSettingPage = () => {
   return (
     <Container>
       <DefaultHeader
-        leftArea={
-          <div id="go-back" onClick={clickGoBackButton}>
-            뒤로가기
-          </div>
-        }
+        leftArea={<HeaderBackButton />}
         rightArea={
           <div id="position-setting" onClick={clickPositionSettingButton}>
             위치지정

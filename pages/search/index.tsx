@@ -6,11 +6,15 @@ import { RecentKeywordButton } from "@components/pages/search/RecentKeywordButto
 import styled from "@emotion/styled";
 import { useSearchKeyword } from "@hooks/useSearchKeyword";
 import { useRouter } from "next/router";
-import { useCallback } from "react";
+import { RefObject, useCallback } from "react";
 import { Color } from "styles/Color";
 import ScrollContainer from "react-indiana-drag-scroll";
+interface HeaderCenterAreaProps {
+  inputRef: RefObject<HTMLInputElement>;
+  searchKeyword: (event: React.KeyboardEvent) => void;
+}
 
-const mockHotkeywordData = [
+const mockHotKeywordData = [
   { id: 1, name: "강북구 맛집" },
   { id: 2, name: "마라탕" },
   { id: 3, name: "탕후루" },
@@ -80,6 +84,22 @@ const RecentKeywordSection = styled.section`
   }
 `;
 
+const HeaderCenterArea = ({
+  inputRef,
+  searchKeyword,
+}: HeaderCenterAreaProps) => {
+  return (
+    <div id="search-input">
+      <input
+        placeholder="검색어를 입력해 주세요."
+        defaultValue={inputRef.current?.value}
+        ref={inputRef}
+        onKeyUp={searchKeyword}
+      />
+    </div>
+  );
+};
+
 const SearchPage = () => {
   const router = useRouter();
   const {
@@ -99,10 +119,6 @@ const SearchPage = () => {
     [router, updateKeywords]
   );
 
-  const onClickBackBtn = () => {
-    router.back();
-  };
-
   const onClickIndividualRemoveBtn = useCallback(
     (keyword: string) => {
       const updatedKeywords = [...(recentKeywords ?? [])].filter(
@@ -113,23 +129,13 @@ const SearchPage = () => {
     [recentKeywords, setRecentKeywords]
   );
 
-  const HeaderCenterArea = () => {
-    return (
-      <div id="search-input">
-        <input
-          placeholder="검색어를 입력해 주세요."
-          ref={inputRef}
-          onKeyUp={searchKeyword}
-        />
-      </div>
-    );
-  };
-
   return (
     <Container>
       <DefaultHeader
         leftArea={<HeaderBackButton />}
-        centerArea={<HeaderCenterArea />}
+        centerArea={
+          <HeaderCenterArea inputRef={inputRef} searchKeyword={searchKeyword} />
+        }
       />
       <Contents>
         <HotKeywordSection>
@@ -143,7 +149,7 @@ const SearchPage = () => {
               gap: "5px",
             }}
           >
-            {mockHotkeywordData.map((value) => (
+            {mockHotKeywordData.map((value) => (
               <div key={value.id} onClick={() => onClickKeyword(value.name)}>
                 <HotKeywordTagButton key={value.id} text={value.name} />
               </div>

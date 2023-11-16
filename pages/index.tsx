@@ -21,6 +21,15 @@ import {
 } from "src/recoil-states/positionStates";
 import { Color } from "styles/Color";
 
+interface HeaderCenterAreaProps {
+  onClick: () => void;
+  position: PositionDataType;
+}
+interface SettingPositionComponentProps {
+  onClickCurrentPosition: () => void;
+  onClickMapPosition: () => void;
+}
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -48,6 +57,70 @@ const PositionTextContainer = styled.div`
   gap: 15px;
 `;
 
+const HeaderCenterArea = ({ onClick, position }: HeaderCenterAreaProps) => {
+  return (
+    <HeaderAreaContainer onClick={onClick}>
+      <DefaultText size={15} text={String(position?.address || "")} />
+      <ArrowIcon
+        styles={{
+          marginTop: "-1px",
+        }}
+      />
+    </HeaderAreaContainer>
+  );
+};
+
+const SettingPositionComponent = ({
+  onClickCurrentPosition,
+  onClickMapPosition,
+}: SettingPositionComponentProps) => {
+  return (
+    <PositionTextContainer>
+      <DefaultText
+        text="현재 위치로 지정"
+        size={15}
+        style={{
+          cursor: "pointer",
+        }}
+        onClick={onClickCurrentPosition}
+      />
+      <Link href={"/location-setting"}>
+        <a>
+          <DefaultText
+            text="지도에서 위치 지정"
+            size={15}
+            style={{
+              cursor: "pointer",
+            }}
+            onClick={onClickMapPosition}
+          />
+        </a>
+      </Link>
+    </PositionTextContainer>
+  );
+};
+
+const HeaderRightArea = () => {
+  return (
+    <HeaderAreaContainer>
+      <Link href={"/search"}>
+        <a>
+          <SearchIcon />
+        </a>
+      </Link>
+      <Link href={"/notification"}>
+        <a>
+          <NotificationIcon
+            notificationCount={0}
+            styles={{
+              marginTop: "-5px",
+            }}
+          />
+        </a>
+      </Link>
+    </HeaderAreaContainer>
+  );
+};
 const Home: NextPage = () => {
   const router = useRouter();
   const { showToast } = useToast();
@@ -57,71 +130,16 @@ const Home: NextPage = () => {
   const [isClickPosition, setIsClickPosition] = useState(false);
   const [isResetPosition, setIsResetPosition] = useState(false);
 
-  const centerArea = () => {
-    return (
-      <HeaderAreaContainer onClick={() => setIsClickPosition(true)}>
-        <DefaultText size={15} text={String(location?.address || "")} />
-        <ArrowIcon
-          styles={{
-            marginTop: "-1px",
-          }}
-        />
-      </HeaderAreaContainer>
-    );
+  const onClickPosition = () => {
+    setIsClickPosition(true);
   };
 
-  const rightArea = () => {
-    return (
-      <HeaderAreaContainer>
-        <Link href={"/search"}>
-          <a>
-            <SearchIcon />
-          </a>
-        </Link>
-        <Link href={"/notification"}>
-          <a>
-            <NotificationIcon
-              notificationCount={0}
-              styles={{
-                marginTop: "-5px",
-              }}
-            />
-          </a>
-        </Link>
-      </HeaderAreaContainer>
-    );
+  const onClickCurrentPosition = () => {
+    setIsResetPosition(true);
+    setIsClickPosition(false);
   };
-
-  const SettingPositionComponent = () => {
-    return (
-      <PositionTextContainer>
-        <DefaultText
-          text="현재 위치로 지정"
-          size={15}
-          style={{
-            cursor: "pointer",
-          }}
-          onClick={() => {
-            setIsResetPosition(true);
-            setIsClickPosition(false);
-          }}
-        />
-        <Link href={"/location-setting"}>
-          <a>
-            <DefaultText
-              text="지도에서 위치 지정"
-              size={15}
-              style={{
-                cursor: "pointer",
-              }}
-              onClick={() => {
-                setIsClickPosition(false);
-              }}
-            />
-          </a>
-        </Link>
-      </PositionTextContainer>
-    );
+  const onClickMapPosition = () => {
+    setIsClickPosition(false);
   };
 
   useEffect(() => {
@@ -130,12 +148,12 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     // 가져오기 성공
-    function getSuccess(position: {
+    const getSuccess = (position: {
       coords: {
         latitude: number;
         longitude: number;
       };
-    }) {
+    }) => {
       // 위도
       const lat = position.coords.latitude;
       // 경도
@@ -146,12 +164,12 @@ const Home: NextPage = () => {
           y: lng,
         },
       });
-    }
+    };
 
     // 가지오기 실패(거부)
-    function getError() {
+    const getError = () => {
       showToast("위치 정보를 찾을 수 없습니다. 위치 설정을 확인해 주세요!");
-    }
+    };
     if (position.coords.x === 0 || position.coords.y === 0 || isResetPosition) {
       navigator.geolocation.getCurrentPosition(getSuccess, getError);
     }
@@ -182,7 +200,12 @@ const Home: NextPage = () => {
 
   return (
     <Container>
-      <DefaultHeader centerArea={centerArea()} rightArea={rightArea()} />
+      <DefaultHeader
+        centerArea={
+          <HeaderCenterArea onClick={onClickPosition} position={position} />
+        }
+        rightArea={<HeaderRightArea />}
+      />
       <HomeList />
       {/* 현재 위치 재설정 맵 팝업.*/}
       <Transition
@@ -194,7 +217,10 @@ const Home: NextPage = () => {
         {(styles) => (
           <DefaultModalContainer style={styles}>
             <BottomUpPopup setIsOpenModal={setIsClickPosition}>
-              <SettingPositionComponent />
+              <SettingPositionComponent
+                onClickCurrentPosition={onClickCurrentPosition}
+                onClickMapPosition={onClickMapPosition}
+              />
             </BottomUpPopup>
           </DefaultModalContainer>
         )}

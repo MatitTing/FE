@@ -3,8 +3,13 @@ import { HeaderBackButton } from "@components/common/HeaderBackButton";
 import styled from "@emotion/styled";
 import { useSearchKeyword } from "@hooks/useSearchKeyword";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { RefObject, forwardRef, useEffect } from "react";
 import { Color } from "styles/Color";
+
+interface HeaderCenterAreaProps {
+  inputRef: RefObject<HTMLInputElement>;
+  searchKeyword: (event: React.KeyboardEvent) => void;
+}
 
 const Container = styled.div`
   display: flex;
@@ -33,38 +38,39 @@ const Container = styled.div`
   }
 `;
 
+const HeaderCenterArea = ({
+  inputRef,
+  searchKeyword,
+}: HeaderCenterAreaProps) => {
+  return (
+    <div id="search-input">
+      <input
+        placeholder="검색어를 입력해 주세요."
+        defaultValue={inputRef.current?.value}
+        ref={inputRef}
+        onKeyUp={searchKeyword}
+      />
+    </div>
+  );
+};
 const SearchResultPage = () => {
   const router = useRouter();
   const { keyword } = router.query;
   const { inputRef, searchKeyword } = useSearchKeyword();
-  const onClickBackBtn = () => {
-    router.push("/search");
-  };
 
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.value = keyword as string;
     }
-  }, [keyword]);
-
-  const HeaderCenterArea = () => {
-    return (
-      <div id="search-input">
-        <input
-          placeholder="검색어를 입력해 주세요."
-          defaultValue={inputRef.current?.value}
-          ref={inputRef}
-          onKeyUp={searchKeyword}
-        />
-      </div>
-    );
-  };
+  }, [inputRef, keyword]);
 
   return (
     <Container>
       <DefaultHeader
         leftArea={<HeaderBackButton routerPath="/search" />}
-        centerArea={<HeaderCenterArea />}
+        centerArea={
+          <HeaderCenterArea inputRef={inputRef} searchKeyword={searchKeyword} />
+        }
       />
     </Container>
   );
