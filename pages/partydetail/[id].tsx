@@ -8,7 +8,10 @@ import Image from "next/image";
 import { useScroll } from "react-use";
 import { useRef } from "react";
 import { useRouter } from "next/router";
-import { usePartyDetailQuery } from "@hooks/react-query/usePartyDetailQuery";
+import { useQuery } from "@tanstack/react-query";
+import getPartyDetail, {
+  API_GET_PARTY_DETAIL_KEY,
+} from "src/api/getPartyDetail";
 export interface PartyDetailDataType {
   // 스키마 확정후 추가
 }
@@ -71,7 +74,16 @@ const PartyDetail = () => {
 
   const router = useRouter();
   const { id } = router.query as { id: string };
-  const { isLoading, isError, error, data } = usePartyDetailQuery({ id });
+
+  {
+    /*
+  TODO: 추후, api 재작성 시 주석 풀고 활용할 것. 현재 빌드시 에러.
+*/
+  }
+  // const { isLoading, isError, error, data } = useQuery({
+  //   queryKey: [API_GET_PARTY_DETAIL_KEY, { id }],
+  //   queryFn: ()=>getPartyDetail({ id }),
+  // });
 
   const participateParty = () => {
     // 백엔드 확정후 추가

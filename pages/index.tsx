@@ -7,14 +7,15 @@ import { NotificationIcon } from "@components/icons/header/Notification.icon";
 import { HomeList } from "@components/pages/home/HomeList";
 import { BottomUpPopup } from "@components/popup/BottomUpPopup";
 import styled from "@emotion/styled";
-import { useGetLocationAddressMutation } from "@hooks/react-query/useGetCurrentAddressMutation";
 import useToast from "@hooks/useToast";
 import { Transition } from "@mantine/core";
 import type { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { useMutation } from "react-query";
 import { useRecoilState } from "recoil";
+import getLocationAddress from "src/api/getLocationAddress";
 import {
   PositionDataType,
   PositionSate,
@@ -124,7 +125,10 @@ const HeaderRightArea = () => {
 const Home: NextPage = () => {
   const router = useRouter();
   const { showToast } = useToast();
-  const { mutateAsync: getAddress } = useGetLocationAddressMutation();
+  const { mutateAsync: getAddress } = useMutation({
+    mutationFn: getLocationAddress,
+  });
+
   const [position, setPosition] = useRecoilState(PositionSate);
   const [location, setLocation] = useState<PositionDataType>();
   const [isClickPosition, setIsClickPosition] = useState(false);

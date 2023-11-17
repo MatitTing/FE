@@ -3,14 +3,15 @@ import { DefaultText } from "@components/common/DefaultText";
 import { HeaderBackButton } from "@components/common/HeaderBackButton";
 import { MapCurrentPositionIcon } from "@components/icons/map/MapCurrentPositon.icon";
 import styled from "@emotion/styled";
-import { useGetLocationAddressMutation } from "@hooks/react-query/useGetCurrentAddressMutation";
-import { useGetLocationWithKeywordMutation } from "@hooks/react-query/useGetLocationWithKeywordMutation";
 import { Divider } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
+import { useMutation } from "react-query";
 import { useDebounce } from "react-use";
 import { useRecoilState } from "recoil";
+import getLocationAddress from "src/api/getLocationAddress";
+import getLocationWithKeyword from "src/api/getLocationWithKeyword";
 import {
   PositionDataType,
   PositionSate,
@@ -56,9 +57,12 @@ const InvalidMessage = styled.div`
 const LocationSettingPage = () => {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
-  const { mutateAsync: getAddress } = useGetLocationAddressMutation();
-  const { mutateAsync: getAddressWithKeyword } =
-    useGetLocationWithKeywordMutation();
+  const { mutateAsync: getAddress } = useMutation({
+    mutationFn: getLocationAddress,
+  });
+  const { mutateAsync: getAddressWithKeyword } = useMutation({
+    mutationFn: getLocationWithKeyword,
+  });
   const [position, setPosition] = useRecoilState(PositionSate);
   const [mapPosition, setMapPosition] = useState<PositionDataType>();
   const [isKeywordError, setIsKeywordError] = useState(false);
