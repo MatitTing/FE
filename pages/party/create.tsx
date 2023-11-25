@@ -1,10 +1,11 @@
 import { NextPage } from "next";
-import { useRef, FormEvent } from "react";
+import { useRef, FormEvent, useEffect } from "react";
 import styled from "@emotion/styled";
 import Create from "@components/party/create/Create";
 import SearchMap from "@components/party/create/SearchMap";
 import useSearchPlace from "@hooks/useSearchPlace";
 import { DefaultHeader } from "@components/common/DefaultHeader";
+import useSetParty from "src/api/setParty";
 
 const Wrapper = styled.form`
   display: flex;
@@ -26,6 +27,7 @@ const SubmitBtn = styled.button`
 
 const CreatePage: NextPage = () => {
   const formRef = useRef<HTMLFormElement>(null);
+  const { mutate: setParty } = useSetParty();
   const {
     marker,
     setMap,
