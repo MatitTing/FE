@@ -9,13 +9,14 @@ import { BottomUpPopup } from "@components/popup/BottomUpPopup";
 import styled from "@emotion/styled";
 import useToast from "@hooks/useToast";
 import { Transition } from "@mantine/core";
-import { useMutation } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
 import type { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import getLocationAddress from "src/api/getLocationAddress";
+import getMainPageData, { API_GET_MAIN_PAGE } from "src/api/getPartyMainPage";
 import {
   PositionDataType,
   PositionSate,
@@ -38,7 +39,6 @@ const Container = styled.div`
   align-items: center;
   margin: 0 auto;
   min-height: calc(100vh - 80px);
-  gap: 50px;
   width: 100%;
   max-width: 768px;
   background: ${Color.VeryLightGrey};
@@ -119,14 +119,27 @@ const HeaderRightArea = () => {
 const Home: NextPage = () => {
   const router = useRouter();
   const { showToast } = useToast();
-  const { mutateAsync: getAddress } = useMutation({
-    mutationFn: getLocationAddress,
-  });
-
   const [position, setPosition] = useRecoilState(PositionSate);
   const [location, setLocation] = useState<PositionDataType>();
   const [isClickPosition, setIsClickPosition] = useState(false);
   const [isResetPosition, setIsResetPosition] = useState(false);
+  const { mutateAsync: getAddress } = useMutation({
+    mutationFn: getLocationAddress,
+  });
+
+  const { fetchNextPage, hasNextPage, data } = useInfiniteQuery({
+    queryKey: [API_GET_MAIN_PAGE],
+    queryFn: ({ pageParam = 0 }) =>
+      getMainPageData({
+        latitude: 37.54419081960767,
+        longitude: 127.0515738292837,
+        lastPartyId: pageParam,
+        size: 5,
+      }),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages, lastPageParam, allPageParams) =>
+      lastPage.pageInfo.lastPartyId,
+  });
 
   const onClickPosition = () => {
     setIsClickPosition(true);
@@ -138,6 +151,10 @@ const Home: NextPage = () => {
   };
   const onClickMapPosition = () => {
     setIsClickPosition(false);
+  };
+
+  const onObserve = () => {
+    if (hasNextPage) fetchNextPage();
   };
 
   useEffect(() => {
@@ -196,6 +213,10 @@ const Home: NextPage = () => {
     }
   }, [getAddress, position.coords.x, position.coords.y, setPosition]);
 
+  const onClickPartyCard = (id: number) => {
+    router.push(`/partydetail/${id}`);
+  };
+
   return (
     <Container>
       <DefaultHeader
@@ -204,7 +225,11 @@ const Home: NextPage = () => {
         }
         rightArea={<HeaderRightArea />}
       />
-      <HomeList />
+      <HomeList
+        data={data?.pages}
+        onObserve={onObserve}
+        onClickPartyCard={onClickPartyCard}
+      />
       {/* 현재 위치 재설정 맵 팝업.*/}
       <Transition
         transition={`slide-up`}

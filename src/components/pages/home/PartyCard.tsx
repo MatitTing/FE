@@ -1,11 +1,15 @@
 import { DefaultText } from "@components/common/DefaultText";
+import { MainIcon } from "@components/icons/common/Main.icon";
 import styled from "@emotion/styled";
 import Image from "next/image";
 import { ColorToken } from "styles/Color";
-import { PartyListDataType } from "./HomeList";
+import { MainPagePartyListResponse } from "types/main/MainPagePartyListResponse";
+import partyDefaultThumbnail from "public/images/list/partyDefaultThumbnail.png";
+import dayjs from "dayjs";
 
 interface PartyCardProps {
-  partyData: PartyListDataType;
+  partyData: MainPagePartyListResponse;
+  onClickPartyCard: (id: number) => void;
 }
 
 const Container = styled.div`
@@ -17,12 +21,13 @@ const Container = styled.div`
   position: relative;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  margin-top: 30px;
+  cursor: pointer;
 `;
 const InformationSection = styled.section`
   padding: 8px 15px;
   display: flex;
   flex-direction: column;
-
   gap: 10px;
 `;
 const Title = styled.div``;
@@ -37,42 +42,70 @@ const ImageSection = styled.section`
   height: 100%;
 `;
 
-export const PartyCard = ({ partyData }: PartyCardProps) => {
+export const PartyCard = ({ partyData, onClickPartyCard }: PartyCardProps) => {
+  const {
+    address,
+    age,
+    gender,
+    menu,
+    thumbnail,
+    participate,
+    partyTime,
+    partyTitle,
+    totalParticipate,
+    partyId,
+  } = partyData;
+
+  const onClick = () => {
+    onClickPartyCard(partyId);
+  };
+
   return (
-    <Container>
+    <Container onClick={onClick}>
       <ImageSection>
-        <Image
-          width={500}
-          height={300}
-          layout="responsive"
-          src={partyData.image}
-          placeholder="blur"
-          blurDataURL={partyData.image}
-          alt={"party-image"}
-          objectFit="cover"
-        />
+        {thumbnail ? (
+          <Image
+            width={500}
+            height={300}
+            src={thumbnail}
+            alt={"party-image"}
+            style={{
+              objectFit: "cover",
+            }}
+          />
+        ) : (
+          <Image
+            width={500}
+            height={300}
+            src={partyDefaultThumbnail}
+            alt={"party-image"}
+            style={{
+              objectFit: "cover",
+            }}
+          />
+        )}
       </ImageSection>
       <InformationSection>
         <Title>
-          <DefaultText text={partyData.title} size={24} weight={700} />
+          <DefaultText text={partyTitle} size={24} weight={700} />
         </Title>
         <Description>
-          <DefaultText text={partyData.description} size={15} weight={500} />
+          <DefaultText text={menu} size={15} weight={500} />
         </Description>
         <OtherInformation>
           <DefaultText
-            text={`${partyData.date} ${partyData.time}`}
+            text={`${dayjs(partyTime).format("YYYY-MM-MM / HH:MM")}`}
             size={15}
             weight={500}
           />
-          <DefaultText text={partyData.location} size={15} weight={500} />
+          <DefaultText text={address} size={15} weight={500} />
           <DefaultText
-            text={`${partyData.isWomenOnly ? "여성전용" : ""}`}
+            text={`${gender === "ALL" ? "" : "여성전용"}`}
             size={15}
             weight={500}
           />
           <DefaultText
-            text={`현재 인원수/${partyData.maxPeople}`}
+            text={`현재 인원수:${participate}/${totalParticipate}`}
             size={15}
             weight={500}
           />

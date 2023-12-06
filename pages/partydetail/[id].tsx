@@ -8,10 +8,8 @@ import Image from "next/image";
 import { useScroll } from "react-use";
 import { useRef } from "react";
 import { useRouter } from "next/router";
-import { useQuery } from "@tanstack/react-query";
-import getPartyDetail, {
-  API_GET_PARTY_DETAIL_KEY,
-} from "src/api/getPartyDetail";
+import { queryOptions, useQuery, useQueryClient } from "@tanstack/react-query";
+
 export interface PartyDetailDataType {
   // 스키마 확정후 추가
 }
@@ -84,6 +82,11 @@ const PartyDetail = () => {
   //   queryKey: [API_GET_PARTY_DETAIL_KEY, { id }],
   //   queryFn: ()=>getPartyDetail({ id }),
   // });
+
+  const queryClient = useQueryClient();
+
+  queryOptions({ queryKey: [] });
+  console.log(queryClient);
 
   const participateParty = () => {
     // 백엔드 확정후 추가
