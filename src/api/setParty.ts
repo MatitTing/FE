@@ -1,9 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
-import { AxiosError } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import defaultRequest from "src/lib/axios/defaultRequest";
 
 export type SetPartyRequestParam = {
-  userId: number;
+  // userId: number;
   title: string;
   content: string;
   partyTime: string;
@@ -23,11 +23,14 @@ interface SetPartyResponse {
 }
 
 const setParty = async (params: SetPartyRequestParam) =>
-  (await defaultRequest.post("/api/party", { ...params })).data;
+  await defaultRequest.post("/api/party", { ...params });
 
-// axiosError type은 임시. api 작업 시 수정 예정
 const useSetParty = () =>
-  useMutation<SetPartyResponse, AxiosError, SetPartyRequestParam>({
+  useMutation<
+    AxiosResponse<SetPartyResponse>,
+    AxiosError,
+    SetPartyRequestParam
+  >({
     mutationFn: setParty,
   });
 

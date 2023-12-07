@@ -1,10 +1,8 @@
 import styled from "@emotion/styled";
 import TextInput from "@components/common/TextInput";
-import CheckBox from "./CheckBox";
 import { useRouter } from "next/router";
 import Thumbnail from "./Thumbnail";
 import { ReactNode } from "react";
-import { PARTY_GENDER_LABEL, PARTY_AGE_LABEL } from "src/constants/checkbox";
 
 const Wrapper = styled.div`
   height: 100%;
@@ -65,8 +63,23 @@ const Create = ({ children }: CreateProps) => {
       />
       {children}
       <Thumbnail />
-      <CheckBox title="성별(선택)" contents={PARTY_GENDER_LABEL} />
-      <CheckBox title="연령(선택)" contents={PARTY_AGE_LABEL} />
+      <Contents>
+        <Label>성별</Label>
+        <Select name="category">
+          <option value="All">All</option>
+          <option value="MALE">MALE</option>
+          <option value="FEMALE">FEMALE</option>
+        </Select>
+      </Contents>
+      <Contents>
+        <Label>연령</Label>
+        <Select name="category">
+          <option value="All">All</option>
+          <option value="2030">20대 ~ 30대</option>
+          <option value="3040">30대 ~ 40대</option>
+          <option value="40~">40대 ~</option>
+        </Select>
+      </Contents>
       <Contents>
         <Label>종류</Label>
         <Select name="category">

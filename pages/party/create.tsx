@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import { useRef, FormEvent, useEffect } from "react";
+import { useRef, FormEvent } from "react";
 import styled from "@emotion/styled";
 import Create from "@components/party/create/Create";
 import SearchMap from "@components/party/create/SearchMap";
