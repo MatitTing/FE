@@ -12,6 +12,7 @@ const useSearchPlace = () => {
     setMarker(null);
     setResultList(null);
   };
+
   const handleClickPlace = useCallback(
     (place: kakao.maps.services.PlacesSearchResultItem) => {
       if (!map) return;

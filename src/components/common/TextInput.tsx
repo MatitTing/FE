@@ -80,6 +80,7 @@ const TextInput = ({
         onKeyDown={onKeyDown}
         isBorderRadius={isBorderRadius}
         maxLength={maxLength}
+        {...register}
       />
       {errorMessage && <ErrorText>{errorMessage}</ErrorText>}
     </Container>

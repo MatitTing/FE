@@ -3,19 +3,16 @@ import { AxiosError, AxiosResponse } from "axios";
 import defaultRequest from "src/lib/axios/defaultRequest";
 
 export type SetPartyRequestParam = {
-  // userId: number;
   title: string;
   content: string;
   partyTime: string;
-  deadline: string;
   totalParticipant: number;
   longitude: number;
   latitude: number;
   gender: string;
   category: string;
   age: string;
-  menu: string;
-  thumbnail: string;
+  thumbnail?: string;
 };
 
 interface SetPartyResponse {

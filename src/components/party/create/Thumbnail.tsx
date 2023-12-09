@@ -1,9 +1,8 @@
-import { ChangeEvent } from "react";
+import { ChangeEventHandler } from "react";
 import styled from "@emotion/styled";
 import Image from "next/image";
-import useSetImage from "src/api/setImage";
-
-const Wrapper = styled.div``;
+import { PartyForm } from "@pages/party/create";
+import { UseFormGetValues } from "react-hook-form";
 
 const ImageBox = styled.div`
   position: relative;
@@ -21,43 +20,38 @@ const ImageAddBtn = styled.label`
   padding: 1rem;
   background-color: orange;
   color: #fff;
-  margin-top: -3px;
 `;
 
-interface ThumbnailProps {}
+interface ThumbnailProps {
+  onChangeThumbnail: ChangeEventHandler<HTMLInputElement>;
+  getValues: UseFormGetValues<PartyForm>;
+}
 
-const Thumbnail = ({}: ThumbnailProps) => {
-  const { mutate: setImage } = useSetImage();
-  const handleChangeThumbnail = (e: ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    const { files } = e.target;
+const Thumbnail = ({ onChangeThumbnail, getValues }: ThumbnailProps) => {
+  const { thumbnail } = getValues();
 
-    if (files) {
-      setImage(files[0]);
-    }
-  };
   return (
-    <Wrapper>
+    <div>
       <ImageBox>
-        <Image
-          src="https://cdn.pixabay.com/photo/2023/07/20/11/00/cookie-8139062_1280.jpg"
-          alt="식당 이미지"
-          layout="fill"
-          objectFit="contain"
-          objectPosition="center"
-        />
+        {thumbnail ? (
+          <Image
+            src={thumbnail}
+            alt="식당 썸네일"
+            layout="fill"
+            objectFit="contain"
+            objectPosition="center"
+          />
+        ) : null}
       </ImageBox>
-      <ImageAddBtn htmlFor="input-file">
-        이미지 첨부(이미지는 예시로 적용)
-      </ImageAddBtn>
+      <ImageAddBtn htmlFor="input-file">+ 이미지 첨부</ImageAddBtn>
       <input
         id="input-file"
         name="image"
         type="file"
         hidden
-        onChange={handleChangeThumbnail}
+        onChange={onChangeThumbnail}
       />
-    </Wrapper>
+    </div>
   );
 };
 

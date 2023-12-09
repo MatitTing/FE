@@ -22,31 +22,20 @@ const Wrapper = styled.div`
 `;
 const Container = styled.div`
   display: flex;
-  justify-content: center; /* 중앙 정렬로 변경 */
   background: ${ColorToken.white};
   width: 100%;
-  max-width: 768px;
-  position: fixed;
-  top: 0;
-  z-index: 999;
-  height: 45px;
+  justify-content: space-between;
   padding: 15px;
 `;
 
-const LeftSection = styled.div`
-  position: absolute;
-  left: 15px;
-`;
+const LeftSection = styled.div``;
 const CenterSection = styled.div`
   position: absolute;
-  justify-content: center;
-  display: flex;
-  width: calc(100% - 85px);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;
-const RightSection = styled.div`
-  position: absolute;
-  right: 15px;
-`;
+const RightSection = styled.div``;
 
 export const DefaultHeader = ({
   leftArea,
@@ -56,9 +45,9 @@ export const DefaultHeader = ({
   return (
     <Wrapper>
       <Container>
-        {leftArea ? <LeftSection>{leftArea}</LeftSection> : null}
+        {leftArea ? <LeftSection>{leftArea}</LeftSection> : <span></span>}
         {centerArea ? <CenterSection>{centerArea}</CenterSection> : null}
-        {rightArea ? <RightSection>{rightArea}</RightSection> : null}
+        {rightArea ? <RightSection>{rightArea}</RightSection> : <span></span>}
       </Container>
     </Wrapper>
   );

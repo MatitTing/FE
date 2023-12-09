@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { AxiosError, AxiosResponse } from "axios";
+import { AxiosError } from "axios";
 import defaultRequest from "src/lib/axios/defaultRequest";
 
 interface SetImageResponse {
@@ -7,18 +7,20 @@ interface SetImageResponse {
 }
 
 const setImage = async (image: File) =>
-  await defaultRequest.post(
-    "/api/party",
-    { image },
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }
-  );
+  (
+    await defaultRequest.post(
+      "/api/image",
+      { image },
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    )
+  ).data;
 
 const useSetImage = () =>
-  useMutation<AxiosResponse<SetImageResponse>, AxiosError, File>({
+  useMutation<SetImageResponse, AxiosError, File>({
     mutationFn: setImage,
   });
 
