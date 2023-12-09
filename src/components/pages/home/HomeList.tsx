@@ -4,6 +4,7 @@ import { FC, MouseEventHandler } from "react";
 import { Color } from "styles/Color";
 import { MainPagePartyListResponse } from "types/main/MainPagePartyListResponse";
 import { PartyCard } from "./PartyCard";
+import { ObserverTrigger } from "@components/hoc/ObserverTrigger";
 
 interface HomeListProps {
   data?: InfinitePaginationDataType<"partyList", MainPagePartyListResponse>[];
@@ -16,10 +17,10 @@ const Container = styled.div`
   flex-direction: column;
   width: 100%;
   background-color: ${Color.VeryLightGrey};
-  padding-bottom: 60px;
   overflow-y: scroll;
   overflow-x: hidden;
   align-items: center;
+  padding: 0 15px 60px 15px;
 `;
 
 export const HomeList: FC<HomeListProps> = ({
@@ -30,7 +31,7 @@ export const HomeList: FC<HomeListProps> = ({
   return (
     <Container>
       {data && data.length !== 0 && (
-        <>
+        <ObserverTrigger onObserve={onObserve} observerMinHeight={"30px"}>
           {data.map((item) =>
             item.partyList.map((party) => (
               <PartyCard
@@ -40,8 +41,7 @@ export const HomeList: FC<HomeListProps> = ({
               />
             ))
           )}
-          <Observer minHeight="30px" onObserve={onObserve} />
-        </>
+        </ObserverTrigger>
       )}
     </Container>
   );

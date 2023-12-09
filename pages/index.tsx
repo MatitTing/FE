@@ -120,7 +120,6 @@ const Home: NextPage = () => {
   const router = useRouter();
   const { showToast } = useToast();
   const [position, setPosition] = useRecoilState(PositionSate);
-  const [location, setLocation] = useState<PositionDataType>();
   const [isClickPosition, setIsClickPosition] = useState(false);
   const [isResetPosition, setIsResetPosition] = useState(false);
   const { mutateAsync: getAddress } = useMutation({
@@ -137,8 +136,7 @@ const Home: NextPage = () => {
         size: 5,
       }),
     initialPageParam: 0,
-    getNextPageParam: (lastPage, allPages, lastPageParam, allPageParams) =>
-      lastPage.pageInfo.lastPartyId,
+    getNextPageParam: (lastPage) => lastPage.pageInfo.lastPartyId,
   });
 
   const onClickPosition = () => {
@@ -157,61 +155,67 @@ const Home: NextPage = () => {
     if (hasNextPage) fetchNextPage();
   };
 
-  useEffect(() => {
-    setLocation(position);
-  }, [position]);
-
-  useEffect(() => {
-    // 가져오기 성공
-    const getSuccess = (position: {
-      coords: {
-        latitude: number;
-        longitude: number;
-      };
-    }) => {
-      // 위도
-      const lat = position.coords.latitude;
-      // 경도
-      const lng = position.coords.longitude;
-      setPosition({
+  useEffect(
+    function callGeoLocation() {
+      // 가져오기 성공
+      const getSuccess = (position: {
         coords: {
-          x: lat,
-          y: lng,
-        },
-      });
-    };
+          latitude: number;
+          longitude: number;
+        };
+      }) => {
+        // 위도
+        const lat = position.coords.latitude;
+        // 경도
+        const lng = position.coords.longitude;
+        setPosition({
+          coords: {
+            x: lat,
+            y: lng,
+          },
+        });
+      };
 
-    // 가지오기 실패(거부)
-    const getError = () => {
-      showToast("위치 정보를 찾을 수 없습니다. 위치 설정을 확인해 주세요!");
-    };
-    if (position.coords.x === 0 || position.coords.y === 0 || isResetPosition) {
-      navigator.geolocation.getCurrentPosition(getSuccess, getError);
-    }
-  }, [
-    isResetPosition,
-    position.coords.x,
-    position.coords.y,
-    setPosition,
-    showToast,
-  ]);
+      // 가지오기 실패(거부)
+      const getError = () => {
+        showToast("위치 정보를 찾을 수 없습니다. 위치 설정을 확인해 주세요!");
+      };
+      if (
+        position.coords.x === 0 ||
+        position.coords.y === 0 ||
+        isResetPosition
+      ) {
+        navigator.geolocation.getCurrentPosition(getSuccess, getError);
+      }
+    },
+    [
+      isResetPosition,
+      position.coords.x,
+      position.coords.y,
+      setPosition,
+      showToast,
+    ]
+  );
 
-  useEffect(() => {
-    if (position.coords.x !== 0 && position.coords.y !== 0) {
-      getAddress({
-        latitude: position.coords.x,
-        longitude: position.coords.y,
-        kakaoRestApiKey: String(process.env.KAKAO_RESTAPI_KEY),
-      }).then((data) => {
-        const address = data.documents[0].address;
+  useEffect(
+    function setAddress() {
+      if (position.coords.x !== 0 && position.coords.y !== 0) {
+        getAddress({
+          latitude: position.coords.x,
+          longitude: position.coords.y,
+          kakaoRestApiKey: String(process.env.KAKAO_RESTAPI_KEY),
+        }).then((data) => {
+          const address = data.documents[0].address;
 
-        setPosition((prev) => ({
-          ...prev,
-          address: `${address.region_1depth_name} ${address.region_2depth_name} ${address.region_3depth_name}`,
-        }));
-      });
-    }
-  }, [getAddress, position.coords.x, position.coords.y, setPosition]);
+          setPosition((prev) => ({
+            ...prev,
+            address: `${address.region_1depth_name} ${address.region_2depth_name} ${address.region_3depth_name}`,
+          }));
+        });
+      }
+    },
+    [getAddress, position.coords.x, position.coords.y, setPosition]
+  );
 
   const onClickPartyCard = (id: number) => {
     router.push(`/partydetail/${id}`);

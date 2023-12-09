@@ -6,6 +6,12 @@ import { ColorToken } from "styles/Color";
 import { MainPagePartyListResponse } from "types/main/MainPagePartyListResponse";
 import partyDefaultThumbnail from "public/images/list/partyDefaultThumbnail.png";
 import dayjs from "dayjs";
+import "dayjs/locale/ko";
+import { PeopleIcon } from "@components/icons/card/People.icon";
+import LocationIcon from "@components/icons/profile/Location.icon";
+import { MenuIcon } from "@components/icons/card/Menu.icon";
+import { TagButton } from "@components/common/TagButton";
+dayjs.locale("ko");
 
 interface PartyCardProps {
   partyData: MainPagePartyListResponse;
@@ -16,6 +22,7 @@ const Container = styled.div`
   width: 100%;
   max-width: 500px;
   border-radius: 30px;
+  display: flex;
   overflow: hidden;
   border: 1px solid ${ColorToken.border};
   position: relative;
@@ -25,21 +32,38 @@ const Container = styled.div`
   cursor: pointer;
 `;
 const InformationSection = styled.section`
-  padding: 8px 15px;
+  padding: 15px 15px 25px 0px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
+  width: calc(100% - 140px);
 `;
 const Title = styled.div``;
-const Description = styled.div``;
+const Description = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 5px;
+`;
 const OtherInformation = styled.div`
   display: flex;
-  justify-content: space-between;
+  gap: 5px;
+  align-items: center;
 `;
 
 const ImageSection = styled.section`
   width: 100%;
-  height: 100%;
+  max-width: 160px;
+`;
+
+const PeopleSection = styled.section`
+  display: flex;
+  gap: 5px;
+  align-items: center;
+`;
+
+const TagSection = styled.section`
+  display: flex;
+  gap: 5px;
 `;
 
 export const PartyCard = ({ partyData, onClickPartyCard }: PartyCardProps) => {
@@ -65,51 +89,59 @@ export const PartyCard = ({ partyData, onClickPartyCard }: PartyCardProps) => {
       <ImageSection>
         {thumbnail ? (
           <Image
-            width={500}
-            height={300}
+            width={160}
+            height={160}
             src={thumbnail}
             alt={"party-image"}
             style={{
               objectFit: "cover",
+              padding: "15px",
+              borderRadius: "30px",
             }}
           />
         ) : (
           <Image
-            width={500}
-            height={300}
+            width={160}
+            height={180}
             src={partyDefaultThumbnail}
             alt={"party-image"}
             style={{
               objectFit: "cover",
+              padding: "15px",
+              borderRadius: "30px",
             }}
           />
         )}
       </ImageSection>
       <InformationSection>
+        <TagSection>
+          <TagButton tagType="age" text={age} />
+          {gender === "WOMEN" && <TagButton tagType="gender" text={"여성만"} />}
+        </TagSection>
         <Title>
           <DefaultText text={partyTitle} size={24} weight={700} />
         </Title>
         <Description>
-          <DefaultText text={menu} size={15} weight={500} />
+          <MenuIcon />
+          <DefaultText text={menu} size={12} weight={500} />
         </Description>
         <OtherInformation>
+          <LocationIcon />
+          <DefaultText text={"성동구"} size={12} weight={500} />
           <DefaultText
-            text={`${dayjs(partyTime).format("YYYY-MM-MM / HH:MM")}`}
-            size={15}
-            weight={500}
-          />
-          <DefaultText text={address} size={15} weight={500} />
-          <DefaultText
-            text={`${gender === "ALL" ? "" : "여성전용"}`}
-            size={15}
-            weight={500}
-          />
-          <DefaultText
-            text={`현재 인원수:${participate}/${totalParticipate}`}
-            size={15}
+            text={`${dayjs(partyTime).format("MM.MM(dd) / HH:MM (A)")}`}
+            size={12}
             weight={500}
           />
         </OtherInformation>
+        <PeopleSection>
+          <PeopleIcon />
+          <DefaultText
+            text={`${participate}/${totalParticipate}`}
+            size={12}
+            weight={500}
+          />
+        </PeopleSection>
       </InformationSection>
     </Container>
   );
