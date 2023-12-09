@@ -4,11 +4,7 @@ import KakaoMap from "@components/common/Map";
 import { MapMarker } from "react-kakao-maps-sdk";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import SearchBox from "./SearchBox";
-import {
-  ChangeEvent,
-  Dispatch,
-  SetStateAction,
-} from "react";
+import { ChangeEvent, Dispatch, SetStateAction } from "react";
 
 const SearchWrapper = styled.div`
   display: flex;
@@ -31,18 +27,12 @@ const MarkerText = styled.div`
 
 interface SearchMapProps {
   marker: Marker | null;
-  setMap: Dispatch<
-    SetStateAction<kakao.maps.Map | undefined>
-  >;
+  setMap: Dispatch<SetStateAction<kakao.maps.Map | undefined>>;
   resultList: kakao.maps.services.PlacesSearchResult | null;
   keyword: string;
   reset: () => void;
-  handleChangeSearchBox: (
-    e: ChangeEvent<HTMLInputElement>
-  ) => void;
-  handleClickPlace: (
-    place: kakao.maps.services.PlacesSearchResultItem
-  ) => void;
+  handleChangeSearchBox: (e: ChangeEvent<HTMLInputElement>) => void;
+  handleClickPlace: (place: kakao.maps.services.PlacesSearchResultItem) => void;
 }
 
 const SearchMap = ({
@@ -65,9 +55,7 @@ const SearchMap = ({
           onChange={handleChangeSearchBox}
         />
         <div onClick={reset}>
-          <HighlightOffIcon
-            style={{ fill: "#bbb", fontSize: "20px" }}
-          />
+          <HighlightOffIcon style={{ fill: "#bbb", fontSize: "20px" }} />
         </div>
       </SearchWrapper>
       <MapWrapper>
