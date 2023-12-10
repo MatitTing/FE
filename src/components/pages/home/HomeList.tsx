@@ -1,10 +1,9 @@
-import Observer from "@components/common/Observer";
+import { ObserverTrigger } from "@components/hoc/ObserverTrigger";
 import styled from "@emotion/styled";
-import { FC, MouseEventHandler } from "react";
+import { FC } from "react";
 import { Color } from "styles/Color";
 import { MainPagePartyListResponse } from "types/main/MainPagePartyListResponse";
 import { PartyCard } from "./PartyCard";
-import { ObserverTrigger } from "@components/hoc/ObserverTrigger";
 
 interface HomeListProps {
   data?: InfinitePaginationDataType<"partyList", MainPagePartyListResponse>[];

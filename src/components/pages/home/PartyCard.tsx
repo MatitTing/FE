@@ -1,16 +1,15 @@
 import { DefaultText } from "@components/common/DefaultText";
-import { MainIcon } from "@components/icons/common/Main.icon";
-import styled from "@emotion/styled";
-import Image from "next/image";
-import { ColorToken } from "styles/Color";
-import { MainPagePartyListResponse } from "types/main/MainPagePartyListResponse";
-import partyDefaultThumbnail from "public/images/list/partyDefaultThumbnail.png";
-import dayjs from "dayjs";
-import "dayjs/locale/ko";
+import { TagButton } from "@components/common/TagButton";
+import { MenuIcon } from "@components/icons/card/Menu.icon";
 import { PeopleIcon } from "@components/icons/card/People.icon";
 import LocationIcon from "@components/icons/profile/Location.icon";
-import { MenuIcon } from "@components/icons/card/Menu.icon";
-import { TagButton } from "@components/common/TagButton";
+import styled from "@emotion/styled";
+import dayjs from "dayjs";
+import "dayjs/locale/ko";
+import Image from "next/image";
+import partyDefaultThumbnail from "public/images/list/partyDefaultThumbnail.png";
+import { ColorToken } from "styles/Color";
+import { MainPagePartyListResponse } from "types/main/MainPagePartyListResponse";
 dayjs.locale("ko");
 
 interface PartyCardProps {
