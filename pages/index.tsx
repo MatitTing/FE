@@ -7,15 +7,18 @@ import { NotificationIcon } from "@components/icons/header/Notification.icon";
 import { HomeList } from "@components/pages/home/HomeList";
 import { BottomUpPopup } from "@components/popup/BottomUpPopup";
 import styled from "@emotion/styled";
+import { useGpsPosition } from "@hooks/useGpsPosition";
 import useToast from "@hooks/useToast";
 import { Transition } from "@mantine/core";
-import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import type { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import getLocationAddress from "src/api/getLocationAddress";
+import getLocationAddress, {
+  API_GET_LOCATION_ADDRESS_KEY,
+} from "src/api/getLocationAddress";
 import getMainPageData, { API_GET_MAIN_PAGE } from "src/api/getPartyMainPage";
 import {
   PositionDataType,
@@ -118,25 +121,36 @@ const HeaderRightArea = () => {
 };
 const Home: NextPage = () => {
   const router = useRouter();
-  const { showToast } = useToast();
   const [position, setPosition] = useRecoilState(PositionSate);
   const [isClickPosition, setIsClickPosition] = useState(false);
   const [isResetPosition, setIsResetPosition] = useState(false);
-  const { mutateAsync: getAddress } = useMutation({
-    mutationFn: getLocationAddress,
+  const { location } = useGpsPosition();
+  const { data: addressData } = useQuery({
+    queryKey: [
+      API_GET_LOCATION_ADDRESS_KEY,
+      { latitude: position.coords.x, longitude: position.coords.y },
+    ],
+    queryFn: () =>
+      getLocationAddress({
+        latitude: position.coords.x,
+        longitude: position.coords.y,
+        kakaoRestApiKey: String(process.env.KAKAO_RESTAPI_KEY),
+      }),
+    enabled: !!position.coords.x,
   });
 
   const { fetchNextPage, hasNextPage, data } = useInfiniteQuery({
     queryKey: [API_GET_MAIN_PAGE],
     queryFn: ({ pageParam = 0 }) =>
       getMainPageData({
-        latitude: 37.54419081960767,
-        longitude: 127.0515738292837,
+        latitude: position.coords.x,
+        longitude: position.coords.y,
         lastPartyId: pageParam,
         size: 5,
       }),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => lastPage.pageInfo.lastPartyId,
+    enabled: !!position.coords.x,
   });
 
   const onClickPosition = () => {
@@ -155,66 +169,39 @@ const Home: NextPage = () => {
     if (hasNextPage) fetchNextPage();
   };
 
-  useEffect(
-    function callGeoLocation() {
-      // 가져오기 성공
-      const getSuccess = (position: {
+  console.log(location, "로케이션!");
+  useEffect(() => {
+    if (!position.coords.x || isResetPosition)
+      setPosition((prev) => ({
+        ...prev,
         coords: {
-          latitude: number;
-          longitude: number;
-        };
-      }) => {
-        // 위도
-        const lat = position.coords.latitude;
-        // 경도
-        const lng = position.coords.longitude;
-        setPosition({
-          coords: {
-            x: lat,
-            y: lng,
-          },
-        });
-      };
-
-      // 가지오기 실패(거부)
-      const getError = () => {
-        showToast("위치 정보를 찾을 수 없습니다. 위치 설정을 확인해 주세요!");
-      };
-      if (
-        position.coords.x === 0 ||
-        position.coords.y === 0 ||
-        isResetPosition
-      ) {
-        navigator.geolocation.getCurrentPosition(getSuccess, getError);
-      }
-    },
-    [
-      isResetPosition,
-      position.coords.x,
-      position.coords.y,
-      setPosition,
-      showToast,
-    ]
-  );
+          x: location?.latitude || 0,
+          y: location?.longitude || 0,
+        },
+      }));
+  }, [
+    isResetPosition,
+    location?.latitude,
+    location?.longitude,
+    position.coords.x,
+    setPosition,
+  ]);
 
   useEffect(
     function setAddress() {
-      if (position.coords.x !== 0 && position.coords.y !== 0) {
-        getAddress({
-          latitude: position.coords.x,
-          longitude: position.coords.y,
-          kakaoRestApiKey: String(process.env.KAKAO_RESTAPI_KEY),
-        }).then((data) => {
-          const address = data.documents[0].address;
-
-          setPosition((prev) => ({
-            ...prev,
-            address: `${address.region_1depth_name} ${address.region_2depth_name} ${address.region_3depth_name}`,
-          }));
-        });
+      if (!position.coords.x || !position.coords.y) {
+        return;
       }
+      const address = addressData?.documents[0].address;
+      if (!address) {
+        return;
+      }
+      setPosition((prev) => ({
+        ...prev,
+        address: `${address.region_1depth_name} ${address.region_2depth_name} ${address.region_3depth_name}`,
+      }));
     },
-    [getAddress, position.coords.x, position.coords.y, setPosition]
+    [addressData?.documents, position.coords.x, position.coords.y, setPosition]
   );
 
   const onClickPartyCard = (id: number) => {
