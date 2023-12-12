@@ -4,6 +4,8 @@ import { FC } from "react";
 import { Color } from "styles/Color";
 import { MainPagePartyListResponse } from "types/main/MainPagePartyListResponse";
 import { PartyCard } from "./PartyCard";
+import NoResult from "@components/common/NoResult";
+import { DefaultText } from "@components/common/DefaultText";
 
 interface HomeListProps {
   data?: InfinitePaginationDataType<"partyList", MainPagePartyListResponse>[];
@@ -29,7 +31,7 @@ export const HomeList: FC<HomeListProps> = ({
 }) => {
   return (
     <Container>
-      {data && data.length !== 0 && (
+      {data && data.length !== 0 ? (
         <ObserverTrigger onObserve={onObserve} observerMinHeight={"30px"}>
           {data.map((item) =>
             item.partyList.map((party) => (
@@ -41,6 +43,17 @@ export const HomeList: FC<HomeListProps> = ({
             ))
           )}
         </ObserverTrigger>
+      ) : (
+        <NoResult>
+          <DefaultText
+            text={
+              "현재 해당 위치에는 파티가 존재하지 않습니다. \n 다른 위치로 지정해 주세요."
+            }
+            preLine
+            size={20}
+            weight={800}
+          />
+        </NoResult>
       )}
     </Container>
   );
