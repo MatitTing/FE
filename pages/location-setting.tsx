@@ -56,12 +56,14 @@ const InvalidMessage = styled.div`
 `;
 
 const LocationSettingPage = () => {
-  const router = useRouter();
-  const inputRef = useRef<HTMLInputElement>(null);
-  const { location } = useGpsPosition();
   const [position, setPosition] = useRecoilState(PositionSate);
   const [mapPosition, setMapPosition] = useState<PositionDataType>();
-  const { data: addressData, refetch: getNewAddressData } = useQuery({
+  const [isKeywordError, setIsKeywordError] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const { location } = useGpsPosition();
+  const router = useRouter();
+
+  const { data: addressData } = useQuery({
     queryKey: [
       API_GET_LOCATION_ADDRESS_KEY,
       { latitude: position.coords.x, longitude: position.coords.y },
@@ -74,8 +76,6 @@ const LocationSettingPage = () => {
       }),
     enabled: !!position.coords.x,
   });
-
-  const [isKeywordError, setIsKeywordError] = useState(false);
 
   const clickPositionSettingButton = () => {
     if (!mapPosition) {
@@ -183,13 +183,7 @@ const LocationSettingPage = () => {
             const geocoder = new kakao.maps.services.Geocoder();
             const callback = (
               result: Array<{
-                /**
-                 * 지번 주소 상세 정보
-                 */
                 address: kakao.maps.services.Address;
-                /**
-                 * 도로명 주소 상세 정보
-                 */
                 road_address: kakao.maps.services.RoadAaddress | null;
               }>,
               status: kakao.maps.services.Status

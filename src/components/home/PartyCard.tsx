@@ -22,7 +22,6 @@ const Container = styled.div`
   max-width: 500px;
   border-radius: 30px;
   display: flex;
-  overflow: hidden;
   border: 1px solid ${ColorToken.border};
   position: relative;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
@@ -126,7 +125,7 @@ export const PartyCard = ({ partyData, onClickPartyCard }: PartyCardProps) => {
         </Description>
         <OtherInformation>
           <LocationIcon />
-          <DefaultText text={"성동구"} size={12} weight={500} />
+          <DefaultText text={address} size={12} weight={500} />
           <DefaultText
             text={`${dayjs(partyTime).format("MM.MM(dd) / HH:MM (A)")}`}
             size={12}
