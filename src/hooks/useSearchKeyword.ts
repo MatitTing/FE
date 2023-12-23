@@ -25,22 +25,19 @@ export const useSearchKeyword = () => {
     [recentKeywords, setRecentKeywords]
   );
 
-  const searchKeyword = useCallback(
-    (event: React.KeyboardEvent) => {
-      if (event.key !== "Enter") {
-        return;
-      }
+  const searchKeyword = async (event: React.KeyboardEvent) => {
+    if (event.key !== "Enter") {
+      return;
+    }
 
-      if (!inputRef.current?.value) {
-        return;
-      }
-      const keyword = inputRef.current.value;
-      // 중복되지 않는 키워드인지 확인
-      updateKeywords(keyword);
-      router.push(`/search/${keyword}`);
-    },
-    [router, updateKeywords]
-  );
+    if (!inputRef.current?.value) {
+      return;
+    }
+    const keyword = inputRef.current.value;
+    // 중복되지 않는 키워드인지 확인
+    updateKeywords(keyword);
+    await router.push(`/search/${keyword}`);
+  };
   useEffect(() => {
     setIsInitial(false);
   }, []);

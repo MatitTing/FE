@@ -17,13 +17,14 @@ export const HeaderBackButton = ({
   routerPath,
   margin = "-5px 0 0 0",
 }: HeaderBackButtonProps) => {
-  const rouetr = useRouter();
+  const router = useRouter();
   const onClickIcon = useCallback(() => {
     if (routerPath) {
-      rouetr.push(routerPath);
+      router.push(routerPath);
+      return;
     }
-    rouetr.back();
-  }, [rouetr, routerPath]);
+    router.back();
+  }, [router, routerPath]);
 
   return (
     <Container margin={margin} onClick={onClickIcon}>

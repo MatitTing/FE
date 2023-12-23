@@ -9,14 +9,15 @@ const Document = () => {
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=optional"
         />
+        <Script
+          src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.KAKAO_KEY}&libraries=services&autoload=false`}
+          type="text/javascript"
+          strategy="beforeInteractive"
+        />
       </Head>
       <body>
         <Main />
         <NextScript />
-        <Script
-          src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.KAKAO_KEY}&libraries=services,clusterer&autoload=false`}
-          strategy="beforeInteractive"
-        />
       </body>
     </Html>
   );

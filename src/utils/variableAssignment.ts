@@ -8,10 +8,15 @@ const replacePlaceholder = (
   return (str: string) => str.replace(regex, options[key]);
 };
 
-const variableAssignment = (template: string, options: Options): string => {
-  if (typeof template !== "string" || !options) {
+const variableAssignment = (template: string, options?: Options): string => {
+  if (
+    typeof template !== "string" ||
+    (options && !Object.keys(options).length)
+  ) {
     throw new Error("Invalid input parameters");
   }
+
+  if (!options) return template;
 
   const replaceFunctions = Object.keys(options).map((key) =>
     replacePlaceholder(options, key)

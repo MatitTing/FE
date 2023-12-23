@@ -1,8 +1,6 @@
 import variableAssignMent from "@utils/variableAssignment";
-import axios from "axios";
 import defaultRequest from "src/lib/axios/defaultRequest";
-import { MainPagePartyListResponse } from "types/main/MainPagePartyListResponse";
-import { PartyDetailResponse } from "types/party/detail/PartyDetailResponse";
+import { PartyListResponse } from "types/common/PartyListResponse";
 
 interface GetMainPageParameter {
   longitude: number;
@@ -21,7 +19,7 @@ const getMainPageData = async ({
   size = 5,
 }: GetMainPageParameter) => {
   const { data } = await defaultRequest.get<
-    InfinitePaginationDataType<"partyList", MainPagePartyListResponse>
+    InfinitePaginationDataType<"partyList", PartyListResponse>
   >(
     variableAssignMent(API_GET_MAIN_PAGE, {
       latitude: String(latitude),

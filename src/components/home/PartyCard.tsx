@@ -9,11 +9,11 @@ import "dayjs/locale/ko";
 import Image from "next/image";
 import partyDefaultThumbnail from "public/images/list/partyDefaultThumbnail.png";
 import { ColorToken } from "styles/Color";
-import { MainPagePartyListResponse } from "types/main/MainPagePartyListResponse";
+import { PartyListResponse } from "types/common/PartyListResponse";
 dayjs.locale("ko");
 
 interface PartyCardProps {
-  partyData: MainPagePartyListResponse;
+  partyData: PartyListResponse;
   onClickPartyCard: (id: number) => void;
 }
 

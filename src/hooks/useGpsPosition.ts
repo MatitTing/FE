@@ -33,7 +33,9 @@ export const useGpsPosition = () => {
       const getError = () => {
         showToast("위치 정보를 찾을 수 없습니다. 위치 설정을 확인해 주세요!");
       };
-      navigator.geolocation.getCurrentPosition(getSuccess, getError);
+      navigator.geolocation.getCurrentPosition(getSuccess, getError, {
+        enableHighAccuracy: false,
+      });
     },
     [showToast]
   );

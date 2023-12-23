@@ -2,12 +2,7 @@ import DefaultError from "@components/common/DefaultError";
 import DefaultLoading from "@components/common/DefaultLoading";
 import { Suspense } from "@suspensive/react";
 import { QueryErrorResetBoundary } from "@tanstack/react-query"; // (*)
-import {
-  FC,
-  MouseEventHandler,
-  PropsWithChildren,
-  ReactEventHandler,
-} from "react";
+import { FC, PropsWithChildren, ReactEventHandler } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
 interface QuerySuspenseErrorBoundaryProps {

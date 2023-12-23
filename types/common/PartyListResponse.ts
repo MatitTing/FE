@@ -1,4 +1,4 @@
-export interface MainPagePartyListResponse {
+export interface PartyListResponse {
   partyId: number;
   partyTitle: string;
   partyContent: string;
