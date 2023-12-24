@@ -20,6 +20,7 @@ export const HotKeywordSection: FC<HotKeywordSectionProps> = ({ onClick }) => {
   const { data } = useQuery({
     queryKey: [API_GET_SEARCH_RANK],
     queryFn: getSearchRank,
+    staleTime: 0,
   });
 
   return (
@@ -36,8 +37,8 @@ export const HotKeywordSection: FC<HotKeywordSectionProps> = ({ onClick }) => {
       >
         {data?.map((value, index) => (
           <HotKeywordTagButton
-            key={value + index}
-            text={value}
+            key={value.keyword + index}
+            text={value.keyword}
             onClick={onClick}
           />
         ))}
