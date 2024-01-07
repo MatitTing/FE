@@ -1,7 +1,5 @@
-export interface PartyDetailResponse {
-  userId: number;
+export interface MainPagePartyListResponse {
   partyId: number;
-  isLeader: boolean;
   partyTitle: string;
   partyContent: string;
   address: string;
