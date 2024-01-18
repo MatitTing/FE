@@ -9,6 +9,11 @@ const ImageBox = styled.div`
   width: 100%;
   height: 150px;
   overflow: hidden;
+
+  img {
+    object-fit: cover;
+    object-position: center;
+  }
 `;
 
 const ImageAddBtn = styled.label`
@@ -34,14 +39,10 @@ const Thumbnail = ({ onChangeThumbnail, getValues }: ThumbnailProps) => {
     <div>
       <ImageBox>
         {thumbnail ? (
-          <Image
-            src={thumbnail}
-            alt="식당 썸네일"
-            layout="fill"
-            objectFit="contain"
-            objectPosition="center"
-          />
-        ) : null}
+          <Image src={thumbnail} alt="식당 썸네일" fill />
+        ) : (
+          <Image src="/images/default_thumbnail.jpg" alt="기본 썸네일" fill />
+        )}
       </ImageBox>
       <ImageAddBtn htmlFor="input-file">+ 이미지 첨부</ImageAddBtn>
       <input

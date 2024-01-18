@@ -1,17 +1,24 @@
 import { NextPage } from "next";
-import { useRef } from "react";
+import { ChangeEvent, useRef } from "react";
 import styled from "@emotion/styled";
 import Create from "@components/party/create/Create";
 import SearchMap from "@components/party/create/SearchMap";
 import useSearchPlace from "@hooks/useSearchPlace";
 import { DefaultHeader } from "@components/common/DefaultHeader";
-import useSetParty from "src/api/setParty";
+import {
+  postParty,
+  SetPartyRequestParam,
+  SetPartyResponse,
+} from "src/api/postParty";
 import * as yup from "yup";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import router from "next/router";
+import { useMutation } from "@tanstack/react-query";
+import { AxiosResponse, AxiosError } from "axios";
+import { postUploadImage, SetImageResponse } from "src/api/postUploadImage";
 
-const Wrapper = styled.form`
+const Form = styled.form`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -27,10 +34,10 @@ const schema = yup.object({
   gender: yup.string().required(),
   category: yup.string().required(),
   age: yup.string().required(),
-  menu: yup.string(),
-  thumbnail: yup.string(),
+  menu: yup.string().required(),
+  thumbnail: yup.string().required(),
   totalParticipant: yup.number().required(),
-  status: yup.string(),
+  status: yup.string().required(),
 });
 
 export interface PartyForm {
@@ -40,15 +47,24 @@ export interface PartyForm {
   gender: string;
   category: string;
   age: string;
-  menu: string | undefined;
-  thumbnail: string | undefined;
+  menu: string;
+  thumbnail: string;
   totalParticipant: number;
-  status: string | undefined;
+  status: string;
 }
 
 const CreatePage: NextPage = () => {
   const formRef = useRef<HTMLFormElement>(null);
-  const { mutate: setParty } = useSetParty();
+  const { mutate: postPartyCreate } = useMutation<
+    AxiosResponse<SetPartyResponse>,
+    AxiosError,
+    SetPartyRequestParam
+  >({
+    mutationFn: postParty,
+  });
+  const { mutate: setImage } = useMutation<SetImageResponse, AxiosError, File>({
+    mutationFn: postUploadImage,
+  });
   const {
     marker,
     setMap,
@@ -69,28 +85,29 @@ const CreatePage: NextPage = () => {
     resolver: yupResolver(schema),
     mode: "onSubmit",
     defaultValues: {
-      thumbnail:
-        "https://cdn.pixabay.com/photo/2023/07/20/11/00/cookie-8139062_1280.jpg",
+      menu: "",
+      status: "",
+      thumbnail: "/images/default_thumbnail.jpg",
     },
   });
 
   const onSubmitPartyForm: SubmitHandler<PartyForm> = (formData: PartyForm) => {
-    if (marker?.position) {
-      setParty(
-        {
-          ...formData,
-          latitude: marker?.position.lat,
-          longitude: marker?.position.lng,
+    if (!marker || !marker.position) return;
+
+    postPartyCreate(
+      {
+        ...formData,
+        latitude: marker.position.lat,
+        longitude: marker.position.lng,
+      },
+      {
+        onSuccess: ({ data }) => {
+          if (data) {
+            router.replace(`/party/${data.partyId}`);
+          }
         },
-        {
-          onSuccess: ({ data }) => {
-            if (data) {
-              router.replace(`/party/${data.partyId}`);
-            }
-          },
-        }
-      );
-    }
+      }
+    );
   };
 
   const onClickSubmitButton = () =>
@@ -101,8 +118,8 @@ const CreatePage: NextPage = () => {
   const rightHeaderArea = (
     <SubmitBtn
       type="button"
-      onClick={() => onClickSubmitButton()}
-      disabled={marker?.position.lat === undefined || !isValid}
+      onClick={onClickSubmitButton}
+      disabled={!marker?.position.lat || !isValid}
     >
       완료
     </SubmitBtn>
@@ -110,13 +127,29 @@ const CreatePage: NextPage = () => {
 
   const onInvalid = (errors: any) => console.error(errors);
 
+  const handleChangeThumbnail = (e: ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const { files } = e.target;
+
+    if (files) {
+      setImage(files[0], {
+        onSuccess({ imgUrl }) {
+          if (imgUrl) {
+            setValue("thumbnail", imgUrl);
+          }
+        },
+      });
+    }
+  };
+
   return (
-    <Wrapper
-      ref={formRef}
-      onSubmit={handleSubmit(onSubmitPartyForm, onInvalid)}
-    >
+    <Form ref={formRef} onSubmit={handleSubmit(onSubmitPartyForm, onInvalid)}>
       <DefaultHeader centerArea="파티 생성" rightArea={rightHeaderArea} />
-      <Create register={register} setValue={setValue} getValues={getValues}>
+      <Create
+        register={register}
+        getValues={getValues}
+        onChangeThumbnail={handleChangeThumbnail}
+      >
         <SearchMap
           marker={marker}
           setMap={setMap}
@@ -127,7 +160,7 @@ const CreatePage: NextPage = () => {
           handleClickPlace={handleClickPlace}
         />
       </Create>
-    </Wrapper>
+    </Form>
   );
 };
 

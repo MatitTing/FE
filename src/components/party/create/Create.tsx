@@ -2,13 +2,9 @@ import styled from "@emotion/styled";
 import TextInput from "@components/common/TextInput";
 import { useRouter } from "next/router";
 import Thumbnail from "./Thumbnail";
-import { ChangeEvent, ReactNode } from "react";
-import {
-  UseFormGetValues,
-  UseFormRegister,
-  UseFormSetValue,
-} from "react-hook-form";
-import useSetImage from "src/api/setImage";
+import { ChangeEvent, PropsWithChildren } from "react";
+import { UseFormGetValues, UseFormRegister } from "react-hook-form";
+
 import { PartyForm } from "@pages/party/create";
 import SelectContent from "./SelectContent";
 import {
@@ -51,30 +47,18 @@ const Label = styled.h5`
 `;
 
 interface CreateProps {
-  children: ReactNode;
   register: UseFormRegister<PartyForm>;
-  setValue: UseFormSetValue<PartyForm>;
+  onChangeThumbnail: (e: ChangeEvent<HTMLInputElement>) => void;
   getValues: UseFormGetValues<PartyForm>;
 }
 
-const Create = ({ children, register, setValue, getValues }: CreateProps) => {
+const Create = ({
+  children,
+  register,
+  getValues,
+  onChangeThumbnail,
+}: PropsWithChildren<CreateProps>) => {
   const { query: partyId } = useRouter();
-  const { mutate: setImage } = useSetImage();
-
-  const handleChangeThumbnail = (e: ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    const { files } = e.target;
-
-    if (files) {
-      setImage(files[0], {
-        onSuccess({ imgUrl }) {
-          if (imgUrl) {
-            setValue("thumbnail", imgUrl);
-          }
-        },
-      });
-    }
-  };
 
   return (
     <Wrapper>
@@ -92,10 +76,7 @@ const Create = ({ children, register, setValue, getValues }: CreateProps) => {
         {...register("content")}
       />
       {children}
-      <Thumbnail
-        onChangeThumbnail={handleChangeThumbnail}
-        getValues={getValues}
-      />
+      <Thumbnail onChangeThumbnail={onChangeThumbnail} getValues={getValues} />
       <SelectContent
         label="성별"
         register={{ ...register("gender") }}
