@@ -113,9 +113,6 @@ const CreatePage: NextPage = () => {
     </SubmitBtn>
   );
 
-  // todo: 얼럿 띄우기
-  const onInvalid = (errors: any) => console.error(errors);
-
   const handleChangeThumbnail = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     const { files } = e.target;
@@ -132,7 +129,7 @@ const CreatePage: NextPage = () => {
   };
 
   return (
-    <Form ref={formRef} onSubmit={handleSubmit(onSubmitPartyForm, onInvalid)}>
+    <Form ref={formRef} onSubmit={handleSubmit(onSubmitPartyForm)}>
       <DefaultHeader centerArea="파티 생성" rightArea={rightHeaderArea} />
       <Create
         register={register}
