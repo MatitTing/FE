@@ -34,7 +34,6 @@ const schema = yup.object({
   gender: yup.string().required(),
   category: yup.string().required(),
   age: yup.string().required(),
-  menu: yup.string().required(),
   thumbnail: yup.string().required(),
   totalParticipant: yup.number().required(),
   status: yup.string().required(),
@@ -47,7 +46,6 @@ export interface PartyForm {
   gender: string;
   category: string;
   age: string;
-  menu: string;
   thumbnail: string;
   totalParticipant: number;
   status: string;
@@ -85,8 +83,7 @@ const CreatePage: NextPage = () => {
     resolver: yupResolver(schema),
     mode: "onSubmit",
     defaultValues: {
-      menu: "",
-      status: "",
+      status: "모집중",
       thumbnail: "/images/default_thumbnail.jpg",
     },
   });
@@ -110,21 +107,13 @@ const CreatePage: NextPage = () => {
     );
   };
 
-  const onClickSubmitButton = () =>
-    formRef?.current?.dispatchEvent(
-      new Event("submit", { cancelable: true, bubbles: true })
-    );
-
   const rightHeaderArea = (
-    <SubmitBtn
-      type="button"
-      onClick={onClickSubmitButton}
-      disabled={!marker?.position.lat || !isValid}
-    >
+    <SubmitBtn type="submit" disabled={!marker?.position.lat || !isValid}>
       완료
     </SubmitBtn>
   );
 
+  // todo: 얼럿 띄우기
   const onInvalid = (errors: any) => console.error(errors);
 
   const handleChangeThumbnail = (e: ChangeEvent<HTMLInputElement>) => {

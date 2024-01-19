@@ -99,7 +99,11 @@ const Create = ({
       />
       <Contents>
         <Label>모집일</Label>
-        <input type="date" {...register("partyTime")} />
+        <input
+          type="date"
+          {...register("partyTime")}
+          defaultValue={new Date().toISOString().substring(0, 10)}
+        />
       </Contents>
       {partyId ? (
         <SelectContent
