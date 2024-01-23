@@ -14,6 +14,7 @@ import {
   PARTY_STATUS_LABEL,
   PARTY_TOTAL_LABEL,
 } from "src/constants/options";
+import { PartyDetailResponse } from "types/party/detail/PartyDetailResponse";
 
 const Wrapper = styled.div`
   height: 100%;
@@ -47,19 +48,19 @@ const Label = styled.h5`
 `;
 
 interface CreateProps {
+  partyId?: number;
   register: UseFormRegister<PartyForm>;
   onChangeThumbnail: (e: ChangeEvent<HTMLInputElement>) => void;
   getValues: UseFormGetValues<PartyForm>;
 }
 
 const Create = ({
+  partyId,
   children,
   register,
   getValues,
   onChangeThumbnail,
 }: PropsWithChildren<CreateProps>) => {
-  const { query: partyId } = useRouter();
-
   return (
     <Wrapper>
       <TextInput
@@ -102,7 +103,7 @@ const Create = ({
         <input
           type="date"
           {...register("partyTime")}
-          defaultValue={new Date().toISOString().substring(0, 10)}
+          defaultValue={"2024-01-26"}
         />
       </Contents>
       {partyId ? (

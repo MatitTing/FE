@@ -11,6 +11,7 @@ export type SetPartyRequestParam = {
   category: string;
   age: string;
   thumbnail?: string;
+  status?: string;
 };
 
 export interface SetPartyResponse {
@@ -19,3 +20,11 @@ export interface SetPartyResponse {
 
 export const postParty = async (params: SetPartyRequestParam) =>
   await defaultRequest.post("/api/party", { ...params });
+
+export const postPartyUpdate = async ({
+  id,
+  params,
+}: {
+  id: string;
+  params: SetPartyRequestParam;
+}) => await defaultRequest.put(`/api/party/${id}`, { ...params });

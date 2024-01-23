@@ -1,25 +1,20 @@
 import { NextPage } from "next";
-import { ChangeEvent, useRef } from "react";
+import { ChangeEvent, useEffect, useRef } from "react";
 import styled from "@emotion/styled";
 import Create from "@components/party/create/Create";
 import SearchMap from "@components/party/create/SearchMap";
 import useSearchPlace from "@hooks/useSearchPlace";
 import { DefaultHeader } from "@components/common/DefaultHeader";
-import {
-  postParty,
-  SetPartyRequestParam,
-  SetPartyResponse,
-} from "src/api/postParty";
+import { postPartyUpdate } from "src/api/postParty";
 import getPartyDetail, {
   API_GET_PARTY_DETAIL_KEY,
 } from "src/api/getPartyDetail";
 import * as yup from "yup";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import router from "next/router";
+import router, { useRouter } from "next/router";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { AxiosResponse, AxiosError } from "axios";
-import { postUploadImage, SetImageResponse } from "src/api/postUploadImage";
+import { postUploadImage } from "src/api/postUploadImage";
 
 const Form = styled.form`
   display: flex;
@@ -46,27 +41,30 @@ export interface PartyForm {
   title: string;
   content: string;
   partyTime: string;
+  totalParticipant: number;
   gender: string;
   category: string;
   age: string;
   thumbnail: string;
-  totalParticipant: number;
   status: string;
 }
 
 const CreatePage: NextPage = () => {
   const formRef = useRef<HTMLFormElement>(null);
+  const router = useRouter();
   const { id } = router.query as { id: string };
 
-  const { mutate: postPartyCreate } = useMutation<
-    AxiosResponse<SetPartyResponse>,
-    AxiosError,
-    SetPartyRequestParam
-  >({
-    mutationFn: postParty,
+  const { data, isSuccess, isError, error, isLoading } = useQuery({
+    queryKey: [API_GET_PARTY_DETAIL_KEY, { id }],
+    queryFn: () => getPartyDetail({ id }),
+    enabled: !!id,
   });
 
-  const { mutate: setImage } = useMutation<SetImageResponse, AxiosError, File>({
+  const { mutate: setParty } = useMutation({
+    mutationFn: postPartyUpdate,
+  });
+
+  const { mutate: setImage } = useMutation({
     mutationFn: postUploadImage,
   });
 
@@ -90,19 +88,33 @@ const CreatePage: NextPage = () => {
     resolver: yupResolver(schema),
     mode: "onSubmit",
     defaultValues: {
-      status: "모집중",
-      thumbnail: "/images/default_thumbnail.jpg",
+      title: data?.partyTitle,
+      content: data?.partyContent,
+      gender: data?.gender,
+      age: data?.age,
+      category: data?.category,
+      totalParticipant: data?.totalParticipate || 1,
+      partyTime:
+        data?.partyTime.split("T")[0] ||
+        new Date().toISOString().substring(0, 10),
+      thumbnail: data?.thumbnail || "/images/default_thumbnail.jpg",
+      status: data?.status || "모집중",
     },
   });
+
+  console.log(data?.partyTime.split("T")[0]);
 
   const onSubmitPartyForm: SubmitHandler<PartyForm> = (formData: PartyForm) => {
     if (!marker || !marker.position) return;
 
-    postPartyCreate(
+    setParty(
       {
-        ...formData,
-        latitude: marker.position.lat,
-        longitude: marker.position.lng,
+        id,
+        params: {
+          ...formData,
+          latitude: marker.position.lat,
+          longitude: marker.position.lng,
+        },
       },
       {
         onSuccess: ({ data }) => {
@@ -135,13 +147,25 @@ const CreatePage: NextPage = () => {
     }
   };
 
+  useEffect(() => {
+    if (id) {
+      //  식당의 상호명과 좌표값으로 지도 세팅
+    }
+  }, [id, setMap]);
+
+  if (!data) return <></>;
+
   return (
     <Form ref={formRef} onSubmit={handleSubmit(onSubmitPartyForm)}>
-      <DefaultHeader centerArea="파티 생성" rightArea={rightHeaderArea} />
+      <DefaultHeader
+        centerArea={`${data?.partyTitle}`}
+        rightArea={rightHeaderArea}
+      />
       <Create
         register={register}
         getValues={getValues}
         onChangeThumbnail={handleChangeThumbnail}
+        partyId={data?.partyId}
       >
         <SearchMap
           marker={marker}

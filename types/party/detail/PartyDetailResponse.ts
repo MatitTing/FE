@@ -16,5 +16,6 @@ export interface PartyDetailResponse {
   participate: number;
   menu: string;
   thumbnail: string;
+  category: string;
   hit: number;
 }
