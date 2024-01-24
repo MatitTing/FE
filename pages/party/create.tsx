@@ -56,7 +56,6 @@ export interface PartyForm {
 
 const CreatePage: NextPage = () => {
   const formRef = useRef<HTMLFormElement>(null);
-  const { id } = router.query as { id: string };
 
   const { mutate: postPartyCreate } = useMutation<
     AxiosResponse<SetPartyResponse>,
