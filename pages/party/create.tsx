@@ -5,19 +5,12 @@ import Create from "@components/party/create/Create";
 import SearchMap from "@components/party/create/SearchMap";
 import useSearchPlace from "@hooks/useSearchPlace";
 import { DefaultHeader } from "@components/common/DefaultHeader";
-import {
-  postParty,
-  SetPartyRequestParam,
-  SetPartyResponse,
-} from "src/api/postParty";
-import getPartyDetail, {
-  API_GET_PARTY_DETAIL_KEY,
-} from "src/api/getPartyDetail";
+import { postParty, SetPartyResponse } from "src/api/postParty";
 import * as yup from "yup";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import router from "next/router";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { AxiosResponse, AxiosError } from "axios";
 import { postUploadImage, SetImageResponse } from "src/api/postUploadImage";
 
@@ -31,8 +24,8 @@ const Form = styled.form`
 const SubmitBtn = styled.button``;
 
 const schema = yup.object({
-  title: yup.string().min(2, "2자 이상 입력해주세요").required(),
-  content: yup.string().required(),
+  partyTitle: yup.string().min(2, "2자 이상 입력해주세요").required(),
+  partyContent: yup.string().required(),
   partyTime: yup.string().required(),
   gender: yup.string().required(),
   category: yup.string().required(),
@@ -43,8 +36,8 @@ const schema = yup.object({
 });
 
 export interface PartyForm {
-  title: string;
-  content: string;
+  partyTitle: string;
+  partyContent: string;
   partyTime: string;
   gender: string;
   category: string;
@@ -60,7 +53,7 @@ const CreatePage: NextPage = () => {
   const { mutate: postPartyCreate } = useMutation<
     AxiosResponse<SetPartyResponse>,
     AxiosError,
-    SetPartyRequestParam
+    PartyInfo
   >({
     mutationFn: postParty,
   });

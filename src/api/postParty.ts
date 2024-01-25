@@ -1,24 +1,10 @@
 import defaultRequest from "src/lib/axios/defaultRequest";
 
-export type SetPartyRequestParam = {
-  title: string;
-  content: string;
-  partyTime: string;
-  totalParticipant: number;
-  longitude: number;
-  latitude: number;
-  gender: string;
-  category: string;
-  age: string;
-  thumbnail?: string;
-  status?: string;
-};
-
 export interface SetPartyResponse {
   partyId: string;
 }
 
-export const postParty = async (params: SetPartyRequestParam) =>
+export const postParty = async (params: PartyInfo) =>
   await defaultRequest.post("/api/party", { ...params });
 
 export const postPartyUpdate = async ({
@@ -26,5 +12,5 @@ export const postPartyUpdate = async ({
   params,
 }: {
   id: string;
-  params: SetPartyRequestParam;
+  params: PartyInfo;
 }) => await defaultRequest.put(`/api/party/${id}`, { ...params });

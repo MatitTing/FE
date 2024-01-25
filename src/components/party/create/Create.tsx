@@ -1,10 +1,8 @@
 import styled from "@emotion/styled";
 import TextInput from "@components/common/TextInput";
-import { useRouter } from "next/router";
 import Thumbnail from "./Thumbnail";
 import { ChangeEvent, PropsWithChildren } from "react";
 import { UseFormGetValues, UseFormRegister } from "react-hook-form";
-
 import { PartyForm } from "@pages/party/create";
 import SelectContent from "./SelectContent";
 import {
@@ -14,7 +12,6 @@ import {
   PARTY_STATUS_LABEL,
   PARTY_TOTAL_LABEL,
 } from "src/constants/options";
-import { PartyDetailResponse } from "types/party/detail/PartyDetailResponse";
 
 const Wrapper = styled.div`
   height: 100%;
@@ -64,17 +61,17 @@ const Create = ({
   return (
     <Wrapper>
       <TextInput
-        name="title"
+        name="partyTitle"
         placeholder="제목"
         isBorderRadius={false}
         maxLength={20}
-        register={{ ...register("title") }}
+        register={{ ...register("partyTitle") }}
       />
       <TextArea
         maxLength={100}
         placeholder="내용을 입력하세요."
         rows={5}
-        {...register("content")}
+        {...register("partyContent")}
       />
       {children}
       <Thumbnail onChangeThumbnail={onChangeThumbnail} getValues={getValues} />
