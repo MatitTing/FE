@@ -12,7 +12,8 @@ export interface PartyDetailResponse {
   age: string;
   deadline: string;
   partyTime: string;
-  totalParticipate: number;
+  totalParticipant: number;
+  partyPlaceName: string;
   participate: number;
   menu: string;
   thumbnail: string;

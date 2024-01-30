@@ -13,4 +13,4 @@ export const postPartyUpdate = async ({
 }: {
   id: string;
   params: PartyInfo;
-}) => await defaultRequest.put(`/api/party/${id}`, { ...params });
+}) => await defaultRequest.patch(`/api/party/${id}`, { ...params });

@@ -1,7 +1,6 @@
 import { ChangeEventHandler } from "react";
 import styled from "@emotion/styled";
 import Image from "next/image";
-import { PartyForm } from "@pages/party/create";
 import { UseFormGetValues } from "react-hook-form";
 
 const ImageBox = styled.div`

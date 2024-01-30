@@ -9,12 +9,12 @@ import { postPartyUpdate } from "src/api/postParty";
 import getPartyDetail, {
   API_GET_PARTY_DETAIL_KEY,
 } from "src/api/getPartyDetail";
-import * as yup from "yup";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { postUploadImage } from "src/api/postUploadImage";
+import { partySchema } from "../create";
 
 const Form = styled.form`
   display: flex;
@@ -25,36 +25,12 @@ const Form = styled.form`
 
 const SubmitBtn = styled.button``;
 
-const schema = yup.object({
-  title: yup.string().min(2, "2자 이상 입력해주세요").required(),
-  content: yup.string().required(),
-  partyTime: yup.string().required(),
-  gender: yup.string().required(),
-  category: yup.string().required(),
-  age: yup.string().required(),
-  thumbnail: yup.string().required(),
-  totalParticipant: yup.number().required(),
-  status: yup.string().required(),
-});
-
-export interface PartyForm {
-  title: string;
-  content: string;
-  partyTime: string;
-  totalParticipant: number;
-  gender: string;
-  category: string;
-  age: string;
-  thumbnail: string;
-  status: string;
-}
-
 const CreatePage: NextPage = () => {
   const formRef = useRef<HTMLFormElement>(null);
   const router = useRouter();
   const { id } = router.query as { id: string };
 
-  const { data, isSuccess, isError, error, isLoading } = useQuery({
+  const { data } = useQuery({
     queryKey: [API_GET_PARTY_DETAIL_KEY, { id }],
     queryFn: () => getPartyDetail({ id }),
     enabled: !!id,
@@ -69,13 +45,13 @@ const CreatePage: NextPage = () => {
   });
 
   const {
-    marker,
     setMap,
+    marker,
     keyword,
     resultList,
-    reset,
     handleChangeSearchBox,
     handleClickPlace,
+    setPlace,
   } = useSearchPlace();
 
   const {
@@ -84,25 +60,14 @@ const CreatePage: NextPage = () => {
     formState: { isValid },
     setValue,
     getValues,
+    reset,
   } = useForm<PartyForm>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(partySchema),
     mode: "onSubmit",
     defaultValues: {
-      title: data?.partyTitle,
-      content: data?.partyContent,
-      gender: data?.gender,
-      age: data?.age,
-      category: data?.category,
-      totalParticipant: data?.totalParticipate || 1,
-      partyTime:
-        data?.partyTime.split("T")[0] ||
-        new Date().toISOString().substring(0, 10),
-      thumbnail: data?.thumbnail || "/images/default_thumbnail.jpg",
-      status: data?.status || "모집중",
+      thumbnail: "https://matitting.s3.ap-northeast-2.amazonaws.com/etc.jpeg",
     },
   });
-
-  console.log(data?.partyTime.split("T")[0]);
 
   const onSubmitPartyForm: SubmitHandler<PartyForm> = (formData: PartyForm) => {
     if (!marker || !marker.position) return;
@@ -112,6 +77,7 @@ const CreatePage: NextPage = () => {
         id,
         params: {
           ...formData,
+          partyPlaceName: marker.content,
           latitude: marker.position.lat,
           longitude: marker.position.lng,
         },
@@ -119,7 +85,7 @@ const CreatePage: NextPage = () => {
       {
         onSuccess: ({ data }) => {
           if (data) {
-            router.replace(`/party/${data.partyId}`);
+            router.replace(`/partydetail/${id}`);
           }
         },
       }
@@ -148,10 +114,18 @@ const CreatePage: NextPage = () => {
   };
 
   useEffect(() => {
-    if (id) {
-      //  식당의 상호명과 좌표값으로 지도 세팅
-    }
-  }, [id, setMap]);
+    if (!data) return;
+    setValue(
+      "thumbnail",
+      data?.thumbnail ||
+        "https://matitting.s3.ap-northeast-2.amazonaws.com/etc.jpeg"
+    );
+    setPlace({
+      lat: data?.latitude,
+      lng: data?.longitude,
+      placeName: data?.partyPlaceName,
+    });
+  }, [data, setPlace, setValue]);
 
   if (!data) return <></>;
 
@@ -166,6 +140,7 @@ const CreatePage: NextPage = () => {
         getValues={getValues}
         onChangeThumbnail={handleChangeThumbnail}
         partyId={data?.partyId}
+        defaultData={data}
       >
         <SearchMap
           marker={marker}

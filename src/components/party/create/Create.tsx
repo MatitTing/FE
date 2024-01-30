@@ -3,7 +3,6 @@ import TextInput from "@components/common/TextInput";
 import Thumbnail from "./Thumbnail";
 import { ChangeEvent, PropsWithChildren } from "react";
 import { UseFormGetValues, UseFormRegister } from "react-hook-form";
-import { PartyForm } from "@pages/party/create";
 import SelectContent from "./SelectContent";
 import {
   PARTY_AGE_LABEL,
@@ -12,6 +11,8 @@ import {
   PARTY_STATUS_LABEL,
   PARTY_TOTAL_LABEL,
 } from "src/constants/options";
+import { PartyDetailResponse } from "types/party/detail/PartyDetailResponse";
+import { getISOString } from "@utils/helper";
 
 const Wrapper = styled.div`
   height: 100%;
@@ -46,13 +47,15 @@ const Label = styled.h5`
 
 interface CreateProps {
   partyId?: number;
-  register: UseFormRegister<PartyForm>;
+  defaultData?: PartyDetailResponse;
   onChangeThumbnail: (e: ChangeEvent<HTMLInputElement>) => void;
+  register: UseFormRegister<PartyForm>;
   getValues: UseFormGetValues<PartyForm>;
 }
 
 const Create = ({
   partyId,
+  defaultData,
   children,
   register,
   getValues,
@@ -66,41 +69,55 @@ const Create = ({
         isBorderRadius={false}
         maxLength={20}
         register={{ ...register("partyTitle") }}
+        defaultValue={defaultData?.partyTitle}
       />
       <TextArea
         maxLength={100}
         placeholder="내용을 입력하세요."
         rows={5}
         {...register("partyContent")}
+        defaultValue={defaultData?.partyContent}
       />
       {children}
+      <TextInput
+        name="menu"
+        placeholder="메뉴를 입력해주세요."
+        isBorderRadius={false}
+        maxLength={20}
+        register={{ ...register("menu") }}
+        defaultValue={defaultData?.menu}
+      />
       <Thumbnail onChangeThumbnail={onChangeThumbnail} getValues={getValues} />
       <SelectContent
         label="성별"
         register={{ ...register("gender") }}
         options={PARTY_GENDER_LABEL}
+        defaultValue={defaultData?.gender}
       />
       <SelectContent
         label="연령"
         register={{ ...register("age") }}
         options={PARTY_AGE_LABEL}
+        defaultValue={defaultData?.age}
       />
       <SelectContent
         label="종류"
         register={{ ...register("category") }}
         options={PARTY_CATEGORY_LABEL}
+        defaultValue={defaultData?.category}
       />
       <SelectContent
         label="모집원"
         register={{ ...register("totalParticipant") }}
         options={PARTY_TOTAL_LABEL}
+        defaultValue={defaultData?.totalParticipant}
       />
       <Contents>
         <Label>모집일</Label>
         <input
-          type="date"
+          type="datetime-local"
           {...register("partyTime")}
-          defaultValue={"2024-01-26"}
+          defaultValue={getISOString(defaultData?.partyTime || "")}
         />
       </Contents>
       {partyId ? (
@@ -108,6 +125,7 @@ const Create = ({
           label="모집 상태"
           register={{ ...register("status") }}
           options={PARTY_STATUS_LABEL}
+          defaultValue={defaultData?.status}
         />
       ) : null}
     </Wrapper>

@@ -24,13 +24,19 @@ const Select = styled.select`
 interface SelectContentProps {
   label: string;
   register: UseFormRegisterReturn<string>;
+  defaultValue?: string | number;
   options: { name: string | number; value: string | number }[];
 }
 
-const SelectContent = ({ label, register, options }: SelectContentProps) => (
+const SelectContent = ({
+  label,
+  register,
+  options,
+  defaultValue,
+}: SelectContentProps) => (
   <Contents>
     <Label>{label}</Label>
-    <Select {...register}>
+    <Select {...register} defaultValue={defaultValue}>
       {options.map(({ name, value }) => (
         <option key={name} value={value}>
           {name}

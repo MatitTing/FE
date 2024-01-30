@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import { ChangeEvent, useRef } from "react";
+import { ChangeEvent, useEffect, useRef } from "react";
 import styled from "@emotion/styled";
 import Create from "@components/party/create/Create";
 import SearchMap from "@components/party/create/SearchMap";
@@ -13,6 +13,7 @@ import router from "next/router";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosResponse, AxiosError } from "axios";
 import { postUploadImage, SetImageResponse } from "src/api/postUploadImage";
+import defaultRequest from "src/lib/axios/defaultRequest";
 
 const Form = styled.form`
   display: flex;
@@ -23,7 +24,7 @@ const Form = styled.form`
 
 const SubmitBtn = styled.button``;
 
-const schema = yup.object({
+export const partySchema = yup.object({
   partyTitle: yup.string().min(2, "2자 이상 입력해주세요").required(),
   partyContent: yup.string().required(),
   partyTime: yup.string().required(),
@@ -32,20 +33,9 @@ const schema = yup.object({
   age: yup.string().required(),
   thumbnail: yup.string().required(),
   totalParticipant: yup.number().required(),
-  status: yup.string().required(),
+  menu: yup.string().required(),
+  status: yup.string(),
 });
-
-export interface PartyForm {
-  partyTitle: string;
-  partyContent: string;
-  partyTime: string;
-  gender: string;
-  category: string;
-  age: string;
-  thumbnail: string;
-  totalParticipant: number;
-  status: string;
-}
 
 const CreatePage: NextPage = () => {
   const formRef = useRef<HTMLFormElement>(null);
@@ -79,12 +69,8 @@ const CreatePage: NextPage = () => {
     setValue,
     getValues,
   } = useForm<PartyForm>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(partySchema),
     mode: "onSubmit",
-    defaultValues: {
-      status: "모집중",
-      thumbnail: "/images/default_thumbnail.jpg",
-    },
   });
 
   const onSubmitPartyForm: SubmitHandler<PartyForm> = (formData: PartyForm) => {
@@ -93,13 +79,14 @@ const CreatePage: NextPage = () => {
     postPartyCreate(
       {
         ...formData,
+        partyPlaceName: marker.content,
         latitude: marker.position.lat,
         longitude: marker.position.lng,
       },
       {
         onSuccess: ({ data }) => {
           if (data) {
-            router.replace(`/party/${data.partyId}`);
+            router.replace(`/partydetail/${data.partyId}`);
           }
         },
       }
@@ -126,6 +113,10 @@ const CreatePage: NextPage = () => {
       });
     }
   };
+
+  useEffect(() => {
+    defaultRequest.get("http://localhost:8080/matitting");
+  }, []);
 
   return (
     <Form ref={formRef} onSubmit={handleSubmit(onSubmitPartyForm)}>

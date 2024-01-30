@@ -25,6 +25,8 @@ const MarkerText = styled.div`
   padding: 3px 5px;
 `;
 
+type Place = { lat: number; lng: number; placeName: string };
+
 interface SearchMapProps {
   marker: Marker | null;
   setMap: Dispatch<SetStateAction<kakao.maps.Map | undefined>>;
