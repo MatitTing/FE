@@ -23,8 +23,6 @@ const Form = styled.form`
   height: calc(100vh - 72px - 45px);
 `;
 
-const SubmitBtn = styled.button``;
-
 const CreatePage: NextPage = () => {
   const formRef = useRef<HTMLFormElement>(null);
   const router = useRouter();
@@ -65,7 +63,7 @@ const CreatePage: NextPage = () => {
     resolver: yupResolver(partySchema),
     mode: "onSubmit",
     defaultValues: {
-      thumbnail: "https://matitting.s3.ap-northeast-2.amazonaws.com/etc.jpeg",
+      thumbnail: "/images/default_thumbnail.jpg",
     },
   });
 
@@ -92,12 +90,6 @@ const CreatePage: NextPage = () => {
     );
   };
 
-  const rightHeaderArea = (
-    <SubmitBtn type="submit" disabled={!marker?.position.lat || !isValid}>
-      완료
-    </SubmitBtn>
-  );
-
   const handleChangeThumbnail = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     const { files } = e.target;
@@ -115,17 +107,20 @@ const CreatePage: NextPage = () => {
 
   useEffect(() => {
     if (!data) return;
-    setValue(
-      "thumbnail",
-      data?.thumbnail ||
-        "https://matitting.s3.ap-northeast-2.amazonaws.com/etc.jpeg"
-    );
+
     setPlace({
       lat: data?.latitude,
       lng: data?.longitude,
       placeName: data?.partyPlaceName,
     });
+    setValue("thumbnail", data?.thumbnail);
   }, [data, setPlace, setValue]);
+
+  const rightHeaderArea = (
+    <button type="submit" disabled={!marker?.position.lat || !isValid}>
+      완료
+    </button>
+  );
 
   if (!data) return <></>;
 

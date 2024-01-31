@@ -22,8 +22,6 @@ const Form = styled.form`
   height: calc(100vh - 72px - 45px);
 `;
 
-const SubmitBtn = styled.button``;
-
 export const partySchema = yup.object({
   partyTitle: yup.string().min(2, "2자 이상 입력해주세요").required(),
   partyContent: yup.string().required(),
@@ -31,9 +29,9 @@ export const partySchema = yup.object({
   gender: yup.string().required(),
   category: yup.string().required(),
   age: yup.string().required(),
-  thumbnail: yup.string().required(),
   totalParticipant: yup.number().required(),
   menu: yup.string().required(),
+  thumbnail: yup.string(),
   status: yup.string(),
 });
 
@@ -71,6 +69,9 @@ const CreatePage: NextPage = () => {
   } = useForm<PartyForm>({
     resolver: yupResolver(partySchema),
     mode: "onSubmit",
+    defaultValues: {
+      thumbnail: "/images/default_thumbnail.jpg",
+    },
   });
 
   const onSubmitPartyForm: SubmitHandler<PartyForm> = (formData: PartyForm) => {
@@ -94,9 +95,9 @@ const CreatePage: NextPage = () => {
   };
 
   const rightHeaderArea = (
-    <SubmitBtn type="submit" disabled={!marker?.position.lat || !isValid}>
+    <button type="submit" disabled={!marker?.position.lat || !isValid}>
       완료
-    </SubmitBtn>
+    </button>
   );
 
   const handleChangeThumbnail = (e: ChangeEvent<HTMLInputElement>) => {

@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useEffect, useState } from "react";
+import { ChangeEvent, useCallback, useState } from "react";
 
 const useSearchPlace = () => {
   const [marker, setMarker] = useState<Marker | null>(null);
