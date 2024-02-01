@@ -1,4 +1,4 @@
-import React from "react";
+import React, { MouseEventHandler, forwardRef } from "react";
 import styled from "@emotion/styled";
 import Image from "next/image";
 
@@ -6,12 +6,10 @@ interface AuthButtonProps {
   bgColor?: string;
   color?: string;
   src: string;
-  type?: string;
   alt?: string;
   width?: number;
   height?: number;
-  provider?: string;
-  onunload?: any; //수정예정
+  onClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
 interface ContainerProps {
@@ -31,23 +29,19 @@ const Container = styled.button<ContainerProps>`
 `;
 
 const AuthButton = (props: AuthButtonProps) => {
-  const handleSignIn = () => {};
-
   const {
     bgColor,
     color,
     src,
-    type,
     alt,
     width = "40",
     height = "40",
-    provider,
-    onunload,
+    onClick,
   } = props;
   return (
-    <Container color={color} bgColor={bgColor} onClick={handleSignIn}>
+    <Container color={color} bgColor={bgColor} onClick={onClick}>
       <Image src={src} alt={alt || ""} width={width} height={height} />
-      {alt}계정으로 {type === "signin" ? "로그인" : "회원가입"}
+      {alt}계정으로 로그인
     </Container>
   );
 };

@@ -14,8 +14,17 @@ const Document = () => {
           type="text/javascript"
           strategy="beforeInteractive"
         />
+        <Script
+          src="https://developers.kakao.com/sdk/js/kakao.js"
+          type="text/javascript"
+          strategy="beforeInteractive"
+        />
       </Head>
       <body>
+        <Script
+          src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js"
+          strategy="beforeInteractive"
+        />
         <Main />
         <NextScript />
       </body>
