@@ -3,13 +3,21 @@ import { DefaultHeader } from "@components/common/DefaultHeader";
 import { useState } from "react";
 import BackIcon from "@components/icons/common/Back.icon";
 import Progressbar from "@components/common/ProgressBar";
-import GenderType from "@components/profileinput/GenderType";
-import SetBirthday from "@components/profileinput/SetBirthday";
-import SetNickname from "@components/profileinput/SetNickname";
 import { DefaultButton } from "@components/common/DefaultButton";
 import { useRouter } from "next/router";
+
+import GenderSection from "@components/signup/GenderSection";
+import BirthDaySection from "@components/signup/BirthdaySection";
+import NickNameSection from "@components/signup/NicknameSection";
+import { useForm } from "react-hook-form";
 interface HeaderLeftAreaProps {
   onClick: () => void;
+}
+
+export interface SignUpFormType {
+  gender: string;
+  birthDay: string;
+  nickName: string;
 }
 
 const Container = styled.div`
@@ -53,8 +61,15 @@ const LeftArea = ({ onClick }: HeaderLeftAreaProps) => {
   );
 };
 
-const ProfileInput = () => {
+const SignUpPage = () => {
   const [step, setStep] = useState(0);
+  const { register, control, setValue } = useForm<SignUpFormType>({
+    defaultValues: {
+      gender: "",
+      birthDay: "",
+      nickName: "",
+    },
+  });
   const router = useRouter();
 
   const forwardStep = () =>
@@ -72,15 +87,15 @@ const ProfileInput = () => {
   const signupSteps = [
     {
       title: "회원님의 성별은 무엇인가요?",
-      contents: <GenderType />,
+      contents: <GenderSection control={control} setValue={setValue} />,
     },
     {
       title: "회원님의 생일은 언제인가요?",
-      contents: <SetBirthday />,
+      contents: <BirthDaySection {...register("birthDay")} />,
     },
     {
       title: "닉네임을 만들어 볼까요?",
-      contents: <SetNickname />,
+      contents: <NickNameSection {...register("nickName")} />,
     },
   ];
 
@@ -105,4 +120,4 @@ const ProfileInput = () => {
   );
 };
 
-export default ProfileInput;
+export default SignUpPage;

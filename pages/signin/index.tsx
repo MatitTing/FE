@@ -3,10 +3,14 @@ import { DefaultHeader } from "@components/common/DefaultHeader";
 import AuthButton from "@components/signin/SigninButton";
 import { HeaderBackButton } from "@components/common/HeaderBackButton";
 import { Color } from "styles/Color";
-import useSocialLoginInit from "@hooks/useSocialLoginInit";
-import { useCallback, useRef } from "react";
+import useSocialLoginInit from "@hooks/useSocialLogin";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Head from "next/head";
 import Script from "next/script";
+import { useMutation } from "@tanstack/react-query";
+import postLogin, { postLoginParameter } from "src/api/postLogin";
+import Link from "next/link";
+import { PostLoginResponse } from "types/signs";
 
 const Container = styled.div`
   display: flex;
@@ -43,25 +47,13 @@ const Logo = styled.div`
   font-size: 40px;
 `;
 
-const NaverInvisibleButton = styled.button`
-  display: none;
-`;
-
 const Profile = () => {
-  const naverRef = useRef<HTMLButtonElement>(null);
-  const { token } = useSocialLoginInit();
-
-  console.log(token);
-
-  const handleNaverLogin = () => {
-    (naverRef.current?.children[0] as HTMLButtonElement).click();
-  };
-
   const onClickKakao = () => {
     window.Kakao.Auth.authorize({
       redirectUri: "http://localhost:3000/signin",
     });
   };
+  useSocialLoginInit();
 
   return (
     <Container>
@@ -76,14 +68,16 @@ const Profile = () => {
             color="#3b2214"
             onClick={onClickKakao}
           />
-          <NaverInvisibleButton ref={naverRef} id="naverIdLogin" />
-          <AuthButton
-            src="/images/oauth/naver.png"
-            alt="네이버"
-            bgColor="#03C75A"
-            color="#ffffff"
-            onClick={handleNaverLogin}
-          />
+          <Link
+            href={`https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.NAVER_CLIENT_ID}&state=matitting&redirect_uri=${process.env.NAVER_CALLBACK_URL}`}
+          >
+            <AuthButton
+              src="/images/oauth/naver.png"
+              alt="네이버"
+              bgColor="#03C75A"
+              color="#ffffff"
+            />
+          </Link>
         </AuthButtonList>
       </Main>
     </Container>

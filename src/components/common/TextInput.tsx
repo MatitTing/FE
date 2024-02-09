@@ -1,12 +1,7 @@
-import {
-  ChangeEvent,
-  ChangeEventHandler,
-  FocusEventHandler,
-  KeyboardEventHandler,
-} from "react";
-import { UseFormRegisterReturn } from "react-hook-form";
 import styled from "@emotion/styled";
 import { shouldNotForwardProp } from "@utils/common";
+import { ChangeEvent, InputHTMLAttributes, forwardRef } from "react";
+import { ColorToken } from "styles/Color";
 
 const Container = styled.div({
   position: "relative",
@@ -20,7 +15,7 @@ const Input = styled(
   width: "100%",
   height: "100%",
   padding: "10px 14px",
-  border: "none",
+  border: `1px solid ${ColorToken.border}`,
   backgroundColor: "#f9f9f9",
   borderRadius: isBorderRadius ? "10px" : 0,
   "&:focus": {
@@ -32,59 +27,38 @@ const ErrorText = styled.p({
   color: "red",
 });
 
-interface InputProps {
-  register?: UseFormRegisterReturn<string>;
-  value?: string;
-  name?: string;
-  placeholder?: string;
-  errorMessage?: string;
-  maxLength?: number;
-  onChange?: ChangeEventHandler<HTMLInputElement>;
-  onFocus?: FocusEventHandler<HTMLInputElement>;
-  onKeyDown?: KeyboardEventHandler<HTMLInputElement>;
+type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, "type">;
+
+interface TextInputProps extends InputProps {
   whiteSpace?: boolean;
   isBorderRadius?: boolean;
+  errorMessage?: string;
 }
 
-const TextInput = ({
-  register,
-  value,
-  name,
-  placeholder,
-  errorMessage,
-  maxLength,
-  onChange,
-  onFocus,
-  onKeyDown,
-  whiteSpace = true,
-  isBorderRadius = false,
-}: InputProps) => {
-  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    if (!whiteSpace) {
-      e.target.value = e.target.value.replace(/\s/gi, "");
-    }
+const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
+  ({ whiteSpace, isBorderRadius, errorMessage, ...rest }, ref) => {
+    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+      if (!whiteSpace) {
+        e.target.value = e.target.value.replace(/\s/gi, "");
+      }
+      rest.onChange && rest.onChange(e);
+    };
 
-    onChange && onChange(e);
-  };
+    return (
+      <Container>
+        <Input
+          type="text"
+          onChange={onChangeHandler}
+          isBorderRadius={isBorderRadius}
+          {...rest}
+          ref={ref}
+        />
+        {errorMessage && <ErrorText>{errorMessage}</ErrorText>}
+      </Container>
+    );
+  }
+);
 
-  return (
-    <Container>
-      <Input
-        type="text"
-        name={name}
-        {...register}
-        value={value}
-        placeholder={placeholder}
-        onChange={onChangeHandler}
-        onFocus={onFocus}
-        onKeyDown={onKeyDown}
-        isBorderRadius={isBorderRadius}
-        maxLength={maxLength}
-        {...register}
-      />
-      {errorMessage && <ErrorText>{errorMessage}</ErrorText>}
-    </Container>
-  );
-};
+TextInput.displayName = "TextInput";
 
 export default TextInput;

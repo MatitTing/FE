@@ -11,7 +11,6 @@ import Modal from "src/components/common/Modal";
 import "../styles/globals.css";
 import { NextPageWithLayout } from "../types/layout";
 import Script from "next/script";
-import useSocialLoginInit from "@hooks/useSocialLoginInit";
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
