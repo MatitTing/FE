@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { DefaultHeader } from "@components/common/DefaultHeader";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import BackIcon from "@components/icons/common/Back.icon";
 import Progressbar from "@components/common/ProgressBar";
 import { DefaultButton } from "@components/common/DefaultButton";
@@ -10,6 +10,9 @@ import GenderSection from "@components/signup/GenderSection";
 import BirthDaySection from "@components/signup/BirthdaySection";
 import NickNameSection from "@components/signup/NicknameSection";
 import { useForm } from "react-hook-form";
+import SignupButton from "@components/signup/SignupButton";
+import { useMutation } from "@tanstack/react-query";
+import postSignup from "src/api/postSignup";
 interface HeaderLeftAreaProps {
   onClick: () => void;
 }
@@ -49,11 +52,6 @@ const ProgressbarContainer = styled.div`
   height: 100px;
   align-items: center;
 `;
-const NextButtonContainer = styled.div`
-  display: flex;
-  width: 100%;
-  margin-top: auto;
-`;
 
 const LeftArea = ({ onClick }: HeaderLeftAreaProps) => {
   return (
@@ -62,26 +60,58 @@ const LeftArea = ({ onClick }: HeaderLeftAreaProps) => {
 };
 
 const SignUpPage = () => {
+  const { query } = useRouter();
   const [step, setStep] = useState(0);
-  const { register, control, setValue } = useForm<SignUpFormType>({
-    defaultValues: {
-      gender: "",
-      birthDay: "",
-      nickName: "",
-    },
-  });
-  const router = useRouter();
+  const { newUserId } = query;
 
-  const forwardStep = () =>
-    step + 1 === signupSteps.length
-      ? registerInfo()
-      : setStep((step: number) => step + 1);
+  const { mutate } = useMutation({
+    mutationFn: postSignup,
+  });
+  const { register, control, setValue, handleSubmit, setError, formState } =
+    useForm<SignUpFormType>({
+      defaultValues: {
+        gender: "",
+        birthDay: "",
+        nickName: "",
+      },
+    });
+  const router = useRouter();
+  const { errors } = formState;
 
   const backStep = () =>
     step > 0 ? setStep((step: number) => step - 1) : router.back();
 
-  const registerInfo = () => {
-    //유저정보등록
+  const submitSingup = async ({
+    birthDay,
+    gender,
+    nickName,
+  }: SignUpFormType) => {
+    const lastStep = signupSteps.length - 1;
+
+    if (step === lastStep) {
+      console.log(birthDay, gender, nickName);
+      await mutate(
+        {
+          userId: Number(newUserId),
+          age: 30,
+          gender,
+          nickname: nickName,
+        },
+        {
+          onSuccess(data, variables, context) {
+            console.log(data);
+          },
+          onError(error, variables, context) {
+            setError("nickName", {
+              message: "중복된 닉네임입니다. 다른 닉네임을 사용해 주세요.",
+            });
+          },
+        }
+      );
+
+      return;
+    }
+    setStep((step: number) => step + 1);
   };
 
   const signupSteps = [
@@ -95,9 +125,17 @@ const SignUpPage = () => {
     },
     {
       title: "닉네임을 만들어 볼까요?",
-      contents: <NickNameSection {...register("nickName")} />,
+      contents: (
+        <NickNameSection
+          {...register("nickName")}
+          errorMessage={errors.nickName?.message}
+        />
+      ),
     },
   ];
+  const buttonText = useMemo(() => {
+    return step + 1 === signupSteps.length ? "완료" : "다음";
+  }, [signupSteps.length, step]);
 
   return (
     <Container>
@@ -107,15 +145,12 @@ const SignUpPage = () => {
       </ProgressbarContainer>
       <StepTitle>{signupSteps[step].title}</StepTitle>
       {signupSteps[step].contents}
-      <NextButtonContainer>
-        <DefaultButton
-          text={step + 1 === signupSteps.length ? "완료" : "다음"}
-          onClick={forwardStep}
-          style={{
-            width: "100%",
-          }}
-        />
-      </NextButtonContainer>
+      <SignupButton
+        control={control}
+        step={step}
+        onClick={handleSubmit(submitSingup)}
+        text={buttonText}
+      />
     </Container>
   );
 };

@@ -24,17 +24,20 @@ const GenderSection: FC<GenderSectionProps> = ({ control, setValue }) => {
     name: "gender",
   });
 
-  const genders = [{ type: "남성" }, { type: "여성" }];
+  const genders = [
+    { type: "MALE", value: "남성" },
+    { type: "FEMALE", value: "여성" },
+  ];
   const onClickButton = (type: string) => {
     setValue("gender", type);
   };
 
   return (
     <Container>
-      {genders.map(({ type }) => (
+      {genders.map(({ type, value }) => (
         <DefaultButton
           key={type}
-          text={type}
+          text={value}
           filled={type === selectedType}
           onClick={() => {
             onClickButton(type);

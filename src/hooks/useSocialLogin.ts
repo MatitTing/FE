@@ -34,11 +34,7 @@ const useSocialLogin = () => {
         {
           onSuccess(data, variables, context) {
             if (data.newUserId) {
-              replace("/signup", {
-                query: {
-                  newUserId: data.newUserId,
-                },
-              });
+              replace(`/signup?newUserId=${data.newUserId}`);
             }
           },
         }
@@ -50,11 +46,7 @@ const useSocialLogin = () => {
         {
           onSuccess(data, variables, context) {
             if (data.newUserId) {
-              replace("/signup", {
-                query: {
-                  newUserId: data.newUserId,
-                },
-              });
+              replace(`/signup?newUserId=${data.newUserId}`);
             }
           },
         }

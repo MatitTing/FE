@@ -1,10 +1,12 @@
 import React, { InputHTMLAttributes, forwardRef } from "react";
 import TextInput from "@components/common/TextInput";
 import styled from "@emotion/styled";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { ColorToken } from "styles/Color";
 
-type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, "type">;
+type InputProps = {
+  errorMessage?: string;
+} & Omit<InputHTMLAttributes<HTMLInputElement>, "type">;
 
 const Container = styled.div`
   display: flex;
@@ -15,10 +17,15 @@ const Container = styled.div`
 `;
 
 const NickNameSection = forwardRef<HTMLInputElement, InputProps>(
-  ({ ...rest }, ref) => {
+  ({ errorMessage, ...rest }, ref) => {
     return (
       <Container>
-        <TextInput isBorderRadius {...rest} ref={ref} />
+        <TextInput
+          isBorderRadius
+          {...rest}
+          ref={ref}
+          errorMessage={errorMessage}
+        />
       </Container>
     );
   }

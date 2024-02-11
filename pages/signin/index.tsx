@@ -1,16 +1,10 @@
-import styled from "@emotion/styled";
 import { DefaultHeader } from "@components/common/DefaultHeader";
-import AuthButton from "@components/signin/SigninButton";
 import { HeaderBackButton } from "@components/common/HeaderBackButton";
-import { Color } from "styles/Color";
+import AuthButton from "@components/signin/SigninButton";
+import styled from "@emotion/styled";
 import useSocialLoginInit from "@hooks/useSocialLogin";
-import { useCallback, useEffect, useRef, useState } from "react";
-import Head from "next/head";
-import Script from "next/script";
-import { useMutation } from "@tanstack/react-query";
-import postLogin, { postLoginParameter } from "src/api/postLogin";
 import Link from "next/link";
-import { PostLoginResponse } from "types/signs";
+import { Color } from "styles/Color";
 
 const Container = styled.div`
   display: flex;

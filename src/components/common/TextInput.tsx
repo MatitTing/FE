@@ -3,29 +3,34 @@ import { shouldNotForwardProp } from "@utils/common";
 import { ChangeEvent, InputHTMLAttributes, forwardRef } from "react";
 import { ColorToken } from "styles/Color";
 
+interface InputStyleProps {
+  isBorderRadius?: boolean;
+  errorMessage?: string;
+}
+
 const Container = styled.div({
   position: "relative",
   width: "100%",
 });
 
-const Input = styled(
-  "input",
-  shouldNotForwardProp("isBorderRadius")
-)<{ isBorderRadius?: boolean }>(({ isBorderRadius }) => ({
-  width: "100%",
-  height: "100%",
-  padding: "10px 14px",
-  border: `1px solid ${ColorToken.border}`,
-  backgroundColor: "#f9f9f9",
-  borderRadius: isBorderRadius ? "10px" : 0,
-  "&:focus": {
-    outline: "none",
-  },
-}));
+const Input = styled.input<InputStyleProps>`
+  width: 100%;
+  height: 100%;
+  padding: 10px 14px;
+  border: ${({ errorMessage }) =>
+    errorMessage ? `1px solid red` : `1px solid ${ColorToken.border}`};
+  background: "#f9f9f9";
+  border-radius: ${({ isBorderRadius }) => (isBorderRadius ? "10px" : "0")};
+  &:focus {
+    outline: "none";
+  }
+`;
 
-const ErrorText = styled.p({
-  color: "red",
-});
+const ErrorText = styled.p`
+  color: red;
+  margin-top: 10px;
+  margin-left: 5px;
+`;
 
 type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, "type">;
 
@@ -50,6 +55,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
           type="text"
           onChange={onChangeHandler}
           isBorderRadius={isBorderRadius}
+          errorMessage={errorMessage}
           {...rest}
           ref={ref}
         />
