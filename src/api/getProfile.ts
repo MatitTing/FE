@@ -1,13 +1,10 @@
 import defaultRequest from "src/lib/axios/defaultRequest";
 import { UserProfileResponse } from "types/profile/user/UserProfileResponse";
-import variableAssignMent from "@utils/variableAssignment";
 
-export const API_GET_PROFILE_KEY = "/api/profile/{{userId}}";
+export const API_GET_PROFILE_KEY = "/api/profile";
 
-const getProfile = async ({ userId }: any): Promise<UserProfileResponse> => {
-  const { data } = await defaultRequest.get(
-    variableAssignMent(API_GET_PROFILE_KEY, { userId })
-  );
+const getProfile = async (): Promise<UserProfileResponse> => {
+  const { data } = await defaultRequest.get(API_GET_PROFILE_KEY);
   return data;
 };
 

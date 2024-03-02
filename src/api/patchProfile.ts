@@ -1,23 +1,14 @@
 import defaultRequest from "src/lib/axios/defaultRequest";
-import variableAssignMent from "@utils/variableAssignment";
 
 interface patchProfileParameter {
-  userId: string;
   nickname: string;
-  imgUrl: string;
+  imgUrl?: string;
 }
 
-export const API_PATCH_PROFILE_KEY = "/api/party/{{userId}}";
+export const API_PATCH_PROFILE_KEY = "/api/profile";
 
-const patchProfile = async ({
-  userId,
-  nickname,
-  imgUrl,
-}: patchProfileParameter) => {
-  return defaultRequest.patch(
-    variableAssignMent(API_PATCH_PROFILE_KEY, { userId }),
-    { nickname, imgUrl }
-  );
+const patchProfile = async (body: patchProfileParameter) => {
+  return defaultRequest.patch(API_PATCH_PROFILE_KEY, body);
 };
 
 export default patchProfile;

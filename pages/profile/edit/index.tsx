@@ -1,18 +1,23 @@
 import styled from "@emotion/styled";
-import { DefaultHeader } from "@components/common/DefaultHeader";
-import { HeaderBackButton } from "@components/common/HeaderBackButton";
-import { DefaultButton } from "@components/common/DefaultButton";
 import TextInput from "@components/common/TextInput";
-import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import patchProfile from "src/api/patchProfile";
 import Image from "next/image";
 import getProfile from "src/api/getProfile";
+import { DefaultHeader } from "@components/common/DefaultHeader";
+import { HeaderBackButton } from "@components/common/HeaderBackButton";
+import { DefaultButton } from "@components/common/DefaultButton";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import { API_GET_PROFILE_KEY } from "src/api/getProfile";
 import { postUploadImage } from "src/api/postUploadImage";
 import { ChangeEvent } from "react";
 import { useState } from "react";
 import { useRef } from "react";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/router";
+
+interface ProfileEditForm {
+  nickname: string;
+}
 
 const Container = styled.div`
   display: flex;
@@ -33,6 +38,12 @@ const Main = styled.div`
   flex-direction: column;
 `;
 
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+
 const ImageContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -44,8 +55,8 @@ const ImageContainer = styled.div`
 `;
 
 const Profile = () => {
+  const router = useRouter();
   const queryClient = useQueryClient();
-
   const inputFileRef = useRef<HTMLInputElement>(null);
 
   const [localImgUrl, setLocalImgUrl] = useState<string>();
@@ -53,29 +64,27 @@ const Profile = () => {
 
   const { data } = useQuery({
     queryKey: [API_GET_PROFILE_KEY],
-    queryFn: () => getProfile({ userId: "11" }),
+    queryFn: () => getProfile(),
   });
 
-  const { register, getValues } = useForm({
-    mode: "onSubmit",
+  const { register, handleSubmit } = useForm<ProfileEditForm>({
+    defaultValues: {
+      nickname: data?.nickname,
+    },
   });
-
-  const { nickname } = getValues();
 
   const { mutate: patchProfileMutate } = useMutation({
     mutationFn: patchProfile,
-    onSuccess: () => {},
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [API_GET_PROFILE_KEY],
+      });
+      router.replace("/profile");
+    },
   });
 
-  const { mutate: postUploadImageMutate } = useMutation({
+  const { mutateAsync: postUploadImageMutate } = useMutation({
     mutationFn: postUploadImage,
-    onSuccess: ({ imgUrl }) => {
-      patchProfileMutate({
-        userId: "11",
-        nickname: nickname,
-        imgUrl,
-      });
-    },
   });
 
   const handleChangeThumbnail = (event: ChangeEvent<HTMLInputElement>) => {
@@ -96,34 +105,40 @@ const Profile = () => {
     inputFileRef.current?.click();
   };
 
-  const Confirm = () => {
+  const onSubmitPartyForm = async (formData: ProfileEditForm) => {
+    const { nickname } = formData;
     if (localImgFile) {
-      postUploadImageMutate(localImgFile);
+      const uploadResult = await postUploadImageMutate(localImgFile);
+      if (uploadResult.imgUrl) {
+        patchProfileMutate({ imgUrl: uploadResult.imgUrl, nickname });
+      }
       return;
     }
-    if (data) {
-      const { nickname } = getValues();
-      patchProfileMutate({
-        userId: "11",
-        nickname: nickname,
-        imgUrl: data.imgUrl,
-      });
-    }
+    patchProfileMutate({ nickname });
   };
 
-  if (data) {
-    return (
-      <Container>
-        <DefaultHeader
-          leftArea={<HeaderBackButton />}
-          rightArea={<DefaultButton text="완료" onClick={Confirm} />}
-        />
-        <Main>
+  if (!data) {
+    return;
+  }
+
+  return (
+    <Container>
+      <DefaultHeader
+        leftArea={<HeaderBackButton />}
+        rightArea={
+          <DefaultButton
+            text="완료"
+            onClick={handleSubmit(onSubmitPartyForm)}
+          />
+        }
+      />
+      <Main>
+        <Form onSubmit={handleSubmit(onSubmitPartyForm)}>
           <ImageContainer onClick={handleClickImage}>
             <Image
               width={200}
               height={200}
-              src={localImgUrl || "/images/profile/profile.png"}
+              src={localImgUrl || data.imgUrl || "/images/profile/profile.png"}
               style={{ borderRadius: "50%", objectFit: "cover" }}
               alt="profile"
             />
@@ -144,10 +159,10 @@ const Profile = () => {
             register={{ ...register("nickname") }}
             defaultValue={data.nickname}
           />
-        </Main>
-      </Container>
-    );
-  }
+        </Form>
+      </Main>
+    </Container>
+  );
 };
 
 export default Profile;
