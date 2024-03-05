@@ -10,7 +10,7 @@ export interface PostLoginParameter {
 export const API_POST_LOGIN_KEY = "/oauth2/login";
 
 const postLogin = async (body: PostLoginParameter) => {
-  const { data } = await defaultRequest.post<PostLoginResponse>(
+  const data = await defaultRequest.post<PostLoginResponse>(
     API_POST_LOGIN_KEY,
     body
   );

@@ -3,6 +3,8 @@ import { HeaderBackButton } from "@components/common/HeaderBackButton";
 import AuthButton from "@components/signin/SigninButton";
 import styled from "@emotion/styled";
 import useSocialLoginInit from "@hooks/useSocialLogin";
+import { setCookie } from "cookies-next";
+import { cookies } from "next/headers";
 import Link from "next/link";
 import { Color } from "styles/Color";
 

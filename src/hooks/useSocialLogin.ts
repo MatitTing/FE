@@ -1,7 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import { setCookie } from "cookies-next";
 import { useRouter } from "next/router";
 import { FC, useCallback, useEffect, useState } from "react";
 import postLogin from "src/api/postLogin";
+import defaultRequest from "src/lib/axios/defaultRequest";
 import { string } from "yup";
 
 declare global {
@@ -18,10 +21,10 @@ interface SocialLoginInformationType {
 }
 
 const useSocialLogin = () => {
-  const { replace, query } = useRouter();
+  const { replace, query, push } = useRouter();
   const { code, state } = query;
 
-  const { mutate: processLogin } = useMutation({ mutationFn: postLogin });
+  const { mutateAsync: processLogin } = useMutation({ mutationFn: postLogin });
 
   useEffect(() => {
     if (code && state) {
@@ -33,8 +36,18 @@ const useSocialLogin = () => {
         },
         {
           onSuccess(data, variables, context) {
-            if (data.newUserId) {
-              replace(`/signup?newUserId=${data.newUserId}`);
+            const { newUserId } = data.data;
+            if (newUserId) {
+              replace(`/signup?newUserId=${newUserId}`);
+              return;
+            }
+            if (data) {
+              const accessToken = data.headers["authorization"];
+              const refreshToken = data.headers["authorization-refresh"];
+              defaultRequest.defaults.headers.common["Authorization"] =
+                accessToken;
+              setCookie("refreshToken", refreshToken);
+              push("/");
             }
           },
         }
@@ -45,15 +58,25 @@ const useSocialLogin = () => {
         { code: String(code), oauthProvider: "KAKAO" },
         {
           onSuccess(data, variables, context) {
-            if (data.newUserId) {
-              replace(`/signup?newUserId=${data.newUserId}`);
+            const { newUserId } = data.data;
+            if (newUserId) {
+              replace(`/signup?newUserId=${newUserId}`);
+              return;
+            }
+            if (data) {
+              const accessToken = data.headers["authorization"];
+              const refreshToken = data.headers["authorization-refresh"];
+              defaultRequest.defaults.headers.common["Authorization"] =
+                accessToken;
+              setCookie("refreshToken", refreshToken);
+              push("/");
             }
           },
         }
       );
       return;
     }
-  }, [code, processLogin, replace, state]);
+  }, [code, processLogin, push, replace, state]);
 
   useEffect(() => {
     if (!window.Kakao.isInitialized()) {

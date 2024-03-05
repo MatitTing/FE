@@ -13,6 +13,11 @@ import { useForm } from "react-hook-form";
 import SignupButton from "@components/signup/SignupButton";
 import { useMutation } from "@tanstack/react-query";
 import postSignup from "src/api/postSignup";
+import { ColorToken } from "styles/Color";
+import axios, { AxiosError } from "axios";
+import { NextResponse } from "next/server";
+import { getCookie, setCookie } from "cookies-next";
+import defaultRequest from "src/lib/axios/defaultRequest";
 interface HeaderLeftAreaProps {
   onClick: () => void;
 }
@@ -29,9 +34,10 @@ const Container = styled.div`
   align-items: center;
   margin: 0 auto;
   padding: 45px;
-  min-height: calc(100vh - 80px);
+  min-height: calc(100vh - 45px);
   width: 100%;
   max-width: 768px;
+  background: ${ColorToken.icon_background};
 `;
 
 const HeaderAreaContainer = styled.div`
@@ -64,7 +70,7 @@ const SignUpPage = () => {
   const [step, setStep] = useState(0);
   const { newUserId } = query;
 
-  const { mutate } = useMutation({
+  const { mutateAsync } = useMutation({
     mutationFn: postSignup,
   });
   const { register, control, setValue, handleSubmit, setError, formState } =
@@ -89,26 +95,34 @@ const SignUpPage = () => {
     const lastStep = signupSteps.length - 1;
 
     if (step === lastStep) {
-      console.log(birthDay, gender, nickName);
-      await mutate(
+      const data = await mutateAsync(
         {
           userId: Number(newUserId),
-          age: 30,
+          birthday: birthDay,
           gender,
           nickname: nickName,
         },
         {
-          onSuccess(data, variables, context) {
-            console.log(data);
-          },
           onError(error, variables, context) {
-            setError("nickName", {
-              message: "중복된 닉네임입니다. 다른 닉네임을 사용해 주세요.",
-            });
+            if (
+              error instanceof AxiosError &&
+              error.response?.data.errorCode === 2003
+            ) {
+              setError("nickName", {
+                message: "중복된 닉네임입니다. 다른 닉네임을 사용해 주세요.",
+              });
+            }
           },
         }
       );
 
+      if (data) {
+        const accessToken = data.headers["authorization"];
+        const refreshToken = data.headers["authorization-refresh"];
+        defaultRequest.defaults.headers.common["Authorization"] = accessToken;
+        await setCookie("refreshToken", refreshToken);
+        router.push("/");
+      }
       return;
     }
     setStep((step: number) => step + 1);

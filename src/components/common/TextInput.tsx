@@ -8,17 +8,17 @@ interface InputStyleProps {
   errorMessage?: string;
 }
 
-const Container = styled.div({
-  position: "relative",
-  width: "100%",
-});
+const Container = styled.div`
+  position: relative;
+  width: 100%;
+`;
 
 const Input = styled.input<InputStyleProps>`
   width: 100%;
   height: 100%;
   padding: 10px 14px;
   border: ${({ errorMessage }) =>
-    errorMessage ? `1px solid red` : `1px solid ${ColorToken.border}`};
+    errorMessage ? `1px solid red` : `1px solid ${ColorToken.text_primary}`};
   background: "#f9f9f9";
   border-radius: ${({ isBorderRadius }) => (isBorderRadius ? "10px" : "0")};
   &:focus {

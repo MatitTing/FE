@@ -66,10 +66,7 @@ const SearchPage = () => {
       <DefaultHeader
         leftArea={<HeaderBackButton routerPath="/" />}
         centerArea={
-          <SearchHeader.Center
-            inputRef={inputRef}
-            searchKeyword={searchKeyword}
-          />
+          <SearchHeader.Center ref={inputRef} searchKeyword={searchKeyword} />
         }
       />
       <Contents>
