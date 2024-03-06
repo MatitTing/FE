@@ -18,6 +18,12 @@ defaultRequest.interceptors.response.use(
     // 에러 발생시
     const refreshToken = getCookie("refreshToken");
 
+    if (!refreshToken) {
+      await alert("로그인이 필요합니다. 로그인 해 주세요.");
+      window.location.href = "/signin";
+      return Promise.reject(error);
+    }
+
     // 토큰 갱신 요청
     const response = await defaultRequest.get("/oauth2/renew-token", {
       headers: {
