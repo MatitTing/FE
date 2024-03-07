@@ -1,6 +1,6 @@
 export const PARTY_AGE_LABEL = [
   {
-    name: "all",
+    name: "제한 없음",
     value: "ALL",
   },
   {
@@ -19,15 +19,15 @@ export const PARTY_AGE_LABEL = [
 
 export const PARTY_GENDER_LABEL = [
   {
-    name: "ALL",
+    name: "제한 없음",
     value: "ALL",
   },
   {
-    name: "MALE",
+    name: "남성",
     value: "MALE",
   },
   {
-    name: "FEMALE",
+    name: "여성",
     value: "FEMALE",
   },
 ];
