@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import { ChangeEvent, useEffect, useRef } from "react";
+import { ChangeEvent, useEffect } from "react";
 import styled from "@emotion/styled";
 import Create from "@components/party/create/Create";
 import SearchMap from "@components/party/create/SearchMap";

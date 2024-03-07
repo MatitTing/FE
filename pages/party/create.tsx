@@ -1,19 +1,17 @@
 import { NextPage } from "next";
-import { ChangeEvent, useEffect, useRef } from "react";
+import { ChangeEvent, useRef } from "react";
 import styled from "@emotion/styled";
 import Create from "@components/party/create/Create";
 import SearchMap from "@components/party/create/SearchMap";
 import useSearchPlace from "@hooks/useSearchPlace";
 import { DefaultHeader } from "@components/common/DefaultHeader";
-import { postParty, SetPartyResponse } from "src/api/postParty";
+import { postParty } from "src/api/postParty";
 import * as yup from "yup";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import router from "next/router";
 import { useMutation } from "@tanstack/react-query";
-import { AxiosResponse, AxiosError } from "axios";
-import { postUploadImage, SetImageResponse } from "src/api/postUploadImage";
-import defaultRequest from "src/lib/axios/defaultRequest";
+import { postUploadImage } from "src/api/postUploadImage";
 
 const Form = styled.form`
   display: flex;
