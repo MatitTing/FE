@@ -5,6 +5,7 @@ import { MapMarker } from "react-kakao-maps-sdk";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import SearchBox from "./SearchBox";
 import { ChangeEvent, Dispatch, SetStateAction } from "react";
+import { Marker } from "types/map";
 
 const SearchWrapper = styled.div`
   display: flex;

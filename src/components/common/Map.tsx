@@ -1,5 +1,6 @@
 import { Dispatch, ReactNode, SetStateAction } from "react";
 import { Map } from "react-kakao-maps-sdk";
+import { MapCoordinatet } from "types/map";
 
 interface KakaoMapProps {
   center: MapCoordinatet;

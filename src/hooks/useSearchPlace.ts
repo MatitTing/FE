@@ -1,4 +1,5 @@
 import { ChangeEvent, useCallback, useState } from "react";
+import { Marker, Place } from "types/map";
 
 const useSearchPlace = () => {
   const [marker, setMarker] = useState<Marker | null>(null);
@@ -14,7 +15,7 @@ const useSearchPlace = () => {
   };
 
   const setPlace = useCallback(
-    ({ lat, lng, placeName }: place) => {
+    ({ lat, lng, placeName }: Place) => {
       if (!map) return;
       const bounds = new kakao.maps.LatLngBounds();
       bounds.extend(new kakao.maps.LatLng(lat, lng));
