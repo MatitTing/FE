@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import TextInput from "@components/common/TextInput";
 import Thumbnail from "./Thumbnail";
-import { ChangeEvent, FC, PropsWithChildren } from "react";
+import { ChangeEventHandler, FC, PropsWithChildren } from "react";
 import { UseFormGetValues, UseFormRegister } from "react-hook-form";
 import SelectContent from "./SelectContent";
 import {
@@ -48,7 +48,7 @@ const Label = styled.h5`
 interface CreateProps {
   partyId?: number;
   defaultData?: PartyDetailResponse;
-  onChangeThumbnail: (e: ChangeEvent<HTMLInputElement>) => void;
+  onChangeThumbnail: ChangeEventHandler<HTMLInputElement>;
   register: UseFormRegister<PartyForm>;
   getValues: UseFormGetValues<PartyForm>;
 }
