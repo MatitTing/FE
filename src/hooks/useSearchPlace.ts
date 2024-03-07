@@ -14,15 +14,7 @@ const useSearchPlace = () => {
   };
 
   const setPlace = useCallback(
-    ({
-      lat,
-      lng,
-      placeName,
-    }: {
-      lat: number;
-      lng: number;
-      placeName: string;
-    }) => {
+    ({ lat, lng, placeName }: place) => {
       if (!map) return;
       const bounds = new kakao.maps.LatLngBounds();
       bounds.extend(new kakao.maps.LatLng(lat, lng));
@@ -40,25 +32,16 @@ const useSearchPlace = () => {
   );
 
   const handleClickPlace = useCallback(
-    (place: kakao.maps.services.PlacesSearchResultItem) => {
-      if (!map) return;
-      const bounds = new kakao.maps.LatLngBounds();
-
-      bounds.extend(new kakao.maps.LatLng(Number(place.y), Number(place.x)));
-
-      setKeyword(place.place_name);
+    ({
+      x: lat,
+      y: lng,
+      place_name: placeName,
+    }: kakao.maps.services.PlacesSearchResultItem) => {
+      setKeyword(placeName);
       setResultList(null);
-      setMarker({
-        position: {
-          lat: Number(place.y),
-          lng: Number(place.x),
-        },
-        content: place.place_name,
-      });
-
-      map.setBounds(bounds);
+      setPlace({ lat: Number(lat), lng: Number(lng), placeName });
     },
-    [map]
+    [setPlace]
   );
 
   const handleChangeSearchBox = useCallback(
