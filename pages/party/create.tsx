@@ -38,15 +38,11 @@ export const partySchema = yup.object({
 const CreatePage: NextPage = () => {
   const formRef = useRef<HTMLFormElement>(null);
 
-  const { mutate: postPartyCreate } = useMutation<
-    AxiosResponse<SetPartyResponse>,
-    AxiosError,
-    PartyInfo
-  >({
+  const { mutate: postPartyCreate } = useMutation({
     mutationFn: postParty,
   });
 
-  const { mutate: setImage } = useMutation<SetImageResponse, AxiosError, File>({
+  const { mutate: postImage } = useMutation({
     mutationFn: postUploadImage,
   });
 
@@ -105,7 +101,7 @@ const CreatePage: NextPage = () => {
     const { files } = e.target;
 
     if (files) {
-      setImage(files[0], {
+      postImage(files[0], {
         onSuccess({ imgUrl }) {
           if (imgUrl) {
             setValue("thumbnail", imgUrl);
@@ -114,10 +110,6 @@ const CreatePage: NextPage = () => {
       });
     }
   };
-
-  useEffect(() => {
-    defaultRequest.get("http://localhost:8080/matitting");
-  }, []);
 
   return (
     <Form ref={formRef} onSubmit={handleSubmit(onSubmitPartyForm)}>

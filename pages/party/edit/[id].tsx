@@ -24,7 +24,6 @@ const Form = styled.form`
 `;
 
 const CreatePage: NextPage = () => {
-  const formRef = useRef<HTMLFormElement>(null);
   const router = useRouter();
   const { id } = router.query as { id: string };
 
@@ -34,11 +33,11 @@ const CreatePage: NextPage = () => {
     enabled: !!id,
   });
 
-  const { mutate: setParty } = useMutation({
+  const { mutate: UpdateParty } = useMutation({
     mutationFn: postPartyUpdate,
   });
 
-  const { mutate: setImage } = useMutation({
+  const { mutate: uploadImage } = useMutation({
     mutationFn: postUploadImage,
   });
 
@@ -70,7 +69,7 @@ const CreatePage: NextPage = () => {
   const onSubmitPartyForm: SubmitHandler<PartyForm> = (formData: PartyForm) => {
     if (!marker || !marker.position) return;
 
-    setParty(
+    UpdateParty(
       {
         id,
         params: {
@@ -95,7 +94,7 @@ const CreatePage: NextPage = () => {
     const { files } = e.target;
 
     if (files) {
-      setImage(files[0], {
+      uploadImage(files[0], {
         onSuccess({ imgUrl }) {
           if (imgUrl) {
             setValue("thumbnail", imgUrl);
@@ -125,7 +124,7 @@ const CreatePage: NextPage = () => {
   if (!data) return <></>;
 
   return (
-    <Form ref={formRef} onSubmit={handleSubmit(onSubmitPartyForm)}>
+    <Form onSubmit={handleSubmit(onSubmitPartyForm)}>
       <DefaultHeader
         centerArea={`${data?.partyTitle}`}
         rightArea={rightHeaderArea}

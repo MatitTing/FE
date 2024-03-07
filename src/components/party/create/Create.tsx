@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import TextInput from "@components/common/TextInput";
 import Thumbnail from "./Thumbnail";
-import { ChangeEvent, PropsWithChildren } from "react";
+import { ChangeEvent, FC, PropsWithChildren } from "react";
 import { UseFormGetValues, UseFormRegister } from "react-hook-form";
 import SelectContent from "./SelectContent";
 import {
@@ -12,7 +12,7 @@ import {
   PARTY_TOTAL_LABEL,
 } from "src/constants/options";
 import { PartyDetailResponse } from "types/party/detail/PartyDetailResponse";
-import { getISOString } from "@utils/helper";
+import dayjs from "dayjs";
 
 const Wrapper = styled.div`
   height: 100%;
@@ -53,14 +53,14 @@ interface CreateProps {
   getValues: UseFormGetValues<PartyForm>;
 }
 
-const Create = ({
+const Create: FC<PropsWithChildren<CreateProps>> = ({
   partyId,
   defaultData,
   children,
   register,
   getValues,
   onChangeThumbnail,
-}: PropsWithChildren<CreateProps>) => (
+}) => (
   <Wrapper>
     <TextInput
       name="partyTitle"
@@ -116,7 +116,9 @@ const Create = ({
       <input
         type="datetime-local"
         {...register("partyTime")}
-        defaultValue={getISOString(defaultData?.partyTime || "")}
+        defaultValue={
+          dayjs(defaultData?.partyTime).format("YYYY-MM-DDTHH:mm") || ""
+        }
       />
     </Contents>
     {partyId ? (
