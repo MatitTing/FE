@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
-import { RefObject, forwardRef } from "react";
+import { useSearchKeyword } from "@hooks/useSearchKeyword";
+import { FC, RefObject, forwardRef } from "react";
 
 interface CenterProps {
-  searchKeyword: (event: React.KeyboardEvent) => void;
 }
 
 const SearchInputContainer = styled.div`
@@ -15,24 +15,28 @@ const SearchInputContainer = styled.div`
   }
 `;
 
-const Center = forwardRef<HTMLInputElement, CenterProps>(
-  ({ searchKeyword }, ref) => {
+const Center:FC = 
+  () => {
+    const {
+      searchKeyword,
+      inputRef,
+    } = useSearchKeyword();
     return (
       <SearchInputContainer>
         <input
           placeholder="검색어를 입력해 주세요."
-          ref={ref}
+          ref={inputRef}
           onKeyUp={searchKeyword}
         />
       </SearchInputContainer>
     );
   }
-);
+
 
 const SearchHeader = {
   Center,
 };
 
-Center.displayName = "SearchHeader.Center";
 
 export default SearchHeader;
+

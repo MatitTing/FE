@@ -29,14 +29,13 @@ export const useSearchKeyword = () => {
     if (event.key !== "Enter") {
       return;
     }
-
     if (!inputRef.current?.value) {
       return;
     }
     const keyword = inputRef.current.value;
     // 중복되지 않는 키워드인지 확인
     updateKeywords(keyword);
-    await router.push(`/search/${keyword}`);
+    await router.replace(`/search/${keyword}`);
   };
   useEffect(() => {
     setIsInitial(false);
