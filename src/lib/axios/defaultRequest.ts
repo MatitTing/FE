@@ -10,45 +10,38 @@ const defaultRequest = axios.create({
 });
 
 defaultRequest.interceptors.response.use(
-  function (response) {
+  async function (response) {
     return response;
   },
   async function (error) {
-    const { config } = error;
-    // 에러 발생시
-    const refreshToken = getCookie("refreshToken");
+    if (error.response && error.response.status === 401) {
+      const refreshToken = getCookie("refreshToken");
 
-    if (!refreshToken) {
-      await alert("로그인이 필요합니다. 로그인 해 주세요.");
-      window.location.href = "/signin";
-      return Promise.reject(error);
+      if (!refreshToken) {
+        await alert("로그인이 필요합니다. 로그인 해 주세요.");
+        window.location.href = "/signin";
+        return Promise.reject(error);
+      }
+
+      try {
+        const response = await defaultRequest.get("/oauth2/renew-token", {
+          headers: {
+            "Authorization-Refresh": refreshToken,
+          },
+        });
+
+        // 토큰 갱신 성공 시 새로운 토큰으로 요청 재시도
+        defaultRequest.defaults.headers["Authorization"] =
+          response.headers["authorization"];
+        return defaultRequest.request(error.config);
+      } catch (refreshError) {
+        // 토큰 갱신에 실패하면 에러 반환
+        return Promise.reject(refreshError);
+      }
     }
 
-    // 토큰 갱신 요청
-    const response = await defaultRequest.get("/oauth2/renew-token", {
-      headers: {
-        "Authorization-Refresh": refreshToken,
-      },
-    });
-
-    console.log(response, refreshToken, "토큰 처리!");
-
-    // 응답 헤더에서 Authorization 값을 꺼내와서 인스턴스 헤더에 기본 값으로 설정
-    defaultRequest.defaults.headers["Authorization"] =
-      response.headers["authorization"];
-
-    // 재요청 횟수 제한
-    if (!error.config.retryCount) {
-      error.config.retryCount = 0;
-    }
-    if (error.config.retryCount >= 3) {
-      return Promise.reject(error);
-    }
-    error.config.retryCount += 1;
-
-    // // 에러가 발생한 요청 재요청
-    error.config.headers["Authorization"] = response.headers["authorization"];
-    return defaultRequest.request(error.config);
+    // 401 상태 코드가 아닌 경우에는 그대로 오류 반환
+    return Promise.reject(error);
   }
 );
 
