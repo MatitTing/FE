@@ -8,21 +8,17 @@ interface SearchResultParams {
   size?: number;
 }
 export const API_GET_SEARCH_RESULT =
-  "/api/search?keyword={{keyword}}&lastPartyId={{lastPartyId}}&size={{size}}";
+  "/api/search";
 
-const getSearchResult = async ({
-  keyword,
-  lastPartyId = 0,
-  size = 5,
-}: SearchResultParams) => {
+const getSearchResult = async (params: SearchResultParams) => {
   const { data } = await defaultRequest<
     InfinitePaginationDataType<"partyList", PartyListResponse>
   >(
-    variableAssignment(API_GET_SEARCH_RESULT, {
-      keyword,
-      lastPartyId: String(lastPartyId),
-      size: String(size),
-    })
+  API_GET_SEARCH_RESULT, {
+    params:{
+      ...params
+    }
+  }
   );
   return data;
 };
