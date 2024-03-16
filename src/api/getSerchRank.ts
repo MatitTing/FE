@@ -6,7 +6,7 @@ export const API_GET_SEARCH_RANK = "/api/search/rank";
 
 const getSearchRank = async () => {
   const { data } = await defaultRequest.get<SearchRankResponse[]>(
-    variableAssignment(API_GET_SEARCH_RANK)
+   API_GET_SEARCH_RANK
   );
 
   return data;
