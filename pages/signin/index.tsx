@@ -46,7 +46,7 @@ const Logo = styled.div`
 const Profile = () => {
   const onClickKakao = () => {
     window.Kakao.Auth.authorize({
-      redirectUri: "http://localhost:3000/signin",
+      redirectUri: process.env.SNS_CALLBACK_URL,
     });
   };
   useSocialLoginInit();
@@ -65,7 +65,7 @@ const Profile = () => {
             onClick={onClickKakao}
           />
           <Link
-            href={`https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.NAVER_CLIENT_ID}&state=matitting&redirect_uri=${process.env.NAVER_CALLBACK_URL}`}
+            href={`https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.NAVER_CLIENT_ID}&state=matitting&redirect_uri=${process.env.SNS_CALLBACK_URL}`}
           >
             <AuthButton
               src="/images/oauth/naver.png"
