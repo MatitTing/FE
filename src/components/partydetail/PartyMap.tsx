@@ -1,12 +1,12 @@
 import styled from "@emotion/styled";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 import { DefaultText } from "@components/common/DefaultText";
+import { PartyDetailResponse } from "types/party/detail/PartyDetailResponse";
 
-interface PartyMapProps {
-  address: string;
-  longitude: number;
-  latitude: number;
-}
+type PartyMapProps = Pick<
+  PartyDetailResponse,
+  "partyPlaceName" | "address" | "longitude" | "latitude"
+>;
 
 const Container = styled.div`
   display: flex;
@@ -21,10 +21,14 @@ const Container = styled.div`
 `;
 
 const PartyMap = (data: PartyMapProps) => {
-  const { address, longitude, latitude } = data;
+  const { partyPlaceName, address, longitude, latitude } = data;
   return (
     <Container>
-      <DefaultText text={"모임위치"} size={20} weight={600} />
+      <DefaultText
+        text={`모임위치 : ${partyPlaceName}`}
+        size={20}
+        weight={600}
+      />
       <Map
         center={{ lat: latitude, lng: longitude }}
         style={{ width: "100%", height: "400px", borderRadius: "20px" }}

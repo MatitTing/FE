@@ -1,11 +1,12 @@
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import PartySituation from "./PartySituation";
 import styled from "@emotion/styled";
-import PartyReview from "./PartyReview";
+import PartyRequestList from "./PartyRequestList";
 import { useState, SyntheticEvent } from "react";
+import { useRouter } from "next/router";
+import ProfileTabPanel from "./ProfileTabPanel";
 
 const TabContainer = styled.div`
   position: sticky;
@@ -14,37 +15,28 @@ const TabContainer = styled.div`
   z-index: 99;
 `;
 
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-}
-
-function CustomTabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && <Box>{children}</Box>}
-    </div>
-  );
-}
-
-function a11yProps(index: number) {
+const a11yProps = (index: number) => {
   return {
     id: `simple-tab-${index}`,
     "aria-controls": `simple-tabpanel-${index}`,
   };
-}
+};
+
+const categorylist = [
+  { id: "partysituation", label: "파티현황", component: <PartySituation /> },
+  { id: "partyrequest", label: "초대요청", component: <PartyRequestList /> },
+];
 
 export default function ProfileTab() {
-  const [value, setValue] = useState(0);
+  const router = useRouter();
+  const category = router.query.category as string;
+
+  if (!category) {
+    return null;
+  }
+
+  const currentTab = categorylist.findIndex((item) => item.id === category);
+  const [value, setValue] = useState(currentTab);
 
   const handleChange = (_: SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -59,17 +51,29 @@ export default function ProfileTab() {
             onChange={handleChange}
             aria-label="basic tabs example"
           >
-            <Tab label="파티현황" {...a11yProps(0)} />
-            <Tab label="후기" {...a11yProps(1)} />
+            {categorylist.map(({ id, label }, index) => (
+              <Tab
+                key={id}
+                label={label}
+                {...a11yProps(index)}
+                onClick={() => {
+                  router.push({
+                    query: {
+                      ...router.query,
+                      category: id,
+                    },
+                  });
+                }}
+              />
+            ))}
           </Tabs>
         </Box>
       </TabContainer>
-      <CustomTabPanel value={value} index={0}>
-        <PartySituation />
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={1}>
-        <PartyReview />
-      </CustomTabPanel>
+      {categorylist.map(({ id, component }, index) => (
+        <ProfileTabPanel key={id} value={value} index={index}>
+          {component}
+        </ProfileTabPanel>
+      ))}
     </Box>
   );
 }
