@@ -5,16 +5,17 @@ import Create from "@components/party/create/Create";
 import SearchMap from "@components/party/create/SearchMap";
 import useSearchPlace from "@hooks/useSearchPlace";
 import { DefaultHeader } from "@components/common/DefaultHeader";
-import { postPartyUpdate } from "src/api/postParty";
+import { patchParty } from "src/api/patchParty";
 import getPartyDetail, {
   API_GET_PARTY_DETAIL_KEY,
 } from "src/api/getPartyDetail";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/router";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { postUploadImage } from "src/api/postUploadImage";
 import { partySchema } from "../create";
+import variableAssignMent from "@utils/variableAssignment";
 
 const Form = styled.form`
   display: flex;
@@ -24,6 +25,7 @@ const Form = styled.form`
 `;
 
 const CreatePage: NextPage = () => {
+  const queryClient = useQueryClient();
   const router = useRouter();
   const { id } = router.query as { id: string };
   const userId = "0"; // 임시
@@ -34,8 +36,8 @@ const CreatePage: NextPage = () => {
     enabled: !!id,
   });
 
-  const { mutate: UpdateParty } = useMutation({
-    mutationFn: postPartyUpdate,
+  const { mutate: updateParty } = useMutation({
+    mutationFn: patchParty,
   });
 
   const { mutate: uploadImage } = useMutation({
@@ -70,7 +72,7 @@ const CreatePage: NextPage = () => {
   const onSubmitPartyForm: SubmitHandler<PartyForm> = (formData: PartyForm) => {
     if (!marker || !marker.position) return;
 
-    UpdateParty(
+    updateParty(
       {
         id,
         params: {
@@ -81,10 +83,14 @@ const CreatePage: NextPage = () => {
         },
       },
       {
-        onSuccess: ({ data }) => {
-          if (data) {
-            router.replace(`/partydetail/${id}`);
-          }
+        onSuccess: async () => {
+          await queryClient
+            .invalidateQueries({
+              queryKey: [API_GET_PARTY_DETAIL_KEY, { id }],
+            })
+            .then(() => {
+              router.replace(`/partydetail/${id}`);
+            });
         },
       }
     );

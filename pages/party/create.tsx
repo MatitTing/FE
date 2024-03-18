@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import { ChangeEvent, useRef } from "react";
+import { ChangeEvent } from "react";
 import styled from "@emotion/styled";
 import Create from "@components/party/create/Create";
 import SearchMap from "@components/party/create/SearchMap";
@@ -34,8 +34,6 @@ export const partySchema = yup.object({
 });
 
 const CreatePage: NextPage = () => {
-  const formRef = useRef<HTMLFormElement>(null);
-
   const { mutate: postPartyCreate } = useMutation({
     mutationFn: postParty,
   });
@@ -110,7 +108,7 @@ const CreatePage: NextPage = () => {
   };
 
   return (
-    <Form ref={formRef} onSubmit={handleSubmit(onSubmitPartyForm)}>
+    <Form onSubmit={handleSubmit(onSubmitPartyForm)}>
       <DefaultHeader centerArea="파티 생성" rightArea={rightHeaderArea} />
       <Create
         register={register}
