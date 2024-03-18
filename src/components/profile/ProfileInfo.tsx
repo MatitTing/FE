@@ -3,15 +3,20 @@ import styled from "@emotion/styled";
 import Progressbar from "@components/common/ProgressBar";
 import Image from "next/image";
 import { DefaultText } from "@components/common/DefaultText";
-import LocationIcon from "@components/icons/profile/Location.icon";
 import GenderIcon from "@components/icons/profile/Gender.icon";
 import InfoIcon from "@components/icons/profile/Info.icon";
+import { useQuery } from "@tanstack/react-query";
+import { API_GET_PROFILE_KEY } from "src/api/getProfile";
+import getProfile from "src/api/getProfile";
+import { PARTY_GENDER_LABEL } from "src/constants/options";
+import { labelDataConvert } from "@utils/labelDataConvert";
 
 const Container = styled.div`
   display: flex;
   width: 100%;
   flex-direction: column;
   padding-bottom: 20px;
+  background-color: white;
 `;
 
 const ProfileImgContainer = styled.div`
@@ -38,6 +43,18 @@ const MannerDegreeContainer = styled.div`
   align-items: center;
 `;
 
+const UserInfo = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+`;
+
+const Name = styled.div`
+  margin-bottom: 16px;
+`;
+
 const ProfileDetail = styled.div`
   display: flex;
   flex-direction: column;
@@ -45,34 +62,29 @@ const ProfileDetail = styled.div`
   width: 60%;
   padding: 20px;
   gap: 8px;
-  .userinfo {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 8px;
-  }
-  .name {
-    margin-bottom: 16px;
-  }
 `;
 
-const userdata = {
-  name: "username",
-  locaton: "서울광역시",
-  gender: "남성",
-  age: "20대",
-  mannerdegree: 30,
-};
+const userId = 11;
+// 로그인 기능 연결후 userid 받아올 예정
 
 const ProfileInfo = () => {
-  const { locaton, gender, age, name, mannerdegree } = userdata;
+  const { data } = useQuery({
+    queryKey: [API_GET_PROFILE_KEY],
+    queryFn: () => getProfile(),
+  });
+
+  if (!data) {
+    return;
+  }
+
+  const { gender, age, socialType, nickname, imgUrl } = data;
+
   return (
     <Container>
       <ProfileDetailContainer>
         <ProfileImgContainer>
           <Image
-            src={"/images/profile/profile.png"}
+            src={imgUrl || "/images/profile/profile.png"}
             width={128}
             height={128}
             style={{ borderRadius: "50%" }}
@@ -80,19 +92,21 @@ const ProfileInfo = () => {
           />
         </ProfileImgContainer>
         <ProfileDetail>
-          <div className="userinfo">
-            <LocationIcon />
-            <DefaultText text={locaton} size={16} />
+          <UserInfo>
             <GenderIcon />
-            <DefaultText text={gender} size={16} />
+            <DefaultText
+              text={labelDataConvert(gender, PARTY_GENDER_LABEL)}
+              size={16}
+            />
             <InfoIcon />
-            <DefaultText text={age} size={16} />
-          </div>
-          <div className="name">
-            <DefaultText text={name} size={32} />
-          </div>
+            <DefaultText text={`${age}세`} size={16} />
+          </UserInfo>
+          <Name>
+            <DefaultText text={nickname} size={32} />
+          </Name>
           <MannerDegreeContainer>
-            <Progressbar value={mannerdegree} /> {mannerdegree}°C
+            <Progressbar value={30} /> {30}°C
+            {/* 매너온도는 후기기능에 포함되어 보류 */}
           </MannerDegreeContainer>
         </ProfileDetail>
       </ProfileDetailContainer>

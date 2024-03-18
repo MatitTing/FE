@@ -10,23 +10,17 @@ interface GetMainPageParameter {
 }
 
 export const API_GET_MAIN_PAGE =
-  "/api/main?longitude={{longitude}}&latitude={{latitude}}&lastPartyId={{lastPartyId}}&size={{size}}";
+  "/api/main";
 
-const getMainPageData = async ({
-  latitude = 37.54419081960767,
-  longitude = 127.0515738292837,
-  lastPartyId = 0,
-  size = 5,
-}: GetMainPageParameter) => {
+const getMainPageData = async (params: GetMainPageParameter) => {
   const { data } = await defaultRequest.get<
     InfinitePaginationDataType<"partyList", PartyListResponse>
   >(
-    variableAssignMent(API_GET_MAIN_PAGE, {
-      latitude: String(latitude),
-      longitude: String(longitude),
-      lastPartyId: String(lastPartyId),
-      size: String(size),
-    })
+   API_GET_MAIN_PAGE, {
+    params:{
+      ...params
+    }
+   }
   );
   return data;
 };

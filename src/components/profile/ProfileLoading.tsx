@@ -1,20 +1,20 @@
 import React from "react";
-import TextInput from "@components/common/TextInput";
 import styled from "@emotion/styled";
+import { CircularProgress } from "@mui/material";
 
 const Container = styled.div`
   display: flex;
-  flex-direction: column;
-  padding-top: 80px;
+  justify-content: center;
   align-items: center;
+  height: 100%;
 `;
 
-const SetNickname = () => {
+const ProfileLoading = () => {
   return (
     <Container>
-      <TextInput />
+      <CircularProgress />
     </Container>
   );
 };
 
-export default SetNickname;
+export default ProfileLoading;

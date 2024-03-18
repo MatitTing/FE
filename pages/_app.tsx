@@ -5,11 +5,12 @@ import { MantineProvider } from "@mantine/core";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import type { AppProps } from "next/app";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RecoilRoot } from "recoil";
 import Modal from "src/components/common/Modal";
 import "../styles/globals.css";
 import { NextPageWithLayout } from "../types/layout";
+import Script from "next/script";
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
@@ -20,6 +21,7 @@ function MyApp({
   pageProps: { session, ...pageProps },
 }: AppPropsWithLayout) {
   const getLayout = Component.getLayout || ((page) => <Layout>{page}</Layout>);
+
   const [queryClient] = useState(
     () =>
       new QueryClient({

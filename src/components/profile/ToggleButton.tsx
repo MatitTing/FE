@@ -25,10 +25,6 @@ const ButtonList = [
     text: "참가중",
     value: "member",
   },
-  {
-    text: "모임완료",
-    value: "done",
-  },
 ];
 
 const ToggleButton = ({ partystate, setPartystate }: ToggleButtonProps) => {

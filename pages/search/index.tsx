@@ -41,17 +41,15 @@ const SearchPage = () => {
   const router = useRouter();
   const {
     updateKeywords,
-    searchKeyword,
     recentKeywords,
     setRecentKeywords,
-    inputRef,
     resetRecentKeywords,
   } = useSearchKeyword();
 
   const onClickKeyword: React.MouseEventHandler<HTMLDivElement> = async (e) => {
     const keyword = e.currentTarget.innerText;
     updateKeywords(keyword);
-    await router.push(`/search/${keyword}`);
+    await router.replace(`/search/${keyword}`);
   };
 
   const onClickIndividualRemoveBtn = (keyword: string) => {
@@ -66,10 +64,7 @@ const SearchPage = () => {
       <DefaultHeader
         leftArea={<HeaderBackButton routerPath="/" />}
         centerArea={
-          <SearchHeader.Center
-            inputRef={inputRef}
-            searchKeyword={searchKeyword}
-          />
+          <SearchHeader.Center />
         }
       />
       <Contents>

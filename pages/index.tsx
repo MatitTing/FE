@@ -9,12 +9,14 @@ import styled from "@emotion/styled";
 import { useGpsPosition } from "@hooks/useGpsPosition";
 import { Transition } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import type { NextPage } from "next";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import getLocationAddress, {
   API_GET_LOCATION_ADDRESS_KEY,
 } from "src/api/getLocationAddress";
+import defaultRequest from "src/lib/axios/defaultRequest";
 import { PositionSate } from "src/recoil-states/positionStates";
 import { Color } from "styles/Color";
 
@@ -51,7 +53,7 @@ const Home: NextPage = () => {
     enabled: !!position.coords.x,
   });
 
-  const onClickPosition = () => {
+  const onClickPosition = async () => {
     setIsClickPosition(true);
   };
 

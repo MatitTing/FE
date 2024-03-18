@@ -9,7 +9,7 @@ interface HomeHeaderProps {
 
 const Wrapper = styled.div`
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
   background: ${ColorToken.white};
   width: 100%;
   position: fixed;
@@ -22,18 +22,19 @@ const Wrapper = styled.div`
 `;
 const Container = styled.div`
   display: flex;
+  justify-content: space-between;
+  align-items: center;
   background: ${ColorToken.white};
   width: 100%;
-  justify-content: space-between;
+  max-width: 768px;
   padding: 15px;
 `;
 
 const LeftSection = styled.div``;
 const CenterSection = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
 `;
 const RightSection = styled.div``;
 

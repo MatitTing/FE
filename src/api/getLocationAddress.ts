@@ -9,7 +9,7 @@ type GetMapsLocationVariables = {
 };
 
 export const API_GET_LOCATION_ADDRESS_KEY =
-  "/v2/local/geo/coord2address.json?x={{longitude}}&y={{latitude}}";
+  "/v2/local/geo/coord2address.json";
 
 const getLocationAddress = async ({
   kakaoRestApiKey,
@@ -17,12 +17,13 @@ const getLocationAddress = async ({
   latitude,
 }: GetMapsLocationVariables) => {
   const { data } = await kakaoRequset.get<LocationAddressResponse>(
-    variableAssignMent(API_GET_LOCATION_ADDRESS_KEY, {
-      longitude: longitude.toString(),
-      latitude: latitude.toString(),
-    }),
+ API_GET_LOCATION_ADDRESS_KEY,
     {
       headers: { authorization: `KakaoAK ${kakaoRestApiKey}` },
+      params:{
+        x:longitude,
+        y:latitude
+      }
     }
   );
   return data;

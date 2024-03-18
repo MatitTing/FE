@@ -1,8 +1,9 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
-import { ButtonHTMLAttributes } from "react";
+import { ButtonHTMLAttributes, FC } from "react";
 import { Color, ColorToken } from "styles/Color";
 import { Typography } from "styles/Typography";
+import { PropsWithCustomStyle } from "types/common";
 
 type ButtonType =
   | "default"
@@ -12,23 +13,28 @@ type ButtonType =
   | "cancel"
   | "toggle";
 
-interface ButtonProps {
-  buttonType?: ButtonType;
-  filled?: boolean;
+interface ButtonProps extends ButtonContainerProps {
   text: string | React.ReactNode;
 }
+interface ButtonContainerProps {
+  buttonType?: ButtonType;
+  filled?: boolean;
+}
 
-const ButtonContainer = styled.button<{
-  buttonType: string;
-  filled: boolean;
-}>`
+const ButtonContainer = styled.button<
+  PropsWithCustomStyle<ButtonContainerProps>
+>`
   padding: ${(props) => (props.buttonType === "toggle" ? "10px" : "15px")};
   border: none;
   border-radius: 10px;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: ${({ w }) => w ?? "100%"};
+  margin: ${({ m }) => m ?? 0};
 
   ${Typography.Button.Button2Bold};
-
   :disabled {
     cursor: not-allowed;
   }
@@ -199,13 +205,16 @@ const LinedToggleButtonStyle = css`
   }
 `;
 
-export const DefaultButton = ({
-  buttonType = "primary",
-  filled = true,
-  text,
-  ...props
-}: ButtonHTMLAttributes<HTMLButtonElement> & ButtonProps) => (
-  <ButtonContainer buttonType={buttonType} filled={filled} {...props}>
+export const DefaultButton: FC<
+  PropsWithCustomStyle<ButtonHTMLAttributes<HTMLButtonElement> & ButtonProps>
+> = ({ buttonType = "primary", w, h, m, filled = true, text, ...props }) => (
+  <ButtonContainer
+    buttonType={buttonType}
+    filled={filled}
+    w={w}
+    m={m}
+    {...props}
+  >
     {text}
   </ButtonContainer>
 );
