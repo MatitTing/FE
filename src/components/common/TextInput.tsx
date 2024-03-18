@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import { shouldNotForwardProp } from "@utils/common";
 import { ChangeEvent, InputHTMLAttributes, forwardRef } from "react";
 import { ColorToken } from "styles/Color";
 

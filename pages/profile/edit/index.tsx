@@ -150,11 +150,10 @@ const Profile = () => {
             />
           </ImageContainer>
           <TextInput
-            name="nickname"
             placeholder="닉네임을 입력해주세요."
             isBorderRadius={false}
             maxLength={20}
-            register={{ ...register("nickname") }}
+            {...register("nickname")}
             defaultValue={data.nickname}
           />
         </Form>

@@ -26,10 +26,11 @@ const Form = styled.form`
 const CreatePage: NextPage = () => {
   const router = useRouter();
   const { id } = router.query as { id: string };
+  const userId = "0"; // 임시
 
   const { data } = useQuery({
     queryKey: [API_GET_PARTY_DETAIL_KEY, { id }],
-    queryFn: () => getPartyDetail({ id }),
+    queryFn: () => getPartyDetail({ id, userId }),
     enabled: !!id,
   });
 

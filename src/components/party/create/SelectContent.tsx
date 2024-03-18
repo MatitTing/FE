@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { UseFormRegisterReturn } from "react-hook-form";
+import { forwardRef } from "react";
 
 const Contents = styled.div`
   display: flex;
@@ -23,27 +23,27 @@ const Select = styled.select`
 
 interface SelectContentProps {
   label: string;
-  register: UseFormRegisterReturn<string>;
   defaultValue?: string | number;
   options: { name: string | number; value: string | number }[];
 }
 
-const SelectContent = ({
-  label,
-  register,
-  options,
-  defaultValue,
-}: SelectContentProps) => (
-  <Contents>
-    <Label>{label}</Label>
-    <Select {...register} defaultValue={defaultValue}>
-      {options.map(({ name, value }) => (
-        <option key={name} value={value}>
-          {name}
-        </option>
-      ))}
-    </Select>
-  </Contents>
+const SelectContent = forwardRef<HTMLSelectElement, SelectContentProps>(
+  ({ label, options, defaultValue, ...rest }, ref) => {
+    return (
+      <Contents>
+        <Label>{label}</Label>
+        <Select defaultValue={defaultValue} {...rest} ref={ref}>
+          {options.map(({ name, value }) => (
+            <option key={name} value={value}>
+              {name}
+            </option>
+          ))}
+        </Select>
+      </Contents>
+    );
+  }
 );
+
+SelectContent.displayName = "SelectContent";
 
 export default SelectContent;

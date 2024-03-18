@@ -63,11 +63,10 @@ const Create: FC<PropsWithChildren<CreateProps>> = ({
 }) => (
   <Wrapper>
     <TextInput
-      name="partyTitle"
       placeholder="제목"
       isBorderRadius={false}
       maxLength={20}
-      register={{ ...register("partyTitle") }}
+      {...register("partyTitle")}
       defaultValue={defaultData?.partyTitle}
     />
     <TextArea
@@ -79,35 +78,34 @@ const Create: FC<PropsWithChildren<CreateProps>> = ({
     />
     {children}
     <TextInput
-      name="menu"
       placeholder="메뉴를 입력해주세요."
       isBorderRadius={false}
       maxLength={20}
-      register={{ ...register("menu") }}
+      {...register("menu")}
       defaultValue={defaultData?.menu}
     />
     <Thumbnail onChangeThumbnail={onChangeThumbnail} getValues={getValues} />
     <SelectContent
       label="성별"
-      register={{ ...register("gender") }}
+      {...register("gender")}
       options={PARTY_GENDER_LABEL}
       defaultValue={defaultData?.gender}
     />
     <SelectContent
       label="연령"
-      register={{ ...register("age") }}
+      {...register("age")}
       options={PARTY_AGE_LABEL}
       defaultValue={defaultData?.age}
     />
     <SelectContent
       label="종류"
-      register={{ ...register("category") }}
+      {...register("category")}
       options={PARTY_CATEGORY_LABEL}
       defaultValue={defaultData?.category}
     />
     <SelectContent
       label="모집원"
-      register={{ ...register("totalParticipant") }}
+      {...register("totalParticipant")}
       options={PARTY_TOTAL_LABEL}
       defaultValue={defaultData?.totalParticipant}
     />
@@ -124,7 +122,7 @@ const Create: FC<PropsWithChildren<CreateProps>> = ({
     {partyId ? (
       <SelectContent
         label="모집 상태"
-        register={{ ...register("status") }}
+        {...register("status")}
         options={PARTY_STATUS_LABEL}
         defaultValue={defaultData?.status}
       />
