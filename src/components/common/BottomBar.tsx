@@ -56,10 +56,6 @@ const navList = [
     title: "프로필",
     href: "/profile",
     icon: ProfileIcon,
-    query: {
-      category: "partysituation",
-      role: "HOST",
-    },
   },
 ];
 

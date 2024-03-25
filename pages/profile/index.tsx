@@ -68,7 +68,9 @@ const Profile = () => {
           <ProfileInfo />
         </QuerySuspenseErrorBoundary>
       </ProfileInfoContainer>
+      <QuerySuspenseErrorBoundary>
       <ProfileTab />
+      </QuerySuspenseErrorBoundary>
     </Container>
   );
 };

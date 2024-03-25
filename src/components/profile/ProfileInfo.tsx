@@ -5,7 +5,7 @@ import Image from "next/image";
 import { DefaultText } from "@components/common/DefaultText";
 import GenderIcon from "@components/icons/profile/Gender.icon";
 import InfoIcon from "@components/icons/profile/Info.icon";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { API_GET_PROFILE_KEY } from "src/api/getProfile";
 import getProfile from "src/api/getProfile";
 import { PARTY_GENDER_LABEL } from "src/constants/options";
@@ -68,7 +68,7 @@ const userId = 11;
 // 로그인 기능 연결후 userid 받아올 예정
 
 const ProfileInfo = () => {
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: [API_GET_PROFILE_KEY],
     queryFn: () => getProfile(),
   });
