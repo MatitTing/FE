@@ -10,8 +10,11 @@ import * as yup from "yup";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import router from "next/router";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { postUploadImage } from "src/api/postUploadImage";
+import { useRecoilValue } from "recoil";
+import { API_GET_MAIN_PAGE } from "src/api/getPartyMainPage";
+import { PositionSate } from "src/recoil-states/positionStates";
 
 const Form = styled.form`
   display: flex;
@@ -34,6 +37,9 @@ export const partySchema = yup.object({
 });
 
 const CreatePage: NextPage = () => {
+  const queryClient = useQueryClient();
+  const position = useRecoilValue(PositionSate);
+
   const { mutate: postPartyCreate } = useMutation({
     mutationFn: postParty,
   });
@@ -77,8 +83,15 @@ const CreatePage: NextPage = () => {
         longitude: marker.position.lng,
       },
       {
-        onSuccess: ({ data }) => {
+        onSuccess: async ({ data }) => {
           if (data) {
+            await queryClient.invalidateQueries({
+              queryKey: [
+                API_GET_MAIN_PAGE,
+                { latitude: position.coords.x, longitude: position.coords.y },
+              ],
+            });
+
             router.replace(`/partydetail/${data.partyId}`);
           }
         },

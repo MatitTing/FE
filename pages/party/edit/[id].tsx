@@ -15,7 +15,9 @@ import { useRouter } from "next/router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { postUploadImage } from "src/api/postUploadImage";
 import { partySchema } from "../create";
-import variableAssignMent from "@utils/variableAssignment";
+import { PositionSate } from "src/recoil-states/positionStates";
+import { useRecoilValue } from "recoil";
+import { API_GET_MAIN_PAGE } from "src/api/getPartyMainPage";
 
 const Form = styled.form`
   display: flex;
@@ -28,6 +30,7 @@ const CreatePage: NextPage = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
   const { id } = router.query as { id: string };
+  const position = useRecoilValue(PositionSate);
   const userId = "0"; // 임시
 
   const { data } = useQuery({
@@ -84,13 +87,17 @@ const CreatePage: NextPage = () => {
       },
       {
         onSuccess: async () => {
-          await queryClient
-            .invalidateQueries({
-              queryKey: [API_GET_PARTY_DETAIL_KEY, { id }],
-            })
-            .then(() => {
-              router.replace(`/partydetail/${id}`);
-            });
+          await queryClient.invalidateQueries({
+            queryKey: [API_GET_PARTY_DETAIL_KEY, { id, userId }],
+          });
+          await queryClient.invalidateQueries({
+            queryKey: [
+              API_GET_MAIN_PAGE,
+              { latitude: position.coords.x, longitude: position.coords.y },
+            ],
+          });
+
+          router.replace(`/partydetail/${id}`);
         },
       }
     );
