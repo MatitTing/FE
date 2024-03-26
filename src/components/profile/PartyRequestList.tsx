@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
-import ButtonList from "./ButtonList";
+import ButtonList from "./ProfileTabSortingButton";
 import { useQuery } from "@tanstack/react-query";
 import getPartyJoin from "src/api/getPartyJoin";
 import { API_GET_PARTY_JOIN_KEY } from "src/api/getPartyJoin";
@@ -9,6 +9,12 @@ import postPartyDecision from "src/api/postPartyDecision";
 import PartyRequest from "./PartyRequest";
 import postParticipate from "src/api/postParticipate";
 import { useRouter } from "next/router";
+
+interface TabLabelType {
+  id:string;
+  label:string;
+}
+
 
 const Container = styled.div`
   display: flex;
@@ -19,6 +25,9 @@ const RequestListContainer = styled.div`
   flex-direction: column;
   padding: 0 16px;
 `;
+
+const tabList:  TabLabelType[]= [{id:, label: '받은 요청',}]
+
 
 const PartyRequestList = () => {
   const queryClient = useQueryClient();
@@ -85,11 +94,24 @@ const PartyRequestList = () => {
 
   return (
     <Container>
-      <ButtonList
+      {/* <ButtonList
         listinfo={buttonlistinfo}
         state={role}
         setState={setButtonState}
-      />
+      /> */}
+
+
+       <DefaultButton
+          key={value}
+          text={text}
+          buttonType="toggle"
+          filled={state === value}
+          onClick={() => {
+            setState(value);
+          }}
+        />
+
+
       <RequestListContainer>
         {data?.map((requsetdata) => (
           <PartyRequest

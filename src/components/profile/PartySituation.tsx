@@ -1,67 +1,67 @@
-import React from "react";
-import styled from "@emotion/styled";
-import PartyList from "./PartyList";
-import getPartyStatus from "src/api/getPartyStatus";
-import { API_GET_PARTY_STATUS_KEY } from "src/api/getPartyStatus";
-import { useQuery } from "@tanstack/react-query";
-import ButtonList from "./ButtonList";
-import { useRouter } from "next/router";
+import QuerySuspenseErrorBoundary from '@components/hoc/QuerySuspenseErrorBoundary';
+import styled from '@emotion/styled';
+import { useState } from 'react';
+import PartySituationItemList from './PartySituationItemList';
+import ProfileTabSortingButton from './ProfileTabSortingButton';
+
+type PartySituationType = '모집중' | '참가중';
+export type PartySituationRole = 'HOST' | 'VOLUNTEER';
+
+interface CategoryItemType {
+    id: PartySituationRole;
+    label: PartySituationType;
+}
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 `;
 const PartyListContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 0 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 0 16px;
+    overflow: auto;
+`;
+const TabWrapper = styled.div`
+    display: flex;
+    gap: 10px;
+    padding: 10px;
 `;
 
+const categoryTab: CategoryItemType[] = [
+    { id: 'HOST', label: '모집중' },
+    { id: 'VOLUNTEER', label: '참가중' },
+];
+
 const PartySituation = () => {
-  const router = useRouter();
-  const role = router.query.role as string;
+    const [selectedRole, setSelectedRole] = useState<PartySituationRole>('HOST');
+    return (
+        <Container>
+            <TabWrapper>
+                {categoryTab.map((tab) => {
+                    const onClick = () => {
+                        setSelectedRole(tab.id);
+                    };
 
-  const { data } = useQuery({
-    queryKey: [API_GET_PARTY_STATUS_KEY, { role }],
-    queryFn: () => getPartyStatus({ role }),
-    enabled: !!role,
-  });
+                    return (
+                        <ProfileTabSortingButton
+                            key={tab.id}
+                            text={tab.label}
+                            filled={tab.id === selectedRole}
+                            onClick={onClick}
+                        />
+                    );
+                })}
+            </TabWrapper>
 
-  const buttonlistinfo = [
-    {
-      text: "모집중",
-      value: "HOST",
-    },
-    {
-      text: "참가중",
-      value: "VOLUNTEER",
-    },
-  ];
-
-  const setButtonState = (state: string) => {
-    router.push({
-      query: {
-        ...router.query,
-        role: state,
-      },
-    });
-  };
-
-  return (
-    <Container>
-      <ButtonList
-        listinfo={buttonlistinfo}
-        state={role}
-        setState={setButtonState}
-      />
-      <PartyListContainer>
-        {data?.map((partydata) => (
-          <PartyList key={partydata.partyId} data={partydata} />
-        ))}
-      </PartyListContainer>
-    </Container>
-  );
+            <PartyListContainer>
+                <QuerySuspenseErrorBoundary>
+                    <PartySituationItemList selectedRole={selectedRole} />
+                </QuerySuspenseErrorBoundary>
+            </PartyListContainer>
+        </Container>
+    );
 };
 
 export default PartySituation;

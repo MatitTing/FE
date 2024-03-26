@@ -1,10 +1,11 @@
 import styled from '@emotion/styled';
 import { FC, MouseEventHandler } from 'react';
+import { CategoryType } from './ProfileTab';
 
 interface TabComponentProps {
-    label: string;
+    label: CategoryType;
     isSelected: boolean;
-    onClick: (category: string) => void;
+    onClick: (category: CategoryType) => void;
 }
 
 const Container = styled.div<{ isSelected: boolean }>`
@@ -18,7 +19,7 @@ const Container = styled.div<{ isSelected: boolean }>`
     color: ${({ isSelected }) => (isSelected ? '#1976D2' : '#7A7A7A')};
 `;
 const TabComponent: FC<TabComponentProps> = ({ label, isSelected = false, onClick }) => {
-    const onClickTab = (selectedCategory: string) => {
+    const onClickTab = (selectedCategory: CategoryType) => {
         const handler = () => {
             onClick(selectedCategory);
         };

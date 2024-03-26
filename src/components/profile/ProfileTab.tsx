@@ -13,8 +13,9 @@ import TabComponent from './TabComponent';
 
 interface CategoryItemType {
     id: string;
-    label: string;
+    label: CategoryType;
 }
+export type CategoryType = '파티현황' | '초대요청' | '후기';
 
 const TabContainer = styled.div`
     display: flex;
@@ -43,7 +44,7 @@ const categoryList: CategoryItemType[] = [
 ];
 
 export default function ProfileTab() {
-    const [selectedLabel, setSelectedLabel] = useState<string>('파티현황');
+    const [selectedLabel, setSelectedLabel] = useState<CategoryType>('파티현황');
     // const router = useRouter();
     // const category = router.query.category as string;
 
@@ -76,6 +77,8 @@ export default function ProfileTab() {
                     />
                 ))}
             </TabContainer>
+            {selectedLabel === '파티현황' && <PartySituation />}
+            {/* {selectedLabel === '초대요청' && <PartyRequestList />} */}
         </Wrapper>
         // <Box sx={{ width: "100%" }}>
         //   <TabContainer>
