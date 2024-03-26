@@ -17,10 +17,24 @@ interface CategoryItemType {
 }
 export type CategoryType = '파티현황' | '초대요청' | '후기';
 
-const TabContainer = styled.div`
+const TabContainer = styled.div<{ selectedTabIndex: number }>`
     display: flex;
+    position: relative;
     /* gap: 30px; */
     border-bottom: 1px solid #ebebeb;
+    &:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: ${({ selectedTabIndex }) =>
+            selectedTabIndex * 100}px; /* 임시 값, 실제로는 계산해야 함 */
+        width: 100px; /* 임시 값, 실제로는 계산해야 함 */
+        height: 2px;
+        background-color: #1976d2;
+        transition:
+            left 0.3s ease-in-out,
+            width 0.3s ease-in-out;
+    }
 `;
 
 const Wrapper = styled.div`
@@ -45,32 +59,20 @@ const categoryList: CategoryItemType[] = [
 
 export default function ProfileTab() {
     const [selectedLabel, setSelectedLabel] = useState<CategoryType>('파티현황');
-    // const router = useRouter();
-    // const category = router.query.category as string;
 
-    // if (!category) {
-    //   return null;
-    // }
-    const profile = useSuspenseQuery({
-        queryKey: [API_GET_PROFILE_KEY],
-        queryFn: () => getProfile(),
-    });
+    const [selectedTabIndex, setSelectedTabIndex] = useState(0); // 선택된 탭 인덱스 추적
 
-    // console.log(profile.data.role)
-
-    // const currentTab = categorylist.findIndex((item) => item.id === category);
-    // const [value, setValue] = useState(currentTab);
-
-    // const handleChange = (_: SyntheticEvent, newValue: number) => {
-    //   setValue(newValue);
-    // };
+    const handleTabClick = (label: CategoryType, index: number) => {
+        setSelectedLabel(label);
+        setSelectedTabIndex(index); // 클릭된 탭 인덱스 업데이트
+    };
 
     return (
         <Wrapper>
-            <TabContainer>
-                {categoryList.map((category) => (
+            <TabContainer selectedTabIndex={selectedTabIndex}>
+                {categoryList.map((category, index) => (
                     <TabComponent
-                        onClick={setSelectedLabel}
+                        onClick={(label) => handleTabClick(label, index)} // 클릭 핸들러에 인덱스 전달
                         label={category.label}
                         key={category.id}
                         isSelected={selectedLabel === category.label}
@@ -80,37 +82,5 @@ export default function ProfileTab() {
             {selectedLabel === '파티현황' && <PartySituation />}
             {/* {selectedLabel === '초대요청' && <PartyRequestList />} */}
         </Wrapper>
-        // <Box sx={{ width: "100%" }}>
-        //   <TabContainer>
-        //     <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-        //       <Tabs
-        //         value={value}
-        //         onChange={handleChange}
-        //         aria-label="basic tabs example"
-        //       >
-        //         {categorylist.map(({ id, label }, index) => (
-        //           <Tab
-        //             key={id}
-        //             label={label}
-        //             {...a11yProps(index)}
-        //             onClick={() => {
-        //               router.push({
-        //                 query: {
-        //                   ...router.query,
-        //                   category: id,
-        //                 },
-        //               });
-        //             }}
-        //           />
-        //         ))}
-        //       </Tabs>
-        //     </Box>
-        //   </TabContainer>
-        //   {categorylist.map(({ id, component }, index) => (
-        //     <ProfileTabPanel key={id} value={value} index={index}>
-        //       {component}
-        //     </ProfileTabPanel>
-        //   ))}
-        // </Box>
     );
 }
