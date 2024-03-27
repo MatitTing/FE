@@ -36,12 +36,16 @@ const categoryTab: CategoryItemType[] = [
     { id: 'VOLUNTEER', label: '참가중' },
 ];
 
+function isPartySituationRole(value: unknown): value is PartySituationRole {
+    return value === 'HOST' || value === 'VOLUNTEER';
+}
+
 const PartySituation = () => {
     // const [selectedRole, setSelectedRole] = useState<PartySituationRole>('HOST');
     const { replace, query } = useRouter();
-    const situationRole = useSearchParam('situationRole');
+    const situationRole = useSearchParam('role');
     const selectedRole = useMemo(() => {
-        if (!situationRole) {
+        if (!situationRole || !isPartySituationRole(situationRole)) {
             return;
         }
         return situationRole;
@@ -52,7 +56,7 @@ const PartySituation = () => {
             <TabWrapper>
                 {categoryTab.map((tab) => {
                     const onClick = () => {
-                        replace({ query: { ...query, situationRole: tab.id } });
+                        replace({ query: { ...query, role: tab.id } });
                     };
 
                     return (
@@ -68,7 +72,7 @@ const PartySituation = () => {
 
             <PartyListContainer>
                 <QuerySuspenseErrorBoundary>
-                    <PartySituationItemList selectedRole={'HOST'} />
+                    <PartySituationItemList selectedRole={selectedRole || 'HOST'} />
                 </QuerySuspenseErrorBoundary>
             </PartyListContainer>
         </Container>

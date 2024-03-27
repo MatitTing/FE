@@ -42,7 +42,7 @@ export const SearchResult: FC<SearchResultProps> = ({ keyword }) => {
   });
 
   const onClickPartyCard = (id: number) => {
-    router.push(`/partydetail/${id}`);
+    router.push(`/party/${id}`);
   };
   const onObserve = () => {
     if (hasNextPage) fetchNextPage();

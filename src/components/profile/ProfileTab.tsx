@@ -1,16 +1,10 @@
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Box from '@mui/material/Box';
-import PartySituation from './PartySituation';
 import styled from '@emotion/styled';
-import PartyRequestList from './PartyRequestList';
-import { useState, SyntheticEvent, useMemo } from 'react';
 import { useRouter } from 'next/router';
-import ProfileTabPanel from './ProfileTabPanel';
-import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
-import getProfile, { API_GET_PROFILE_KEY } from 'src/api/getProfile';
-import TabComponent from './TabComponent';
+import { useMemo } from 'react';
 import { useSearchParam } from 'react-use';
+import PartySituation from './PartySituation';
+import TabComponent from './TabComponent';
+import PartyRequest from './PartyRequest';
 
 interface CategoryItemType {
     id: string;
@@ -73,7 +67,7 @@ export default function ProfileTab() {
     }, [selectedLabel]);
 
     const handleTabClick = (label: CategoryType) => {
-        replace({ query: { category: label, situationRole: 'HOST' } });
+        replace({ query: { category: label, role: 'HOST' } });
     };
 
     return (
@@ -89,7 +83,7 @@ export default function ProfileTab() {
                 ))}
             </TabContainer>
             {selectedLabel === '파티현황' && <PartySituation />}
-            {/* {selectedLabel === '초대요청' && <PartyRequestList />} */}
+            {selectedLabel === '초대요청' && <PartyRequest />}
         </Wrapper>
     );
 }
