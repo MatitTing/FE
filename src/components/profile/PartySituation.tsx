@@ -1,8 +1,10 @@
 import QuerySuspenseErrorBoundary from '@components/hoc/QuerySuspenseErrorBoundary';
 import styled from '@emotion/styled';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import PartySituationItemList from './PartySituationItemList';
 import ProfileTabSortingButton from './ProfileTabSortingButton';
+import { useRouter } from 'next/router';
+import { useSearchParam } from 'react-use';
 
 type PartySituationType = '모집중' | '참가중';
 export type PartySituationRole = 'HOST' | 'VOLUNTEER';
@@ -35,13 +37,22 @@ const categoryTab: CategoryItemType[] = [
 ];
 
 const PartySituation = () => {
-    const [selectedRole, setSelectedRole] = useState<PartySituationRole>('HOST');
+    // const [selectedRole, setSelectedRole] = useState<PartySituationRole>('HOST');
+    const { replace, query } = useRouter();
+    const situationRole = useSearchParam('situationRole');
+    const selectedRole = useMemo(() => {
+        if (!situationRole) {
+            return;
+        }
+        return situationRole;
+    }, [situationRole]);
+
     return (
         <Container>
             <TabWrapper>
                 {categoryTab.map((tab) => {
                     const onClick = () => {
-                        setSelectedRole(tab.id);
+                        replace({ query: { ...query, situationRole: tab.id } });
                     };
 
                     return (
@@ -57,7 +68,7 @@ const PartySituation = () => {
 
             <PartyListContainer>
                 <QuerySuspenseErrorBoundary>
-                    <PartySituationItemList selectedRole={selectedRole} />
+                    <PartySituationItemList selectedRole={'HOST'} />
                 </QuerySuspenseErrorBoundary>
             </PartyListContainer>
         </Container>

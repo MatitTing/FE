@@ -4,12 +4,13 @@ import Box from '@mui/material/Box';
 import PartySituation from './PartySituation';
 import styled from '@emotion/styled';
 import PartyRequestList from './PartyRequestList';
-import { useState, SyntheticEvent } from 'react';
+import { useState, SyntheticEvent, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import ProfileTabPanel from './ProfileTabPanel';
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import getProfile, { API_GET_PROFILE_KEY } from 'src/api/getProfile';
 import TabComponent from './TabComponent';
+import { useSearchParam } from 'react-use';
 
 interface CategoryItemType {
     id: string;
@@ -58,13 +59,21 @@ const categoryList: CategoryItemType[] = [
 ];
 
 export default function ProfileTab() {
-    const [selectedLabel, setSelectedLabel] = useState<CategoryType>('파티현황');
+    const { replace } = useRouter();
+    const category = useSearchParam('category');
+    const selectedLabel = useMemo(() => {
+        if (!category) {
+            return;
+        }
+        return category;
+    }, [category]);
 
-    const [selectedTabIndex, setSelectedTabIndex] = useState(0); // 선택된 탭 인덱스 추적
+    const selectedTabIndex = useMemo(() => {
+        return categoryList.findIndex((category) => category.label === selectedLabel);
+    }, [selectedLabel]);
 
-    const handleTabClick = (label: CategoryType, index: number) => {
-        setSelectedLabel(label);
-        setSelectedTabIndex(index); // 클릭된 탭 인덱스 업데이트
+    const handleTabClick = (label: CategoryType) => {
+        replace({ query: { category: label, situationRole: 'HOST' } });
     };
 
     return (
@@ -72,7 +81,7 @@ export default function ProfileTab() {
             <TabContainer selectedTabIndex={selectedTabIndex}>
                 {categoryList.map((category, index) => (
                     <TabComponent
-                        onClick={(label) => handleTabClick(label, index)} // 클릭 핸들러에 인덱스 전달
+                        onClick={(label) => handleTabClick(label)} // 클릭 핸들러에 인덱스 전달
                         label={category.label}
                         key={category.id}
                         isSelected={selectedLabel === category.label}
