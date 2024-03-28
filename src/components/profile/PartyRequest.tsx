@@ -49,7 +49,6 @@ function isPartyRequestRole(value: unknown): value is PartyRequestRole {
 }
 
 const PartyRequest = () => {
-    // const [selectedRole, setSelectedRole] = useState<PartyRequestRole>('HOST');
     const { replace, query } = useRouter();
     const requestRole = useSearchParam('role');
     const selectedRole = useMemo(() => {
@@ -110,11 +109,6 @@ const PartyRequest = () => {
 
     return (
         <Container>
-            {/* <ButtonList
-        listinfo={buttonlistinfo}
-        state={role}
-        setState={setButtonState}
-      /> */}
             <TabWrapper>
                 {categoryTab.map((tab) => {
                     const onClick = () => {
@@ -136,14 +130,6 @@ const PartyRequest = () => {
                 <QuerySuspenseErrorBoundary>
                     <PartyRequestItemList role={selectedRole || 'HOST'} />
                 </QuerySuspenseErrorBoundary>
-                {/* {data?.map((requsetdata) => (
-                    <PartyRequest
-                        key={requsetdata.nickname}
-                        role={role}
-                        data={requsetdata}
-                        joinDecision={joinDecision}
-                    />
-                ))} */}
             </PartyRequestContainer>
         </Container>
     );

@@ -5,6 +5,7 @@ import { useSearchParam } from 'react-use';
 import PartySituation from './PartySituation';
 import TabComponent from './TabComponent';
 import PartyRequest from './PartyRequest';
+import ReviewList from './ReviewList';
 
 interface CategoryItemType {
     id: string;
@@ -52,11 +53,15 @@ const categoryList: CategoryItemType[] = [
     { id: 'review', label: '후기' },
 ];
 
+function isValidCategoryType(value: unknown): value is CategoryType {
+    return value === '파티현황' || value === '초대요청' || value === '후기';
+}
+
 export default function ProfileTab() {
     const { replace } = useRouter();
     const category = useSearchParam('category');
     const selectedLabel = useMemo(() => {
-        if (!category) {
+        if (!category || !isValidCategoryType(category)) {
             return;
         }
         return category;
@@ -67,6 +72,10 @@ export default function ProfileTab() {
     }, [selectedLabel]);
 
     const handleTabClick = (label: CategoryType) => {
+        if (label === '후기') {
+            replace({ query: { category: label, role: 'SENDER' } });
+            return;
+        }
         replace({ query: { category: label, role: 'HOST' } });
     };
 
@@ -84,6 +93,7 @@ export default function ProfileTab() {
             </TabContainer>
             {selectedLabel === '파티현황' && <PartySituation />}
             {selectedLabel === '초대요청' && <PartyRequest />}
+            {selectedLabel === '후기' && <ReviewList />}
         </Wrapper>
     );
 }
