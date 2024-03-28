@@ -4,13 +4,17 @@ import { FC, useMemo } from 'react';
 import { useSearchParam } from 'react-use';
 import ProfileTabSortingButton from './ProfileTabSortingButton';
 import QuerySuspenseErrorBoundary from '@components/hoc/QuerySuspenseErrorBoundary';
+import getReviewList, {
+    API_GET_REVIEW_LIST_KEY,
+    ReviewListRequestType,
+} from 'src/api/getReviewList';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 interface ReviewListProps {}
 type ReviewListType = '보낸리뷰' | '받은리뷰';
-export type ReviewListRole = 'SENDER' | 'RECEIVER';
 
 interface CategoryItemType {
-    id: ReviewListRole;
+    id: ReviewListRequestType;
     label: ReviewListType;
 }
 
@@ -38,7 +42,7 @@ const ReviewListContainer = styled.div`
     overflow: auto;
 `;
 
-function isReviewListRole(value: unknown): value is ReviewListRole {
+function isReviewListRole(value: unknown): value is ReviewListRequestType {
     return value === 'SENDER' || value === 'RECEIVER';
 }
 
@@ -51,6 +55,16 @@ const ReviewList: FC<ReviewListProps> = () => {
         }
         return reviewRole;
     }, [reviewRole]);
+
+    // const reviewData = useSuspenseQuery({
+    //     queryKey: [API_GET_REVIEW_LIST_KEY, { role: selectedRole }],
+    //     queryFn: () => getReviewList({ reviewType: selectedRole ?? 'RECEIVER' }),
+    // });
+
+    // console.log(reviewData);
+
+    
+
     return (
         <Container>
             <TabWrapper>

@@ -58,10 +58,10 @@ const navList = [
         title: '프로필',
         href: '/profile',
         icon: ProfileIcon,
-        query: {
-            category: '파티현황',
-            role: 'HOST',
-        },
+        // query: {
+        //     category: '파티현황',
+        //     role: 'HOST',
+        // },
     },
 ];
 

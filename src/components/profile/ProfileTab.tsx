@@ -8,15 +8,16 @@ import PartyRequest from './PartyRequest';
 import ReviewList from './ReviewList';
 
 interface CategoryItemType {
-    id: string;
-    label: CategoryType;
+    id: CategoryIdType;
+    label: CategoryLabelType;
 }
-export type CategoryType = '파티현황' | '초대요청' | '후기';
+
+export type CategoryIdType = 'situation' | 'request' | 'review';
+export type CategoryLabelType = '파티현황' | '초대요청' | '후기';
 
 const TabContainer = styled.div<{ selectedTabIndex: number }>`
     display: flex;
     position: relative;
-    /* gap: 30px; */
     border-bottom: 1px solid #ebebeb;
     &:after {
         content: '';
@@ -53,30 +54,30 @@ const categoryList: CategoryItemType[] = [
     { id: 'review', label: '후기' },
 ];
 
-function isValidCategoryType(value: unknown): value is CategoryType {
-    return value === '파티현황' || value === '초대요청' || value === '후기';
+function isValidCategoryLabelType(value: unknown): value is CategoryIdType {
+    return value === 'situation' || value === 'request' || value === 'review';
 }
 
 export default function ProfileTab() {
     const { replace } = useRouter();
     const category = useSearchParam('category');
-    const selectedLabel = useMemo(() => {
-        if (!category || !isValidCategoryType(category)) {
+    const selectedId = useMemo(() => {
+        if (!category || !isValidCategoryLabelType(category)) {
             return;
         }
         return category;
     }, [category]);
 
     const selectedTabIndex = useMemo(() => {
-        return categoryList.findIndex((category) => category.label === selectedLabel);
-    }, [selectedLabel]);
+        return categoryList.findIndex((category) => category.id === selectedId);
+    }, [selectedId]);
 
-    const handleTabClick = (label: CategoryType) => {
-        if (label === '후기') {
-            replace({ query: { category: label, role: 'SENDER' } });
+    const handleTabClick = (id: CategoryIdType) => {
+        if (id === 'review') {
+            replace({ query: { category: id, role: 'SENDER' } });
             return;
         }
-        replace({ query: { category: label, role: 'HOST' } });
+        replace({ query: { category: id, role: 'HOST' } });
     };
 
     return (
@@ -84,16 +85,17 @@ export default function ProfileTab() {
             <TabContainer selectedTabIndex={selectedTabIndex}>
                 {categoryList.map((category, index) => (
                     <TabComponent
-                        onClick={(label) => handleTabClick(label)} // 클릭 핸들러에 인덱스 전달
+                        onClick={() => handleTabClick(category.id)}
+                        // onClick={handleTabClick(category.id)} // 클릭 핸들러에 인덱스 전달
                         label={category.label}
                         key={category.id}
-                        isSelected={selectedLabel === category.label}
+                        isSelected={selectedId === String(category.id)}
                     />
                 ))}
             </TabContainer>
-            {selectedLabel === '파티현황' && <PartySituation />}
-            {selectedLabel === '초대요청' && <PartyRequest />}
-            {selectedLabel === '후기' && <ReviewList />}
+            {selectedId === 'situation' && <PartySituation />}
+            {selectedId === 'request' && <PartyRequest />}
+            {selectedId === 'review' && <ReviewList />}
         </Wrapper>
     );
 }

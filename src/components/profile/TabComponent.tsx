@@ -1,12 +1,12 @@
 import styled from '@emotion/styled';
-import { forwardRef, useRef } from 'react';
-import { CategoryType } from './ProfileTab';
+import { forwardRef, MouseEventHandler, useRef } from 'react';
 import useRipple from '@hooks/useRipple';
+import { CategoryIdType } from './ProfileTab';
 
 interface TabComponentProps {
-    label: CategoryType;
+    label: string;
     isSelected: boolean;
-    onClick: (category: CategoryType) => void;
+    onClick: MouseEventHandler<HTMLButtonElement>;
 }
 
 const Tab = styled.button<{ isSelected: boolean }>`
@@ -30,16 +30,10 @@ const Tab = styled.button<{ isSelected: boolean }>`
 const TabComponent = forwardRef<HTMLButtonElement, TabComponentProps>(
     ({ label, isSelected = false, onClick }, forwardedRef) => {
         const internalRef = useRef<HTMLButtonElement>(null);
-        const onClickTab = (selectedCategory: CategoryType) => {
-            const handler = () => {
-                onClick(selectedCategory);
-            };
-            return handler;
-        };
         const ripples = useRipple(internalRef, '#2196f3');
 
         return (
-            <Tab ref={internalRef} isSelected={isSelected} onClick={onClickTab(label)}>
+            <Tab ref={internalRef} isSelected={isSelected} onClick={onClick}>
                 {label}
                 {ripples}
             </Tab>
