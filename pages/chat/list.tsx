@@ -24,77 +24,75 @@ const mockupData = [
   },
 ];
 
-const Wrapper = styled.div({});
+const Wrapper = styled.div``;
 
-const Header = styled.header({
-  height: "45px !important",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  boxShadow: "0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24)",
-});
+const Header = styled.header`
+  height: 45px !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+`;
 
-const Contents = styled.div({
-  padding: "2rem",
-});
+const Contents = styled.div`
+  padding: 2rem;
+`;
 
-const SearchBox = styled.div({
-  position: "relative",
-  display: "flex",
-  justifyContent: "center",
-});
+const SearchBox = styled.div`
+  position: relative;
+  display: flex;
+  justify-content: center;
+`;
 
-const SearchButton = styled.button({
-  minWidth: "50px",
-});
+const SearchButton = styled.button`
+  min-width: 50px;
+`;
+const RoomList = styled.ul`
+  padding: 0;
+  margin: 0 auto;
+  list-style: none;
+`;
 
-const RoomList = styled.ul({
-  padding: 0,
-  margin: "0 auto",
-  listStyle: "none",
-});
+const Room = styled.li`
+  display: flex;
+  margin: 1rem 0;
+  padding: 1rem 0;
+`;
 
-const Room = styled.li({
-  display: "flex",
-  margin: "1rem 0",
-  padding: "1rem 0",
-});
+const ImageBox = styled.div`
+  width: 60;
+  height: 60;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 5%;
+`;
 
-const ImageBox = styled.div({
-  width: 60,
-  height: 60,
-  borderRadius: "50%",
-  overflow: "hidden",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  marginRight: "5%",
-});
+const RightBox = styled.div`
+  width: calc(100% - 60px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
 
-const RightBox = styled.div({
-  width: "calc(100% - 60px)",
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-});
+const TextBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
 
-const TextBox = styled.div({
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-});
+const NickName = styled.p`
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+`;
 
-const NickName = styled.p({
-  margin: 0,
-  fontSize: "18px",
-  fontWeight: "bold",
-});
-
-const Message = styled.p({
-  margin: 0,
-});
-
-const Recentime = styled.p({});
+const Message = styled.p`
+  margin: 0;
+`;
+const Recentime = styled.p``;
 
 const ChatListPage: NextPage = () => {
   const handleOnChangeSearch = () => {};

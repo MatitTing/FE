@@ -2,22 +2,25 @@ import BottomInputGroup from "@components/chat/BottomInputGroup";
 import HeaderBtnGroup from "@components/chat/HeaderBtnGroup";
 import MessageList from "@components/chat/MessageList";
 import styled from "@emotion/styled";
-import { ReactElement, MouseEvent, useState } from "react";
+import * as StompJs from "@stomp/stompjs";
+import { ReactElement, MouseEvent, useState, useEffect, useRef } from "react";
 
-const Wrapper = styled.div({
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "space-between",
-  height: "100vh",
-});
+const Wrapper = styled.div`
+  display: "flex";
+  flex-direction: "column";
+  justify-content: "space-between";
+  height: "100vh";
+`;
 
-const Contents = styled.main({
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "flex-end",
-});
+const Contents = styled.main`
+  display: "flex";
+  flex-direction: "column";
+  justify-content: "flex-end";
+`;
 
 const ChattingRoom = () => {
+  const client = useRef<any>({});
+
   const [isOpenUserList, setIsOpenUserList] = useState(false);
 
   const handleCloseUserList = (e: MouseEvent<HTMLDivElement>) => {
