@@ -1,25 +1,24 @@
-import styled from '@emotion/styled';
-import ProfileTab from '@components/profile/ProfileTab';
-import SettingIcon from '@components/icons/common/Setting.icon';
-import { HeaderBackButton } from '@components/common/HeaderBackButton';
-import { DefaultHeader } from '@components/common/DefaultHeader';
-import ProfileInfo from '@components/profile/ProfileInfo';
-import { useScroll } from 'react-use';
-import { useRef } from 'react';
-import Link from 'next/link';
 import BackgroundImage from '@components/common/BackgroundImage';
+import { DefaultHeader } from '@components/common/DefaultHeader';
+import { HeaderBackButton } from '@components/common/HeaderBackButton';
 import QuerySuspenseErrorBoundary from '@components/hoc/QuerySuspenseErrorBoundary';
+import SettingIcon from '@components/icons/common/Setting.icon';
 import ProfileError from '@components/profile/ProfileError';
+import ProfileInfo from '@components/profile/ProfileInfo';
 import ProfileLoading from '@components/profile/ProfileLoading';
-import { GetServerSideProps, NextApiResponse, NextPageContext } from 'next';
-import { redirect } from 'next/dist/server/api-utils';
+import ProfileTab from '@components/profile/ProfileTab';
+import styled from '@emotion/styled';
+import { GetServerSideProps } from 'next';
+import Link from 'next/link';
+import { useRef } from 'react';
+import { useScroll } from 'react-use';
 
 const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
     margin: 0 auto;
-    height: 100%;
+    padding-bottom: 76px;
     width: 100%;
     max-width: 768px;
     overflow-y: scroll;

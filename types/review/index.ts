@@ -10,4 +10,5 @@ export interface GetReviewListResponse {
     rating: number;
     content: string;
     reviewImg: ImageType[];
+    createdAt: string | Date;
 }

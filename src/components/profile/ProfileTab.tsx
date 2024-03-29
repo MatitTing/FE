@@ -5,7 +5,8 @@ import { useSearchParam } from 'react-use';
 import PartySituation from './PartySituation';
 import TabComponent from './TabComponent';
 import PartyRequest from './PartyRequest';
-import ReviewList from './ReviewList';
+import ReviewList from './ProfileReviewList';
+import ProfileReviewList from './ProfileReviewList';
 
 interface CategoryItemType {
     id: CategoryIdType;
@@ -83,19 +84,23 @@ export default function ProfileTab() {
     return (
         <Wrapper>
             <TabContainer selectedTabIndex={selectedTabIndex}>
-                {categoryList.map((category, index) => (
-                    <TabComponent
-                        onClick={() => handleTabClick(category.id)}
-                        // onClick={handleTabClick(category.id)} // 클릭 핸들러에 인덱스 전달
-                        label={category.label}
-                        key={category.id}
-                        isSelected={selectedId === String(category.id)}
-                    />
-                ))}
+                {categoryList.map((category) => {
+                    const onClick = () => {
+                        handleTabClick(category.id);
+                    };
+                    return (
+                        <TabComponent
+                            onClick={onClick}
+                            label={category.label}
+                            key={category.id}
+                            isSelected={selectedId === String(category.id)}
+                        />
+                    );
+                })}
             </TabContainer>
             {selectedId === 'situation' && <PartySituation />}
             {selectedId === 'request' && <PartyRequest />}
-            {selectedId === 'review' && <ReviewList />}
+            {selectedId === 'review' && <ProfileReviewList />}
         </Wrapper>
     );
 }
