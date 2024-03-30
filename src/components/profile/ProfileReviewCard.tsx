@@ -1,11 +1,15 @@
+import { DefaultModalContainer } from '@components/common/DefaultModalContainer';
 import { DefaultText } from '@components/common/DefaultText';
+import PhotoGallery from '@components/common/PhotoGallery';
 import ReviewStarRating from '@components/common/ReviewStarRating';
 import Star from '@components/common/Star';
 import DeleteIcon from '@components/icons/common/Delete.icon';
 import EditIcon from '@components/icons/common/Edit.icon';
 import styled from '@emotion/styled';
+import useModal from '@hooks/useModal';
 import dayjs from 'dayjs';
 import Image from 'next/image';
+import React, { useCallback, useState } from 'react';
 import { FC } from 'react';
 import { GetReviewListResponse } from 'types/review';
 
@@ -28,6 +32,7 @@ const TextInfoSection = styled.section`
     flex-direction: column;
     gap: 10px;
     width: 100%;
+    max-width: calc(100% - 50px);
 `;
 const NicknameAndDateContainer = styled.div`
     display: flex;
@@ -52,7 +57,25 @@ const ReviewDateAndEditContainer = styled.div`
     gap: 5px;
 `;
 
+const ReviewImageContainer = styled.div`
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    overflow: auto;
+`;
+
 const ProfileReviewCard: FC<ProfileReviewCardProps> = ({ data }) => {
+    const [isOpenImage, setIsOpenImage] = useState(false);
+    const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
+    const onClickImage = useCallback((index: number) => {
+        setSelectedImageIndex(index);
+        setIsOpenImage(true);
+    }, []);
+
+    const onCloseGallery = useCallback(() => {
+        setIsOpenImage(false);
+    }, []);
+
     return (
         <Container>
             <ContentsSection>
@@ -95,13 +118,46 @@ const ProfileReviewCard: FC<ProfileReviewCardProps> = ({ data }) => {
                     <ReviewTextContainer>
                         <DefaultText text={data.content} size={13} />
                     </ReviewTextContainer>
+                    {data.reviewImg.length > 0 ? (
+                        <ReviewImageContainer>
+                            {data.reviewImg.map((reviewImage, index) => {
+                                const handler = () => {
+                                    onClickImage(index);
+                                };
+
+                                return (
+                                    <Image
+                                        src={reviewImage.imageUrl}
+                                        alt="리뷰 이미지"
+                                        key={reviewImage.id}
+                                        height={80}
+                                        width={80}
+                                        style={{
+                                            cursor: 'pointer',
+                                            borderRadius: '10px',
+                                        }}
+                                        onClick={handler}
+                                    />
+                                );
+                            })}
+                        </ReviewImageContainer>
+                    ) : null}
                     <ReviewMoreContainer>
                         <DefaultText text={'리뷰 자세히 보기(more)'} size={13} />
                     </ReviewMoreContainer>
+                    {isOpenImage && (
+                        <DefaultModalContainer>
+                            <PhotoGallery
+                                initialSlideNumber={selectedImageIndex}
+                                imageData={data.reviewImg}
+                                onClickCloseIcon={onCloseGallery}
+                            />
+                        </DefaultModalContainer>
+                    )}
                 </TextInfoSection>
             </ContentsSection>
         </Container>
     );
 };
 
-export default ProfileReviewCard;
+export default React.memo(ProfileReviewCard);

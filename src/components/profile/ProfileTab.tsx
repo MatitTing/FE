@@ -59,7 +59,7 @@ function isValidCategoryLabelType(value: unknown): value is CategoryIdType {
     return value === 'situation' || value === 'request' || value === 'review';
 }
 
-export default function ProfileTab() {
+const ProfileTab = () => {
     const { replace } = useRouter();
     const category = useSearchParam('category');
     const selectedId = useMemo(() => {
@@ -103,4 +103,6 @@ export default function ProfileTab() {
             {selectedId === 'review' && <ProfileReviewList />}
         </Wrapper>
     );
-}
+};
+
+export default ProfileTab;

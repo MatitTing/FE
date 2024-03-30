@@ -9,6 +9,8 @@ import { ProfileReviewListRequestType } from 'src/api/getProfileReviewList';
 import ProfileReviewCard from './ProfileReviewCard';
 import { GetReviewListResponse, ImageType } from 'types/review';
 import dayjs from 'dayjs';
+import React from 'react';
+import { useModalContext } from '@mantine/core/lib/components/Modal/Modal.context';
 
 interface ProfileReviewListProps {}
 type ProfileReviewListType = '보낸리뷰' | '받은리뷰';
@@ -137,4 +139,4 @@ const ProfileReviewList: FC<ProfileReviewListProps> = () => {
     );
 };
 
-export default ProfileReviewList;
+export default React.memo(ProfileReviewList);
