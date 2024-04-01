@@ -26,8 +26,8 @@ const NavContainer = styled.div`
     width: 100%;
     max-width: 768px;
     height: 75px;
+    padding: 0 10px;
     display: flex;
-    padding: 0px 15px;
     justify-content: space-between;
     align-items: center;
     align-self: stretch;
@@ -58,10 +58,6 @@ const navList = [
         title: '프로필',
         href: '/profile',
         icon: ProfileIcon,
-        // query: {
-        //     category: '파티현황',
-        //     role: 'HOST',
-        // },
     },
 ];
 

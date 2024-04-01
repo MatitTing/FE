@@ -51,7 +51,7 @@ const SlideInfo = styled.section`
     height: 50px;
     justify-content: center;
     position: absolute;
-    bottom: 20%;
+    bottom: 10%;
     align-items: center;
 `;
 

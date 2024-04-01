@@ -9,6 +9,7 @@ import styled from '@emotion/styled';
 import useModal from '@hooks/useModal';
 import dayjs from 'dayjs';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import React, { useCallback, useState } from 'react';
 import { FC } from 'react';
 import { GetReviewListResponse } from 'types/review';
@@ -65,6 +66,7 @@ const ReviewImageContainer = styled.div`
 `;
 
 const ProfileReviewCard: FC<ProfileReviewCardProps> = ({ data }) => {
+    const { push } = useRouter();
     const [isOpenImage, setIsOpenImage] = useState(false);
     const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
     const onClickImage = useCallback((index: number) => {
@@ -75,6 +77,10 @@ const ProfileReviewCard: FC<ProfileReviewCardProps> = ({ data }) => {
     const onCloseGallery = useCallback(() => {
         setIsOpenImage(false);
     }, []);
+
+    const onClickReviewDetail = () => {
+        push(`/review/${data.reviewId}`);
+    };
 
     return (
         <Container>
@@ -143,7 +149,11 @@ const ProfileReviewCard: FC<ProfileReviewCardProps> = ({ data }) => {
                         </ReviewImageContainer>
                     ) : null}
                     <ReviewMoreContainer>
-                        <DefaultText text={'리뷰 자세히 보기(more)'} size={13} />
+                        <DefaultText
+                            onClick={onClickReviewDetail}
+                            text={'리뷰 자세히 보기(more)'}
+                            size={13}
+                        />
                     </ReviewMoreContainer>
                     {isOpenImage && (
                         <DefaultModalContainer>
