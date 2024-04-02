@@ -1,10 +1,9 @@
 import styled from '@emotion/styled';
+import { ColorToken } from 'styles/Color';
 
 const Layout = styled.div`
-    width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: center;
 `;
 
 const IconWrapper = styled.button`
@@ -13,10 +12,12 @@ const IconWrapper = styled.button`
 
 const ContentsSection = styled.section`
     display: flex;
-    justify-content: center;
     width: 100%;
     max-width: 768px;
-    border: 1px solid red;
+    background: ${ColorToken.icon_background};
+    /* height: calc(100vh - 45px); */
+    padding: 30px;
+    flex-direction: column;
 `;
 
 export const ReviewAddComponents = {
