@@ -10,6 +10,7 @@ const Container = styled.div`
     flex-direction: column;
     gap: 15px;
     align-items: center;
+    padding-top: 50px;
 `;
 
 const ReviewAddStarRating: FC<ReviewAddStarRatingProps> = () => {

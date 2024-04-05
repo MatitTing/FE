@@ -16,11 +16,11 @@ const ReviewAddScreen: FC<ReviewAddScreenProps> = () => (
             centerArea={<DefaultText text="리뷰 작성" size={15} weight={700} />}
             leftArea={<HeaderBackButton />}
         />
-        {/* <Components.ContentsSection> */}
-        <ReviewAddStarRating />
-        <ReviewAddTextArea />
-        <ReviewAddImageInput />
-        {/* </Components.ContentsSection> */}
+        <Components.ContentsSection>
+            <ReviewAddStarRating />
+            <ReviewAddTextArea />
+            <ReviewAddImageInput />
+        </Components.ContentsSection>
     </Components.Layout>
 );
 

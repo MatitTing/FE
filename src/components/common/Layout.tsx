@@ -1,52 +1,48 @@
-import BottomBar from "./BottomBar";
-import styled from "@emotion/styled";
-import { useRouter } from "next/router";
-import { ReactNode, useMemo } from "react";
+import BottomBar from './BottomBar';
+import styled from '@emotion/styled';
+import { useRouter } from 'next/router';
+import { ReactNode, useMemo } from 'react';
 
 interface LayoutProps {
-  children: ReactNode;
+    children: ReactNode;
 }
 
 const Container = styled.div<{ isVisibleBottom: boolean }>`
-  width: 768px;
-  position: relative;
-  width: 100%;
-  overflow-y: scroll;
-  display: flex;
-  flex-direction: column;
-  header {
-    height: calc(
-      ${(props) => (props.isVisibleBottom ? "100vh - 45px" : "100vh")}
-    );
-    padding: ${(props) => (props.isVisibleBottom ? "20px 0" : "45px 0 0 0")};
-    overflow-y: scroll;
-  }
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    main {
+        height: calc(${(props) => (props.isVisibleBottom ? '100% - 75px' : '100%')});
+        overflow-y: scroll;
+    }
 `;
 
 const BottomSection = styled.section`
-  width: 100%;
-  display: flex;
-  justify-content: center;
+    width: 100%;
+    display: flex;
+    justify-content: center;
 `;
 
 function Layout({ children }: LayoutProps) {
-  const router = useRouter();
-  const isVisibleBottom = useMemo(() => {
-    return ["/", "/search", "/profile", "/party/create", "/chat/list"].includes(
-      router.pathname
-    );
-  }, [router.pathname]);
+    const router = useRouter();
+    const isVisibleBottom = useMemo(() => {
+        return ['/', '/search', '/profile', '/party/create', '/chat/list'].includes(
+            router.pathname,
+        );
+    }, [router.pathname]);
 
-  return (
-    <Container isVisibleBottom={isVisibleBottom}>
-      <header>{children}</header>
-      {isVisibleBottom ? (
-        <BottomSection>
-          <BottomBar />
-        </BottomSection>
-      ) : null}
-    </Container>
-  );
+    return (
+        <Container isVisibleBottom={isVisibleBottom}>
+            <main>{children}</main>
+            {isVisibleBottom ? (
+                <BottomSection>
+                    <BottomBar />
+                </BottomSection>
+            ) : null}
+        </Container>
+    );
 }
 
 export default Layout;
