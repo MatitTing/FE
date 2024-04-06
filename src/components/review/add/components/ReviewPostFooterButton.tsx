@@ -5,8 +5,11 @@ import { FC } from 'react';
 interface ReviewPostFooterButtonProps {}
 
 const Container = styled.div`
-    position: relative;
+    /* position: absolute; */
+    position: fixed;
     width: 100%;
+    padding: 0 30px;
+    max-width: 738px;
     bottom: 45px;
 `;
 

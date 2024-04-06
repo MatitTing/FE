@@ -15,7 +15,7 @@ const Container = styled.div`
 const ImageInputWrapper = styled.div`
     display: flex;
     overflow: auto;
-    width: 100%;
+    width: 100vw;
     height: 120px;
 `;
 

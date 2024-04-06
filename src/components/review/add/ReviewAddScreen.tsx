@@ -21,8 +21,8 @@ const ReviewAddScreen: FC<ReviewAddScreenProps> = () => (
             <ReviewAddStarRating />
             <ReviewAddTextArea />
             <ReviewAddImageInput />
-            <ReviewPostFooterButton />
         </Components.ContentsSection>
+        <ReviewPostFooterButton />
     </Components.Layout>
 );
 
