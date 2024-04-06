@@ -14,7 +14,7 @@ import React, { useCallback, useState } from 'react';
 import { FC } from 'react';
 import { GetReviewListResponse } from 'types/review';
 
-interface ProfileReviewCardProps {
+interface ReviewCardProps {
     data: GetReviewListResponse;
 }
 const Container = styled.div`
@@ -65,7 +65,7 @@ const ReviewImageContainer = styled.div`
     overflow: auto;
 `;
 
-const ProfileReviewCard: FC<ProfileReviewCardProps> = ({ data }) => {
+const ReviewCard: FC<ReviewCardProps> = ({ data }) => {
     const { push } = useRouter();
     const [isOpenImage, setIsOpenImage] = useState(false);
     const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
@@ -170,4 +170,4 @@ const ProfileReviewCard: FC<ProfileReviewCardProps> = ({ data }) => {
     );
 };
 
-export default React.memo(ProfileReviewCard);
+export default React.memo(ReviewCard);
