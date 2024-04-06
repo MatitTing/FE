@@ -81,7 +81,7 @@ const PhotoGallery: FC<PhotoGalleryProps> = ({
         <Container>
             <Header>
                 <CloseIconWrapper onClick={onClickCloseIcon}>
-                    <CloseIcon size={35} />
+                    <CloseIcon size={35} color="white" />
                 </CloseIconWrapper>
             </Header>
 
