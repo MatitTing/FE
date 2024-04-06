@@ -1,85 +1,78 @@
-import { DefaultHeader } from "@components/common/DefaultHeader";
-import { HeaderBackButton } from "@components/common/HeaderBackButton";
-import { HotKeywordSection } from "@components/search/HotKeywordSection";
-import RecentKeywordSection from "@components/search/RecentKeywordSection";
-import SearchHeader from "@components/search/header";
-import styled from "@emotion/styled";
-import { useSearchKeyword } from "@hooks/useSearchKeyword";
-import dynamic from "next/dynamic";
-import { useRouter } from "next/router";
-import React from "react";
-import { Color } from "styles/Color";
+import { DefaultHeader } from '@components/common/DefaultHeader';
+import { HeaderBackButton } from '@components/common/HeaderBackButton';
+import { HotKeywordSection } from '@components/search/HotKeywordSection';
+import RecentKeywordSection from '@components/search/RecentKeywordSection';
+import SearchHeader from '@components/search/header';
+import styled from '@emotion/styled';
+import { useSearchKeyword } from '@hooks/useSearchKeyword';
+import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
+import React from 'react';
+import { Color } from 'styles/Color';
 const QuerySuspenseErrorBoundary = dynamic(
-  () => import("@components/hoc/QuerySuspenseErrorBoundary")
+    () => import('@components/hoc/QuerySuspenseErrorBoundary'),
 );
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 0 auto;
-  min-height: calc(100vh - 45px);
-  gap: 50px;
-  width: 100%;
-  max-width: 768px;
-  background: ${Color.Grey};
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    padding-top: 45px;
+    min-height: calc(100vh);
+    gap: 50px;
+    width: 100%;
+    max-width: 768px;
+    background: ${Color.Grey};
+    display: flex;
+    flex-direction: column;
 `;
 
 const Contents = styled.div`
-  padding: 35px;
-  gap: 50px;
-  overflow-y: scroll;
-  overflow-x: hidden;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
+    padding: 35px;
+    gap: 50px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 `;
 
 const SearchPage = () => {
-  const router = useRouter();
-  const {
-    updateKeywords,
-    recentKeywords,
-    setRecentKeywords,
-    resetRecentKeywords,
-  } = useSearchKeyword();
+    const router = useRouter();
+    const { updateKeywords, recentKeywords, setRecentKeywords, resetRecentKeywords } =
+        useSearchKeyword();
 
-  const onClickKeyword: React.MouseEventHandler<HTMLDivElement> = async (e) => {
-    const keyword = e.currentTarget.innerText;
-    updateKeywords(keyword);
-    await router.replace(`/search/${keyword}`);
-  };
+    const onClickKeyword: React.MouseEventHandler<HTMLDivElement> = async (e) => {
+        const keyword = e.currentTarget.innerText;
+        updateKeywords(keyword);
+        await router.replace(`/search/${keyword}`);
+    };
 
-  const onClickIndividualRemoveBtn = (keyword: string) => {
-    const updatedKeywords = [...(recentKeywords ?? [])].filter(
-      (value) => value !== keyword
+    const onClickIndividualRemoveBtn = (keyword: string) => {
+        const updatedKeywords = [...(recentKeywords ?? [])].filter((value) => value !== keyword);
+        setRecentKeywords?.(updatedKeywords);
+    };
+
+    return (
+        <Container>
+            <DefaultHeader
+                leftArea={<HeaderBackButton routerPath="/" />}
+                centerArea={<SearchHeader.Center />}
+            />
+            <Contents>
+                <QuerySuspenseErrorBoundary>
+                    <HotKeywordSection onClick={onClickKeyword} />
+                </QuerySuspenseErrorBoundary>
+                <RecentKeywordSection
+                    recentKeywords={recentKeywords}
+                    resetRecentKeywords={resetRecentKeywords}
+                    onClickKeyword={onClickKeyword}
+                    onClickDeleteBtn={onClickIndividualRemoveBtn}
+                />
+            </Contents>
+        </Container>
     );
-    setRecentKeywords?.(updatedKeywords);
-  };
-
-  return (
-    <Container>
-      <DefaultHeader
-        leftArea={<HeaderBackButton routerPath="/" />}
-        centerArea={
-          <SearchHeader.Center />
-        }
-      />
-      <Contents>
-        <QuerySuspenseErrorBoundary>
-          <HotKeywordSection onClick={onClickKeyword} />
-        </QuerySuspenseErrorBoundary>
-        <RecentKeywordSection
-          recentKeywords={recentKeywords}
-          resetRecentKeywords={resetRecentKeywords}
-          onClickKeyword={onClickKeyword}
-          onClickDeleteBtn={onClickIndividualRemoveBtn}
-        />
-      </Contents>
-    </Container>
-  );
 };
 
 export default SearchPage;

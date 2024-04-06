@@ -26,7 +26,11 @@ const mockupData = [
     },
 ];
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+    height: 100%;
+    min-height: calc(100vh);
+    padding: 45px 0 75px 0;
+`;
 
 const Header = styled.header({
     height: '45px !important',
