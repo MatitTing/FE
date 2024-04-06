@@ -7,6 +7,7 @@ import ReviewAddStarRating from './components/ReviewAddStarRating';
 import { HeaderBackButton } from '@components/common/HeaderBackButton';
 import ReviewAddTextArea from './components/ReviewAddTextArea';
 import ReviewAddImageInput from './components/ReviewAddImageInput';
+import ReviewPostFooterButton from './components/ReviewPostFooterButton';
 
 interface ReviewAddScreenProps {}
 
@@ -20,6 +21,7 @@ const ReviewAddScreen: FC<ReviewAddScreenProps> = () => (
             <ReviewAddStarRating />
             <ReviewAddTextArea />
             <ReviewAddImageInput />
+            <ReviewPostFooterButton />
         </Components.ContentsSection>
     </Components.Layout>
 );

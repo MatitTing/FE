@@ -20,7 +20,8 @@ const ContentsSection = styled.section`
     max-width: 768px;
     background: ${ColorToken.icon_background};
     height: 100%;
-    padding: 45px 30px;
+    min-height: calc(100vh - 45px);
+    padding: 45px 30px 0 30px;
     flex-direction: column;
 `;
 
