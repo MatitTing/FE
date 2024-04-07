@@ -109,7 +109,7 @@ const ReviewCard: FC<ReviewCardProps> = ({ data, onClickEditButton, onClickDelet
                             text={data.nickname}
                             ellipsis
                             align="center"
-                            size={15}
+                            size={115}
                             weight={700}
                         />
                         <ReviewDateAndEditContainer>
