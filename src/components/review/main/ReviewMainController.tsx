@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import ReviewManiScreen from './ReviewManiScreen';
+import ReviewManiScreen from './ReviewMainScreen';
 
 interface ReviewMainControllerProps {}
 

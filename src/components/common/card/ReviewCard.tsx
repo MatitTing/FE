@@ -10,12 +10,14 @@ import useModal from '@hooks/useModal';
 import dayjs from 'dayjs';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import React, { useCallback, useState } from 'react';
+import React, { MouseEventHandler, useCallback, useState } from 'react';
 import { FC } from 'react';
 import { GetReviewListResponse } from 'types/review';
 
 interface ReviewCardProps {
     data: GetReviewListResponse;
+    onClickEditButton?: MouseEventHandler<HTMLButtonElement>;
+    onClickDeleteButton?: MouseEventHandler<HTMLButtonElement>;
 }
 const Container = styled.div`
     width: 100%;
@@ -58,14 +60,20 @@ const ReviewDateAndEditContainer = styled.div`
     gap: 5px;
 `;
 
-const ReviewImageContainer = styled.div`
+const ReviewImageContainer = styled.section`
     display: flex;
     gap: 10px;
     width: 100%;
     overflow: auto;
 `;
 
-const ReviewCard: FC<ReviewCardProps> = ({ data }) => {
+const IconButton = styled.button`
+    box-sizing: content-box;
+    height: 24px;
+    width: 24px;
+`;
+
+const ReviewCard: FC<ReviewCardProps> = ({ data, onClickEditButton, onClickDeleteButton }) => {
     const { push } = useRouter();
     const [isOpenImage, setIsOpenImage] = useState(false);
     const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
@@ -105,8 +113,16 @@ const ReviewCard: FC<ReviewCardProps> = ({ data }) => {
                             weight={700}
                         />
                         <ReviewDateAndEditContainer>
-                            <EditIcon />
-                            <DeleteIcon />
+                            {onClickEditButton && (
+                                <IconButton onClick={onClickEditButton}>
+                                    <EditIcon />
+                                </IconButton>
+                            )}
+                            {onClickDeleteButton && (
+                                <IconButton onClick={onClickDeleteButton}>
+                                    <DeleteIcon />
+                                </IconButton>
+                            )}
                         </ReviewDateAndEditContainer>
                     </NicknameAndDateContainer>
 
@@ -135,6 +151,7 @@ const ReviewCard: FC<ReviewCardProps> = ({ data }) => {
                                     <Image
                                         src={reviewImage.imageUrl}
                                         alt="리뷰 이미지"
+                                        loading="lazy"
                                         key={reviewImage.id}
                                         height={80}
                                         width={80}

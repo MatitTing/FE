@@ -5,9 +5,9 @@ import { DefaultText } from '@components/common/DefaultText';
 import { HeaderBackButton } from '@components/common/HeaderBackButton';
 import ReviewMainListSection from './components/section/ReviewMainListSection';
 
-interface ReviewManiScreenProps {}
+interface ReviewMainScreenProps {}
 
-const ReviewManiScreen: FC<ReviewManiScreenProps> = () => (
+const ReviewMainScreen: FC<ReviewMainScreenProps> = () => (
     <Components.Layout>
         <DefaultHeader
             centerArea={<DefaultText text="000님의 후기" size={15} weight={700} />}
@@ -19,4 +19,4 @@ const ReviewManiScreen: FC<ReviewManiScreenProps> = () => (
     </Components.Layout>
 );
 
-export default ReviewManiScreen;
+export default ReviewMainScreen;

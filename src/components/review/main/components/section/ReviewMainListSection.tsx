@@ -1,4 +1,5 @@
 import ReviewCard from '@components/common/card/ReviewCard';
+import QuerySuspenseErrorBoundary from '@components/hoc/QuerySuspenseErrorBoundary';
 import dayjs from 'dayjs';
 import { FC } from 'react';
 import { GetReviewListResponse, ImageType } from 'types/review';
@@ -47,7 +48,14 @@ const ReviewMainListSection: FC<ReviewMainListSectionProps> = () => {
     // 목데이터 생성
     const numReviews = 10; // 생성할 리뷰 개수
     const mockReviewList = generateMockReviewList(numReviews);
-    return mockReviewList.map((review) => <ReviewCard data={review} key={review.reviewId} />);
+
+    return (
+        <QuerySuspenseErrorBoundary>
+            {mockReviewList.map((review) => (
+                <ReviewCard data={review} key={review.reviewId} />
+            ))}
+        </QuerySuspenseErrorBoundary>
+    );
 };
 
 export default ReviewMainListSection;
