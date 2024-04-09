@@ -1,17 +1,14 @@
 import { DefaultModalContainer } from '@components/common/DefaultModalContainer';
 import { DefaultText } from '@components/common/DefaultText';
 import PhotoGallery from '@components/common/PhotoGallery';
-import ReviewStarRating from '@components/common/ReviewStarRating';
 import Star from '@components/common/Star';
 import DeleteIcon from '@components/icons/common/Delete.icon';
 import EditIcon from '@components/icons/common/Edit.icon';
 import styled from '@emotion/styled';
-import useModal from '@hooks/useModal';
 import dayjs from 'dayjs';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import React, { MouseEventHandler, useCallback, useState } from 'react';
-import { FC } from 'react';
+import React, { FC, MouseEventHandler, useCallback, useState } from 'react';
 import { GetReviewListResponse } from 'types/review';
 
 interface ReviewCardProps {
@@ -109,7 +106,7 @@ const ReviewCard: FC<ReviewCardProps> = ({ data, onClickEditButton, onClickDelet
                             text={data.nickname}
                             ellipsis
                             align="center"
-                            size={115}
+                            size={15}
                             weight={700}
                         />
                         <ReviewDateAndEditContainer>

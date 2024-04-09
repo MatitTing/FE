@@ -35,35 +35,28 @@ const CloseIconWrapper = styled.button`
     }
 `;
 
-const ImageSection = styled.section`
-    width: 100%;
-    height: 100%;
-    border: 1px solid red;
-    z-index: 999999999999;
-`;
 const ImageWrapper = styled.div`
     width: 100%;
-    height: calc(100vh - 50px);
+    max-width: 100vw;
+    display: flex;
+    height: 100%;
 `;
 
 const SlideInfo = styled.section`
     width: 100%;
     height: 50px;
+    display: flex;
     justify-content: center;
     position: absolute;
-    bottom: 10%;
+    bottom: 2%;
     align-items: center;
 `;
 
 const SlideSection = styled.section`
     position: relative;
-`;
-
-const SlideInfoTextWrapper = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 50px;
+    width: 100%;
+    height: 100%;
+    max-height: calc(100vh - 50px);
 `;
 
 const PhotoGallery: FC<PhotoGalleryProps> = ({
@@ -89,6 +82,11 @@ const PhotoGallery: FC<PhotoGalleryProps> = ({
                 <Swiper
                     initialSlide={initialSlideNumber}
                     onSlideChangeTransitionEnd={onSlideChangeTransitionEnd}
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        height: 'calc(90%)',
+                    }}
                 >
                     {imageData.map((image) => (
                         <SwiperSlide key={image.id}>
@@ -100,6 +98,8 @@ const PhotoGallery: FC<PhotoGalleryProps> = ({
                                     alt="리뷰 이미지"
                                     fill
                                     style={{
+                                        width: '100%',
+                                        height: '100%',
                                         objectFit: 'contain',
                                     }}
                                 />
@@ -108,14 +108,12 @@ const PhotoGallery: FC<PhotoGalleryProps> = ({
                     ))}
                 </Swiper>
                 <SlideInfo>
-                    <SlideInfoTextWrapper>
-                        <DefaultText
-                            text={`${currentPage} / ${totalPages}`}
-                            color="white"
-                            weight={700}
-                            size={18}
-                        />
-                    </SlideInfoTextWrapper>
+                    <DefaultText
+                        text={`${currentPage} / ${totalPages}`}
+                        color="white"
+                        weight={700}
+                        size={18}
+                    />
                 </SlideInfo>
             </SlideSection>
         </Container>
