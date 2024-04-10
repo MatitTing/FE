@@ -5,7 +5,9 @@ import ImageInputTile from '@components/common/imageInput/ImageInputTile';
 import PhotoGallery from '@components/common/PhotoGallery';
 import styled from '@emotion/styled';
 import { FC, useCallback, useState } from 'react';
+import { useFormContext, useWatch } from 'react-hook-form';
 import { ImageType } from 'types/review';
+import { ReviewFormValue } from '../ReviewAddController';
 
 interface ReviewAddImageInputProps {}
 
@@ -33,13 +35,15 @@ const PreviewImageWrapper = styled.div`
 `;
 
 const ReviewAddImageInput: FC<ReviewAddImageInputProps> = () => {
-    const [image, setImage] = useState<ImageInputValue[]>([]);
+    // const [image, setImage] = useState<ImageInputValue[]>([]);
+    const { register, setValue, control } = useFormContext<ReviewFormValue>();
+    const image = useWatch({ control, name: 'reviewPhotos' });
     const [isOpenImage, setIsOpenImage] = useState(false);
     const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
 
     const removeImage = (id: string) => {
-        const filteredImage = image.filter((image) => image.id !== id);
-        setImage(filteredImage);
+        const filteredImage = image?.filter((image) => image.id !== id);
+        setValue('reviewPhotos', filteredImage);
     };
 
     const onCloseGallery = () => {
@@ -51,18 +55,21 @@ const ReviewAddImageInput: FC<ReviewAddImageInputProps> = () => {
         return URL.createObjectURL(src);
     }, []);
 
-    const galleryFormattedImage: ImageType[] = image.map((image) => ({
+    const galleryFormattedImage = image?.map((image) => ({
         id: image.id,
         imageUrl: getImageSource(image.src),
     }));
+    const onChangeImageInput = (value: ImageInputValue[]) => {
+        setValue('reviewPhotos', value);
+    };
 
     return (
         <Container>
             <DefaultText text="사진 첨부" weight={700} size={15} />
             <ImageInputWrapper>
-                <ImageInput maxLength={5} onChange={setImage} value={image} />
+                <ImageInput maxLength={5} onChange={onChangeImageInput} value={image ?? []} />
                 <PreviewImageWrapper>
-                    {image.map(({ src, id }) => (
+                    {image?.map(({ src, id }) => (
                         <ImageInputTile
                             onClick={() => {
                                 setIsOpenImage(true);
@@ -80,7 +87,7 @@ const ReviewAddImageInput: FC<ReviewAddImageInputProps> = () => {
                 <DefaultModalContainer>
                     <PhotoGallery
                         initialSlideNumber={selectedImageIndex}
-                        imageData={galleryFormattedImage}
+                        imageData={galleryFormattedImage ?? []}
                         onClickCloseIcon={onCloseGallery}
                     />
                 </DefaultModalContainer>

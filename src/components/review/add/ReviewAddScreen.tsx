@@ -9,12 +9,16 @@ import ReviewAddTextArea from './components/ReviewAddTextArea';
 import ReviewAddImageInput from './components/ReviewAddImageInput';
 import ReviewPostFooterButton from './components/ReviewPostFooterButton';
 
-interface ReviewAddScreenProps {}
+interface ReviewAddScreenProps {
+    isEdit: boolean;
+}
 
-const ReviewAddScreen: FC<ReviewAddScreenProps> = () => (
+const ReviewAddScreen: FC<ReviewAddScreenProps> = ({ isEdit }) => (
     <Components.Layout>
         <DefaultHeader
-            centerArea={<DefaultText text="리뷰 작성" size={15} weight={700} />}
+            centerArea={
+                <DefaultText text={isEdit ? '리뷰 수정' : '리뷰 작성'} size={15} weight={700} />
+            }
             leftArea={<HeaderBackButton />}
         />
         <Components.ContentsSection>
@@ -22,7 +26,7 @@ const ReviewAddScreen: FC<ReviewAddScreenProps> = () => (
             <ReviewAddTextArea />
             <ReviewAddImageInput />
         </Components.ContentsSection>
-        <ReviewPostFooterButton />
+        <ReviewPostFooterButton isEdit />
     </Components.Layout>
 );
 
