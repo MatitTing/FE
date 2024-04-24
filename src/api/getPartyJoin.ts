@@ -10,12 +10,16 @@ interface getPartyJoinParameter {
     role: GetPartyJoinRequestRole;
 }
 
-export const API_GET_PARTY_JOIN_KEY = '/api/party/party-join?role={{role}}';
+export const API_GET_PARTY_JOIN_KEY = '/api/party/party-join';
 
-const getPartyJoin = async ({ role }: getPartyJoinParameter): Promise<PartyJoinResponse[]> => {
-    const { data } = await defaultRequest.get(
-        variableAssignMent(API_GET_PARTY_JOIN_KEY, { role: role }),
-    );
+const getPartyJoin = async (params: getPartyJoinParameter) => {
+    const { data } = await defaultRequest.get<
+        InfinitePaginationDataType<'partyList', PartyJoinResponse>
+    >(API_GET_PARTY_JOIN_KEY, {
+        params: {
+            ...params,
+        },
+    });
     return data;
 };
 
