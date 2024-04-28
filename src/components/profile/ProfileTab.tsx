@@ -2,11 +2,11 @@ import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 import { useSearchParam } from 'react-use';
-import PartySituation from './PartySituation';
+import PartySituation from './party/status/PartySituation';
 import TabComponent from './TabComponent';
-import PartyRequest from './PartyRequest';
-import ReviewList from './ProfileReviewList';
-import ProfileReviewList from './ProfileReviewList';
+import PartyRequest from './party/request/PartyRequest';
+import ReviewList from './review/ProfileReviewList';
+import ProfileReviewList from './review/ProfileReviewList';
 
 interface CategoryItemType {
     id: CategoryIdType;
@@ -78,7 +78,7 @@ const ProfileTab = () => {
             replace({ query: { category: id, role: 'SENDER' } });
             return;
         }
-        replace({ query: { category: id, role: 'HOST' } });
+        replace({ query: { category: id, role: 'VOLUNTEER', status: 'RECRUIT' } });
     };
 
     return (

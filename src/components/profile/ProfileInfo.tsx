@@ -64,9 +64,6 @@ const ProfileDetail = styled.div`
     gap: 8px;
 `;
 
-const userId = 11;
-// 로그인 기능 연결후 userid 받아올 예정
-
 const ProfileInfo = () => {
     const { data } = useSuspenseQuery({
         queryKey: [API_GET_PROFILE_KEY],

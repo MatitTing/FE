@@ -1,4 +1,5 @@
 import BackgroundImage from '@components/common/BackgroundImage';
+import { DefaultButton } from '@components/common/DefaultButton';
 import { DefaultHeader } from '@components/common/DefaultHeader';
 import { HeaderBackButton } from '@components/common/HeaderBackButton';
 import QuerySuspenseErrorBoundary from '@components/hoc/QuerySuspenseErrorBoundary';
@@ -10,6 +11,7 @@ import ProfileTab from '@components/profile/ProfileTab';
 import styled from '@emotion/styled';
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useRef } from 'react';
 import { useScroll } from 'react-use';
 
@@ -28,7 +30,6 @@ const Container = styled.div`
 const ProfileInfoContainer = styled.div`
     display: flex;
     flex-direction: column;
-    height: 200px;
     width: 100%;
 `;
 
@@ -38,6 +39,15 @@ const RightAreaContainer = styled.div`
     padding: 0 8px;
     align-items: center;
     cursor: pointer;
+`;
+
+const ProfileLoginButtonWrapper = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 120px;
+    padding: 0 30px;
 `;
 
 const RightArea = () => {
@@ -51,6 +61,10 @@ const RightArea = () => {
 const Profile = () => {
     const scrollRef = useRef(null);
     const { y } = useScroll(scrollRef);
+    const { push } = useRouter();
+    const onClickLoginButton = () => {
+        push('/signin');
+    };
 
     return (
         <Container ref={scrollRef}>
@@ -58,7 +72,18 @@ const Profile = () => {
             <BackgroundImage scrollY={y} src="/images/profile/profilebackground.jpg" height={200} />
             <ProfileInfoContainer>
                 <QuerySuspenseErrorBoundary
-                    errorFallback={ProfileError}
+                    errorFallback={({ error }) => {
+                        if (error?.response?.status === 401) {
+                            return (
+                                <ProfileLoginButtonWrapper>
+                                    <DefaultButton
+                                        text="로그인 하러 가기"
+                                        onClick={onClickLoginButton}
+                                    />
+                                </ProfileLoginButtonWrapper>
+                            );
+                        }
+                    }}
                     suspenseFallback={<ProfileLoading />}
                 >
                     <ProfileInfo />
@@ -79,7 +104,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         return {
             redirect: {
                 permanent: false,
-                destination: '/profile?category=situation&role=HOST',
+                destination: '/profile?category=situation&role=HOST&status=RECRUIT',
             },
         };
     }
