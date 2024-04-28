@@ -6,7 +6,6 @@ export type GetPartyCurrentSituationRequestStatus = 'RECRUIT' | 'RECRUIT_FINISH'
 interface GetPartyCurrentSituationParameter {
     page: number;
     size: number;
-    sort: string;
     role: GetPartyCurrentSituationRequestRole;
     status: GetPartyCurrentSituationRequestStatus;
 }

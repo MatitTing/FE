@@ -27,7 +27,6 @@ const PartyRequestItemList: FC<PartyRequestItemListProps> = ({ role }) => {
             getPartyJoin({
                 page: pageParam,
                 role,
-                sort: '',
                 size: 5,
             }),
         initialPageParam: 0,
@@ -40,7 +39,7 @@ const PartyRequestItemList: FC<PartyRequestItemListProps> = ({ role }) => {
     if (!partyRequestList.data.pages[0].partyList.length) {
         return (
             <Container>
-                <DefaultText text="현재 조회된 요청이 없습니다." size={18} weight={700} />
+                <DefaultText text="현재 조회된 파티가 없습니다." size={18} weight={700} />
             </Container>
         );
     }

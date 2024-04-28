@@ -1,18 +1,19 @@
 import QuerySuspenseErrorBoundary from '@components/hoc/QuerySuspenseErrorBoundary';
 import styled from '@emotion/styled';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import PartySituationItemList from './PartySituationItemList';
-import ProfileTabSortingButton from './ProfileTabSortingButton';
+import ProfileTabSortingButton from '../../ProfileTabSortingButton';
 import { useRouter } from 'next/router';
 import { useSearchParam } from 'react-use';
 import { PartyCurrentSituationRequestStatus } from 'types/party';
+import { DefaultText } from '@components/common/DefaultText';
 
-type PartySituationType = '모집중' | '참가중';
-export type PartySituationRole = 'HOST' | 'VOLUNTEER';
-type PartyCurrentStatus = '모집중' | '모집완료' | '파티종료';
+type PartySituationType = '참여' | '개설';
+export type PartyStatusRole = 'HOST' | 'VOLUNTEER';
+type PartyCurrentStatus = '모집중' | '모집마감' | '종료';
 
 interface CategoryItemType {
-    id: PartySituationRole;
+    id: PartyStatusRole;
     label: PartySituationType;
 }
 
@@ -44,21 +45,27 @@ const TabSection = styled.section`
     gap: 10px;
 `;
 
+const LoginRequiredTextWrapper = styled.div`
+    display: flex;
+    justify-content: center;
+    width: 100%;
+`;
+
 const categoryTab: CategoryItemType[] = [
-    { id: 'HOST', label: '모집중' },
-    { id: 'VOLUNTEER', label: '참가중' },
+    { id: 'VOLUNTEER', label: '참여' },
+    { id: 'HOST', label: '개설' },
 ];
 
 const statusTab: StatusItemType[] = [
     { id: 'RECRUIT', label: '모집중' },
     {
         id: 'RECRUIT_FINISH',
-        label: '모집완료',
+        label: '모집마감',
     },
-    { id: 'PARTY_FINISH', label: '파티종료' },
+    { id: 'PARTY_FINISH', label: '종료' },
 ];
 
-function isPartySituationRole(value: unknown): value is PartySituationRole {
+function isPartyRole(value: unknown): value is PartyStatusRole {
     return value === 'HOST' || value === 'VOLUNTEER';
 }
 function isPartySituation(value: unknown): value is PartyCurrentSituationRequestStatus {
@@ -67,21 +74,21 @@ function isPartySituation(value: unknown): value is PartyCurrentSituationRequest
 
 const PartySituation = () => {
     const { replace, query } = useRouter();
-    const situationRole = useSearchParam('role');
-    const situation = useSearchParam('situation');
+    const role = useSearchParam('role');
+    const status = useSearchParam('status');
     const selectedRole = useMemo(() => {
-        if (!situationRole || !isPartySituationRole(situationRole)) {
+        if (!role || !isPartyRole(role)) {
             return;
         }
-        return situationRole;
-    }, [situationRole]);
+        return role;
+    }, [role]);
 
-    const selectedSituation = useMemo(() => {
-        if (!situation || !isPartySituation(situation)) {
+    const selectedStatus = useMemo(() => {
+        if (!status || !isPartySituation(status)) {
             return;
         }
-        return situation;
-    }, [situation]);
+        return status;
+    }, [status]);
 
     return (
         <Container>
@@ -112,7 +119,7 @@ const PartySituation = () => {
                             <ProfileTabSortingButton
                                 key={tab.id}
                                 text={tab.label}
-                                filled={tab.id === selectedSituation}
+                                filled={tab.id === selectedStatus}
                                 onClick={onClick}
                             />
                         );
@@ -121,8 +128,26 @@ const PartySituation = () => {
             </TabWrapper>
 
             <PartyListContainer>
-                <QuerySuspenseErrorBoundary>
-                    <PartySituationItemList selectedRole={selectedRole || 'HOST'} />
+                <QuerySuspenseErrorBoundary
+                    errorFallback={({ error }) => {
+                        if (error?.response?.status === 401) {
+                            return (
+                                <LoginRequiredTextWrapper>
+                                    <DefaultText
+                                        text="로그인이 필요합니다."
+                                        margin="50px 0"
+                                        size={15}
+                                        weight={700}
+                                    />
+                                </LoginRequiredTextWrapper>
+                            );
+                        }
+                    }}
+                >
+                    <PartySituationItemList
+                        selectedRole={selectedRole || 'HOST'}
+                        selectedStatus={selectedStatus || 'RECRUIT'}
+                    />
                 </QuerySuspenseErrorBoundary>
             </PartyListContainer>
         </Container>

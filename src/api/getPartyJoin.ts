@@ -6,7 +6,6 @@ type GetPartyJoinRequestRole = 'HOST' | 'VOLUNTEER';
 interface GetPartyJoinParameter {
     page: number;
     size: number;
-    sort: string;
     role: GetPartyJoinRequestRole;
 }
 
