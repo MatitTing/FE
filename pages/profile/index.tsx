@@ -36,6 +36,7 @@ const ProfileInfoContainer = styled.div`
 const RightAreaContainer = styled.div`
     display: flex;
     height: 100%;
+    justify-content: flex-end;
     padding: 0 8px;
     align-items: center;
     cursor: pointer;
@@ -104,7 +105,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         return {
             redirect: {
                 permanent: false,
-                destination: '/profile?category=situation&role=HOST&status=RECRUIT',
+                destination: '/profile?category=situation&role=VOLUNTEER&status=RECRUIT',
             },
         };
     }

@@ -5,8 +5,8 @@ import { useSearchParam } from 'react-use';
 import PartySituation from './party/status/PartySituation';
 import TabComponent from './TabComponent';
 import PartyRequest from './party/request/PartyRequest';
-import ReviewList from './review/ProfileReviewList';
-import ProfileReviewList from './review/ProfileReviewList';
+import ReviewList from './review/ProfileReview';
+import ProfileReviewList from './review/ProfileReview';
 
 interface CategoryItemType {
     id: CategoryIdType;

@@ -25,11 +25,6 @@ const PartySituationItemList: FC<PartySituationItemListProps> = ({
     selectedRole,
     selectedStatus,
 }) => {
-    // const statusList = useSuspenseQuery({
-    //     queryKey: [API_GET_PARTY_STATUS_KEY, { role: selectedRole }],
-    //     queryFn: () => getPartyStatus({ role: selectedRole }),
-    // });
-
     const partyStatusList = useSuspenseInfiniteQuery({
         queryKey: [API_GET_PARTY_STATUS_KEY, , { role: selectedRole }],
         queryFn: ({ pageParam = 0 }) =>

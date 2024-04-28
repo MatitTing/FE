@@ -9,6 +9,6 @@ export interface GetReviewListResponse {
     nickname: string;
     rating: number;
     content: string;
-    reviewImg: ImageType[];
+    reviewImg: string[];
     createdAt: string | Date;
 }
