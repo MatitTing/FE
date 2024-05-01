@@ -1,15 +1,17 @@
-import defaultRequest from "src/lib/axios/defaultRequest";
+import defaultRequest from 'src/lib/axios/defaultRequest';
 
-interface postParticipateParameter {
-  partyId: number;
-  leaderId?: number;
-  status: string;
+export type PostParticipateStatus = 'APPLY' | 'CANCEL';
+
+interface PostParticipateParameter {
+    partyId: number;
+    oneLineIntroduce: string;
+    status: PostParticipateStatus;
 }
 
-export const API_POST_PARTY_PARTICIPATION_KEY = "/api/party/participation";
+export const API_POST_PARTY_PARTICIPATION_KEY = '/api/party/participation';
 
-const postParticipate = async (body: postParticipateParameter) => {
-  return defaultRequest.post(API_POST_PARTY_PARTICIPATION_KEY, body);
+const postParticipate = async (body: PostParticipateParameter) => {
+    return defaultRequest.post(API_POST_PARTY_PARTICIPATION_KEY, body);
 };
 
 export default postParticipate;
