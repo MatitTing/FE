@@ -5,7 +5,7 @@ import { PartyListResponse } from 'types/common/PartyListResponse';
 interface GetMainPageParameter {
     longitude: number;
     latitude: number;
-    lastPartyId?: number;
+    page?: number;
     size?: number;
 }
 

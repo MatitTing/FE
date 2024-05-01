@@ -35,7 +35,12 @@ export const SearchResult: FC<SearchResultProps> = ({ keyword }) => {
                 lastPartyId: pageParam,
             }),
         initialPageParam: 0,
-        getNextPageParam: (lastPage) => lastPage?.pageInfo?.page,
+        getNextPageParam: (lastPage) => {
+            if (!lastPage?.pageInfo.hasNext) {
+                return undefined;
+            }
+            return lastPage.pageInfo.page + 1;
+        },
         staleTime: 0,
     });
 

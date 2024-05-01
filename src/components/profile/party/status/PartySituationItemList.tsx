@@ -1,12 +1,12 @@
-import { useSuspenseInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { DefaultText } from '@components/common/DefaultText';
+import { ObserverTrigger } from '@components/hoc/ObserverTrigger';
+import styled from '@emotion/styled';
+import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { FC } from 'react';
 import getPartyStatus, { API_GET_PARTY_STATUS_KEY } from 'src/api/getPartyCurrentSituation';
-import { PartyStatusRole } from './PartySituation';
-import PartyList from '../PartyList';
-import { DefaultText } from '@components/common/DefaultText';
-import styled from '@emotion/styled';
 import { PartyCurrentSituationRequestStatus } from 'types/party';
-import { ObserverTrigger } from '@components/hoc/ObserverTrigger';
+import PartyList from '../PartyList';
+import { PartyStatusRole } from './PartySituation';
 
 interface PartySituationItemListProps {
     selectedRole: PartyStatusRole;
@@ -26,7 +26,7 @@ const PartySituationItemList: FC<PartySituationItemListProps> = ({
     selectedStatus,
 }) => {
     const partyStatusList = useSuspenseInfiniteQuery({
-        queryKey: [API_GET_PARTY_STATUS_KEY, , { role: selectedRole }],
+        queryKey: [API_GET_PARTY_STATUS_KEY, { role: selectedRole }],
         queryFn: ({ pageParam = 0 }) =>
             getPartyStatus({
                 page: pageParam,
@@ -35,7 +35,12 @@ const PartySituationItemList: FC<PartySituationItemListProps> = ({
                 size: 5,
             }),
         initialPageParam: 0,
-        getNextPageParam: (lastPage) => lastPage?.pageInfo?.page,
+        getNextPageParam: (lastPage) => {
+            if (!lastPage?.pageInfo.hasNext) {
+                return undefined;
+            }
+            return lastPage.pageInfo.page + 1;
+        },
     });
     const onObserve = () => {
         if (partyStatusList.hasNextPage) partyStatusList.fetchNextPage();

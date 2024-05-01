@@ -1,6 +1,5 @@
 import { DefaultText } from '@components/common/DefaultText';
 import NoResult from '@components/common/NoResult';
-import { ObserverTrigger } from '@components/hoc/ObserverTrigger';
 import styled from '@emotion/styled';
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
@@ -10,6 +9,7 @@ import getMainPageData, { API_GET_MAIN_PAGE } from 'src/api/getPartyMainPage';
 import { PositionSate } from 'src/recoil-states/positionStates';
 import { Color } from 'styles/Color';
 import { PartyCard } from './PartyCard';
+import { ObserverTrigger } from '@components/hoc/ObserverTrigger';
 
 const Container = styled.div`
     display: flex;
@@ -36,12 +36,17 @@ export const HomeList: FC = () => {
                 ? getMainPageData({
                       latitude: position.coords.x,
                       longitude: position.coords.y,
-                      lastPartyId: pageParam,
+                      page: pageParam,
                       size: 5,
                   })
                 : Promise.resolve(null),
         initialPageParam: 0,
-        getNextPageParam: (lastPage) => lastPage?.pageInfo?.page,
+        getNextPageParam: (lastPage) => {
+            if (!lastPage?.pageInfo.hasNext) {
+                return undefined;
+            }
+            return lastPage.pageInfo.page + 1;
+        },
     });
 
     const onClickPartyCard = (id: number) => {

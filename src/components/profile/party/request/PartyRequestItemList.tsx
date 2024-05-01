@@ -1,12 +1,11 @@
-import { useSuspenseInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { DefaultText } from '@components/common/DefaultText';
+import { ObserverTrigger } from '@components/hoc/ObserverTrigger';
+import styled from '@emotion/styled';
+import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { FC } from 'react';
 import getPartyJoin, { API_GET_PARTY_JOIN_KEY } from 'src/api/getPartyJoin';
 import { PartyRequestRole } from './PartyRequest';
-import PartyRequestList from './PartyRequestCard';
-import { DefaultText } from '@components/common/DefaultText';
-import styled from '@emotion/styled';
 import PartyRequestCard from './PartyRequestCard';
-import { ObserverTrigger } from '@components/hoc/ObserverTrigger';
 
 interface PartyRequestItemListProps {
     role: PartyRequestRole;
@@ -22,7 +21,7 @@ const Container = styled.div`
 
 const PartyRequestItemList: FC<PartyRequestItemListProps> = ({ role }) => {
     const partyRequestList = useSuspenseInfiniteQuery({
-        queryKey: [API_GET_PARTY_JOIN_KEY, , { role }],
+        queryKey: [API_GET_PARTY_JOIN_KEY, { role }],
         queryFn: ({ pageParam = 0 }) =>
             getPartyJoin({
                 page: pageParam,
@@ -30,7 +29,12 @@ const PartyRequestItemList: FC<PartyRequestItemListProps> = ({ role }) => {
                 size: 5,
             }),
         initialPageParam: 0,
-        getNextPageParam: (lastPage) => lastPage?.pageInfo?.page,
+        getNextPageParam: (lastPage) => {
+            if (!lastPage?.pageInfo.hasNext) {
+                return undefined;
+            }
+            return lastPage.pageInfo.page + 1;
+        },
     });
     const onObserve = () => {
         if (partyRequestList.hasNextPage) partyRequestList.fetchNextPage();

@@ -23,7 +23,7 @@ const Container = styled.div`
 
 const ProfileReviewItemList: FC<ProfileReviewItemListProps> = ({ role }) => {
     const reviewList = useSuspenseInfiniteQuery({
-        queryKey: [API_GET_REVIEW_LIST_KEY, , { role }],
+        queryKey: [API_GET_REVIEW_LIST_KEY, { role }],
         queryFn: ({ pageParam = 0 }) =>
             getReviewList({
                 page: pageParam,
@@ -31,7 +31,12 @@ const ProfileReviewItemList: FC<ProfileReviewItemListProps> = ({ role }) => {
                 size: 5,
             }),
         initialPageParam: 0,
-        getNextPageParam: (lastPage) => lastPage?.pageInfo?.page,
+        getNextPageParam: (lastPage) => {
+            if (!lastPage?.pageInfo.hasNext) {
+                return undefined;
+            }
+            return lastPage.pageInfo.page + 1;
+        },
     });
 
     const onObserve = () => {
