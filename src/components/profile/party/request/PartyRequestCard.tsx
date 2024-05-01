@@ -10,8 +10,8 @@ import Link from 'next/link';
 interface PartyRequestCardProps {
     role: string;
     data: PartyJoinResponse;
-    onClickCheckButton?: MouseEventHandler<HTMLButtonElement>;
-    onClickCloseButton?: MouseEventHandler<HTMLButtonElement>;
+    onClickAcceptButton?: MouseEventHandler<HTMLButtonElement>;
+    onClickRefuseButton?: MouseEventHandler<HTMLButtonElement>;
 }
 
 const Container = styled.div`
@@ -51,8 +51,8 @@ const IconContainer = styled.button`
 const PartyRequestCard = ({
     role,
     data,
-    onClickCheckButton,
-    onClickCloseButton,
+    onClickAcceptButton,
+    onClickRefuseButton,
 }: PartyRequestCardProps) => {
     const { partyId, partyTitle, nickname } = data;
 
@@ -79,11 +79,11 @@ const PartyRequestCard = ({
             </RequestInfo>
             <ButtonContainer>
                 {isHost && (
-                    <IconContainer onClick={onClickCheckButton}>
+                    <IconContainer onClick={onClickAcceptButton}>
                         <CheckIcon />
                     </IconContainer>
                 )}
-                <IconContainer onClick={onClickCloseButton}>
+                <IconContainer onClick={onClickRefuseButton}>
                     <CloseIcon />
                 </IconContainer>
             </ButtonContainer>

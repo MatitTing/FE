@@ -4,7 +4,7 @@ export type PostParticipateStatus = 'APPLY' | 'CANCEL';
 
 interface PostParticipateParameter {
     partyId: number;
-    oneLineIntroduce: string;
+    oneLineIntroduce?: string;
     status: PostParticipateStatus;
 }
 

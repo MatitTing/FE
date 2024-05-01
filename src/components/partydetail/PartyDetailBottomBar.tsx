@@ -14,6 +14,7 @@ import postParticipate from 'src/api/postParticipate';
 import ConfirmPopup from '../popup/ConfirmPopup';
 import PartyDetailPartyRequestPopup from './PartyDetailPartyRequestPopup';
 import { isAxiosError } from 'axios';
+import { API_GET_PARTY_JOIN_KEY } from 'src/api/getPartyJoin';
 
 export interface PartyRequestPopupForm {
     oneLineIntroduce: string;
@@ -86,12 +87,15 @@ const PartyDetailBottomBar = ({ isLeader }: PartyDetailBottomBarProps) => {
             await queryClient.invalidateQueries({
                 queryKey: [API_GET_PARTY_DETAIL_KEY, { id }],
             });
+            await queryClient.invalidateQueries({
+                queryKey: [API_GET_PARTY_JOIN_KEY, { role: 'VOLUNTEER' }],
+            });
+            form.reset({ oneLineIntroduce: '' });
             showToast('파티가 신청되었습니다. 방장의 수락을 기다려 주세요.');
             setIsOpenParticipatePopup(false);
         },
         onError: (error) => {
             if (isAxiosError(error)) {
-                console.log(error);
                 showToast(error.response?.data.errorMessage);
             }
         },

@@ -1,18 +1,11 @@
-import React, { useMemo, useState } from 'react';
-import styled from '@emotion/styled';
-import ButtonList from '../../ProfileTabSortingButton';
-import { useQuery } from '@tanstack/react-query';
-import getPartyJoin from 'src/api/getPartyJoin';
-import { API_GET_PARTY_JOIN_KEY } from 'src/api/getPartyJoin';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import postPartyDecision from 'src/api/postPartyDecision';
-import postParticipate from 'src/api/postParticipate';
-import { useRouter } from 'next/router';
-import ProfileTabSortingButton from '../../ProfileTabSortingButton';
-import QuerySuspenseErrorBoundary from '@components/hoc/QuerySuspenseErrorBoundary';
-import PartyRequestItemList from './PartyRequestItemList';
-import { useSearchParam } from 'react-use';
 import { DefaultText } from '@components/common/DefaultText';
+import QuerySuspenseErrorBoundary from '@components/hoc/QuerySuspenseErrorBoundary';
+import styled from '@emotion/styled';
+import { useRouter } from 'next/router';
+import { useMemo } from 'react';
+import { useSearchParam } from 'react-use';
+import ProfileTabSortingButton from '../../ProfileTabSortingButton';
+import PartyRequestItemList from './PartyRequestItemList';
 
 type PartyRequestType = '받은요청' | '보낸요청';
 export type PartyRequestRole = 'HOST' | 'VOLUNTEER';
@@ -23,8 +16,8 @@ interface CategoryItemType {
 }
 
 const categoryTab: CategoryItemType[] = [
-    { id: 'HOST', label: '받은요청' },
     { id: 'VOLUNTEER', label: '보낸요청' },
+    { id: 'HOST', label: '받은요청' },
 ];
 
 const Container = styled.div`
