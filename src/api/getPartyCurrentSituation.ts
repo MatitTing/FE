@@ -1,4 +1,5 @@
 import defaultRequest from 'src/lib/axios/defaultRequest';
+import { InfinitePaginationDataType } from 'types/common/InfinitePaginationDataType';
 import { GetPartyCurrentSituationResponse } from 'types/party';
 
 type GetPartyCurrentSituationRequestRole = 'HOST' | 'VOLUNTEER';

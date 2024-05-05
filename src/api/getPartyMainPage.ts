@@ -1,5 +1,6 @@
 import variableAssignMent from '@utils/variableAssignment';
 import defaultRequest from 'src/lib/axios/defaultRequest';
+import { InfinitePaginationDataType } from 'types/common/InfinitePaginationDataType';
 import { PartyListResponse } from 'types/common/PartyListResponse';
 
 interface GetMainPageParameter {

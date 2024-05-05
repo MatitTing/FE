@@ -18,11 +18,8 @@ defaultRequest.interceptors.response.use(
             const refreshToken = getCookie('refreshToken');
 
             if (!refreshToken) {
-                // await alert('로그인이 필요합니다. 로그인 해 주세요.');
-                // window.location.href = '/signin';
                 return Promise.reject(error);
             }
-
             try {
                 const response = await defaultRequest.get('/oauth2/renew-token', {
                     headers: {

@@ -27,8 +27,8 @@ const Container = styled.div`
 const RequestInfo = styled.div`
     display: flex;
     align-items: center;
-    gap: 8px;
-    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
 `;
 const ButtonContainer = styled.div`
     display: flex;
@@ -48,34 +48,39 @@ const IconContainer = styled.button`
     }
 `;
 
+const Profile = styled.div`
+    display: flex;
+    gap: 10px;
+`;
+
+const OneLineIntroduceText = styled.div``;
+
 const PartyRequestCard = ({
     role,
     data,
     onClickAcceptButton,
     onClickRefuseButton,
 }: PartyRequestCardProps) => {
-    const { partyId, partyTitle, nickname } = data;
+    const { partyId, partyTitle, nickname, imgUrl, oneLineIntroduce } = data;
 
     const isHost = role === 'HOST';
 
     return (
         <Container>
             <RequestInfo>
-                <Image
-                    src="/images/profile/profile.png"
-                    alt="프로필사진"
-                    width={48}
-                    height={48}
-                    style={{ borderRadius: '50%' }}
-                />
-                {isHost && <DefaultText text={nickname} size={14} />}
-                <Link href={`/party/${partyId}`}>
-                    {isHost ? (
-                        <DefaultText text={`@${partyTitle}`} size={14} color="#536471" />
-                    ) : (
-                        <DefaultText text={partyTitle} size={14} />
-                    )}
-                </Link>
+                <Profile>
+                    {/* <Image
+                        src={imgUrl}
+                        alt="프로필사진"
+                        width={48}
+                        height={48}
+                        style={{ borderRadius: '50%' }}
+                    /> */}
+                    <DefaultText text={nickname} size={14} />
+                </Profile>
+                <OneLineIntroduceText>
+                    <DefaultText text={oneLineIntroduce} size={14} color="#536471" />
+                </OneLineIntroduceText>
             </RequestInfo>
             <ButtonContainer>
                 {isHost && (
