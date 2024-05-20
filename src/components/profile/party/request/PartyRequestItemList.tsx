@@ -13,6 +13,7 @@ import ConfirmPopup from '@components/popup/ConfirmPopup';
 import { API_GET_PARTY_DETAIL_KEY } from 'src/api/getPartyDetail';
 import useToast from '@hooks/useToast';
 import { isAxiosError } from 'axios';
+import postPartyDecision from 'src/api/postPartyDecision';
 
 interface PartyRequestItemListProps {
     role: PartyRequestRole;
@@ -21,6 +22,7 @@ interface PartyRequestItemListProps {
 type PartyPopupType = {
     isOpen: boolean;
     partyId?: number;
+    nickname?: string;
 };
 
 interface PopupProps {
@@ -43,13 +45,15 @@ const PartyRequestItemList: FC<PartyRequestItemListProps> = ({ role }) => {
         refuseRequestPopup: {
             isOpen: false,
             partyId: undefined,
+            nickname: undefined,
         },
         acceptRequestPopup: {
             isOpen: false,
             partyId: undefined,
+            nickname: undefined,
         },
     });
-    const { mutate: cancelRequest } = useMutation({
+    const participateMutation = useMutation({
         mutationFn: postParticipate,
         onSuccess: async () => {
             await queryClient.invalidateQueries({
@@ -58,10 +62,32 @@ const PartyRequestItemList: FC<PartyRequestItemListProps> = ({ role }) => {
             await queryClient.invalidateQueries({
                 queryKey: [API_GET_PARTY_JOIN_KEY, { role }],
             });
-            showToast('파티가 취소되었습니다.');
             setPopup((prev) => ({
                 ...prev,
                 refuseRequestPopup: {
+                    isOpen: false,
+                    partyId: undefined,
+                },
+            }));
+        },
+        onError: (error) => {
+            if (isAxiosError(error)) {
+                showToast(error.response?.data.errorMessage);
+            }
+        },
+    });
+    const decisionMutation = useMutation({
+        mutationFn: postPartyDecision,
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({
+                queryKey: [API_GET_PARTY_DETAIL_KEY, { id: popup.refuseRequestPopup.partyId }],
+            });
+            await queryClient.invalidateQueries({
+                queryKey: [API_GET_PARTY_JOIN_KEY, { role }],
+            });
+            setPopup((prev) => ({
+                ...prev,
+                acceptRequestPopup: {
                     isOpen: false,
                     partyId: undefined,
                 },
@@ -94,13 +120,48 @@ const PartyRequestItemList: FC<PartyRequestItemListProps> = ({ role }) => {
         if (partyRequestList.hasNextPage) partyRequestList.fetchNextPage();
     };
 
-    const onClickRefuseButton = ({ partyId }: { partyId: number }) => {
+    const onClickRefuseButton = ({ partyId, nickname }: { partyId: number; nickname?: string }) => {
         if (role === 'VOLUNTEER') {
-            cancelRequest({
-                partyId,
-                status: 'CANCEL',
-            });
+            participateMutation.mutate(
+                {
+                    partyId,
+                    status: 'CANCEL',
+                },
+                {
+                    onSuccess: () => {
+                        showToast('파티 요청이 취소되었습니다.');
+                    },
+                },
+            );
+            return;
         }
+        decisionMutation.mutate(
+            {
+                partyId,
+                status: 'REFUSE',
+                nickname: nickname ?? '',
+            },
+            {
+                onSuccess: () => {
+                    showToast('파티 요청이 거절되었습니다.');
+                },
+            },
+        );
+    };
+
+    const onClickAcceptButton = ({ partyId, nickname }: { partyId: number; nickname: string }) => {
+        decisionMutation.mutate(
+            {
+                partyId,
+                status: 'ACCEPT',
+                nickname,
+            },
+            {
+                onSuccess: () => {
+                    showToast('파티 요청이 승낙되었습니다.');
+                },
+            },
+        );
     };
 
     if (!partyRequestList.data.pages[0].partyList.length) {
@@ -123,6 +184,7 @@ const PartyRequestItemList: FC<PartyRequestItemListProps> = ({ role }) => {
                                     acceptRequestPopup: {
                                         isOpen: true,
                                         partyId: individualRequest.partyId,
+                                        nickname: individualRequest.nickname,
                                     },
                                 }))
                             }
@@ -132,6 +194,7 @@ const PartyRequestItemList: FC<PartyRequestItemListProps> = ({ role }) => {
                                     refuseRequestPopup: {
                                         isOpen: true,
                                         partyId: individualRequest.partyId,
+                                        nickname: individualRequest.nickname,
                                     },
                                 }))
                             }
@@ -161,7 +224,13 @@ const PartyRequestItemList: FC<PartyRequestItemListProps> = ({ role }) => {
                                 }))
                             }
                             confirmPopup={() => {
-                                // cancelRequest.mutate({});
+                                if (!popup.acceptRequestPopup.partyId) {
+                                    return;
+                                }
+                                onClickAcceptButton({
+                                    partyId: popup.acceptRequestPopup.partyId,
+                                    nickname: popup.acceptRequestPopup.nickname ?? '',
+                                });
                             }}
                             description="정말 요청을 승낙하시겠습니까?"
                         />

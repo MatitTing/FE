@@ -32,9 +32,6 @@ defaultRequest.interceptors.response.use(
                     response.headers['authorization'];
                 return defaultRequest.request(error.config);
             } catch (refreshError) {
-                // 토큰 갱신에 실패하면 에러 반환
-                // await alert('토큰 갱신에 실패했습니다. 로그인 페이지로 이동합니다.');
-                // window.location.href = '/signin'; // Redirect to sign-in page
                 return Promise.reject(refreshError);
             }
         }

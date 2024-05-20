@@ -57,7 +57,11 @@ const PartySituationItemList: FC<PartySituationItemListProps> = ({
         <ObserverTrigger onObserve={onObserve} observerMinHeight="30px">
             {partyStatusList.data.pages.map((status) =>
                 status.partyList.map((individualStatus) => (
-                    <PartyList key={individualStatus.partyId} data={individualStatus} />
+                    <PartyList
+                        key={individualStatus.partyId}
+                        data={individualStatus}
+                        selectedRole={selectedRole}
+                    />
                 )),
             )}
         </ObserverTrigger>

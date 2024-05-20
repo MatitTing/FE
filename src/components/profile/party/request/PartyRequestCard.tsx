@@ -69,13 +69,13 @@ const PartyRequestCard = ({
         <Container>
             <RequestInfo>
                 <Profile>
-                    {/* <Image
+                    <Image
                         src={imgUrl}
                         alt="프로필사진"
                         width={48}
                         height={48}
                         style={{ borderRadius: '50%' }}
-                    /> */}
+                    />
                     <DefaultText text={nickname} size={14} />
                 </Profile>
                 <OneLineIntroduceText>
