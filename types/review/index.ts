@@ -21,4 +21,5 @@ export interface GetReviewDetailResponse {
     reviewImg: string[];
     createdAt: string | Date;
     isSelfReview: boolean;
+    profileImage: string;
 }
