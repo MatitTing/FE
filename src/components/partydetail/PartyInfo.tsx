@@ -5,6 +5,9 @@ import PartyMap from './PartyMap';
 import PartyBrief from './PartyBrief';
 import PartyDetail from './PartyDetail';
 import PartyHostInfo from './PartyHostInfo';
+import ReviewCard from '@components/common/card/ReviewCard';
+import { DefaultText } from '@components/common/DefaultText';
+import { useRouter } from 'next/router';
 
 interface PartyInfoProps {
     data: PartyDetailResponse;
@@ -19,6 +22,13 @@ const Container = styled.div`
     background: ${Color.LightGrey};
 `;
 
+const ReviewMoreSection = styled.section`
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+`;
+
 const PartyInfoContainer = styled.div`
     display: flex;
     padding: 16px 0;
@@ -30,6 +40,9 @@ const PartyInfoContainer = styled.div`
 `;
 
 const PartyInfo = ({ data }: PartyInfoProps) => {
+    const { push, query } = useRouter();
+    const { id } = query as { id: string };
+
     const partyBriefData = {
         partyTitle: data.partyTitle,
         category: data.category,
@@ -61,6 +74,23 @@ const PartyInfo = ({ data }: PartyInfoProps) => {
                 <PartyBrief {...partyBriefData} />
                 <PartyDetail {...partyDetailData} />
                 <PartyMap {...partyMapData} />
+                {data.reviewInfoRes.length > 0 && (
+                    <>
+                        {data.reviewInfoRes.map((review) => (
+                            <ReviewCard key={review.reviewId} data={review} />
+                        ))}
+                        <ReviewMoreSection>
+                            <DefaultText
+                                onClick={() => {
+                                    push(`/review?hostId=${id}`);
+                                }}
+                                text="방장님의 후기 더보기(MORE)"
+                                weight={700}
+                                size={15}
+                            />
+                        </ReviewMoreSection>
+                    </>
+                )}
             </PartyInfoContainer>
         </Container>
     );

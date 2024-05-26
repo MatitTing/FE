@@ -3,8 +3,6 @@ import { FC, useCallback, useMemo } from 'react';
 import { DefaultText } from '@components/common/DefaultText';
 import Image from 'next/image';
 import dayjs from 'dayjs';
-import Star from '@components/common/Star';
-import { ColorToken } from 'styles/Color';
 import ReviewDetailImage from './ReviewDetailImage';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import getReviewDetail, { API_GET_REVIEW_DETAIL } from 'src/api/getReviewDetail';

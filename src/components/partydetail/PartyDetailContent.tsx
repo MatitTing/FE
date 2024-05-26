@@ -1,6 +1,6 @@
 import PartyInfo from '@components/partydetail/PartyInfo';
 import { useRouter } from 'next/router';
-import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery, useSuspenseInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
 import getPartyDetail, { API_GET_PARTY_DETAIL_KEY } from 'src/api/getPartyDetail';
 import BackgroundImage from '@components/common/BackgroundImage';
 import PartyDetailBottomBar from '@components/partydetail/PartyDetailBottomBar';
@@ -11,6 +11,7 @@ import { API_GET_MAIN_PAGE } from 'src/api/getPartyMainPage';
 import useToast from '@hooks/useToast';
 import styled from '@emotion/styled';
 import Image from 'next/image';
+import { API_GET_HOST_REVIEW_LIST, getHostReviewList } from 'src/api/getHostReviewList';
 
 const PartyDetailContent = () => {
     const router = useRouter();
