@@ -1,7 +1,7 @@
 import { DefaultText } from '@components/common/DefaultText';
 import ReviewStarRating from '@components/common/ReviewStarRating';
 import styled from '@emotion/styled';
-import { FC, useCallback, useState } from 'react';
+import { FC, useCallback, useMemo, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { ReviewFormValue } from '../ReviewAddController';
 
@@ -25,11 +25,25 @@ const ReviewAddStarRating: FC<ReviewAddStarRatingProps> = () => {
         },
         [setValue],
     );
+    const reviewText = useCallback((rating: number) => {
+        switch (rating) {
+            case 5:
+                return '정말 좋았어요.';
+            case 4:
+                return '좋았어요.';
+            case 3:
+                return '보통이에요.';
+            case 2:
+                return '별로였어요.';
+            default:
+                return '최악이에요.';
+        }
+    }, []);
 
     return (
         <Container>
             <ReviewStarRating onSetRate={onChangeStar} defaultRate={Number(rating)} />
-            <DefaultText text="정말 좋았어요." size={15} />
+            <DefaultText text={reviewText(Number(rating))} size={15} />
         </Container>
     );
 };

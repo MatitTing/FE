@@ -1,18 +1,16 @@
-import defaultRequest from "src/lib/axios/defaultRequest";
+import defaultRequest from 'src/lib/axios/defaultRequest';
 
 export interface SetImageResponse {
-  imgUrl: string;
+    imgUrl: string;
 }
 
-export const postUploadImage = async (image: File) =>
-  (
-    await defaultRequest.post(
-      "/api/image",
-      { image },
-      {
+export const postUploadImage = async (image: File) => {
+    const formData = new FormData();
+    formData.append('image', image);
+    const { data } = await defaultRequest.post('/api/image', formData, {
         headers: {
-          "Content-Type": "multipart/form-data",
+            'Content-Type': 'multipart/form-data',
         },
-      }
-    )
-  ).data;
+    });
+    return data;
+};
