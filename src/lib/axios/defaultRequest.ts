@@ -28,9 +28,15 @@ defaultRequest.interceptors.response.use(
                 });
 
                 // 토큰 갱신 성공 시 새로운 토큰으로 요청 재시도
-                defaultRequest.defaults.headers['Authorization'] =
-                    response.headers['authorization'];
-                return defaultRequest.request(error.config);
+                const newAccessToken = response.headers['authorization'];
+                defaultRequest.defaults.headers['Authorization'] = newAccessToken;
+                error.config.headers['Authorization'] = newAccessToken;
+
+                // 요청을 재시도할 때 원래의 FormData 객체를 그대로 사용
+                return defaultRequest.request({
+                    ...error.config,
+                    transformRequest: [(data, headers) => data],
+                });
             } catch (refreshError) {
                 return Promise.reject(refreshError);
             }

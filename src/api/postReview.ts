@@ -1,7 +1,7 @@
 import defaultRequest from 'src/lib/axios/defaultRequest';
 
 export interface PostReviewBody {
-    reviewId: number;
+    partyId: number;
     content: string;
     rating: number;
     imgUrl?: string[];
