@@ -8,12 +8,6 @@ interface ReviewDetailControllerProps {
 }
 
 const ReviewDetailController: FC<ReviewDetailControllerProps> = ({ id }) => {
-    // const reviewData = useQuery({
-    //     queryKey: [API_GET_REVIEW_DETAIL, { id }],
-    //     queryFn: () => getReviewDetail({ reviewId: String(id) }),
-    //     enabled: !!id,
-    // });
-
     return <ReviewDetailScreen id={id} />;
 };
 
