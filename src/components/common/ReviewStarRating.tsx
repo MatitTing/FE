@@ -6,7 +6,7 @@ interface ReviewStarRatingProps {
     max?: number;
     size?: number;
     color?: string;
-    onSetRate: (rate: number) => void;
+    onSetRate?: (rate: number) => void;
     defaultRate?: number;
 }
 

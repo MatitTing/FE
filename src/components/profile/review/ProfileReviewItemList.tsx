@@ -1,17 +1,16 @@
 import ReviewCard from '@components/common/card/ReviewCard';
 import { DefaultText } from '@components/common/DefaultText';
 import { ObserverTrigger } from '@components/hoc/ObserverTrigger';
-import QuerySuspenseErrorBoundary from '@components/hoc/QuerySuspenseErrorBoundary';
 import styled from '@emotion/styled';
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
-import dayjs from 'dayjs';
-import { useRouter } from 'next/router';
 import { FC } from 'react';
-import { API_GET_HOST_REVIEW_LIST_KEY, getHostReviewList } from 'src/api/getHostReviewList';
-import { GetReviewListResponse, ImageType } from 'types/review';
+import getReviewList, {
+    API_GET_REVIEW_LIST_KEY,
+    ReviewListRequestType,
+} from 'src/api/getReviewList';
 
-interface ReviewMainListSectionProps {
-    hostId: string;
+interface ProfileReviewItemListProps {
+    role: ReviewListRequestType;
 }
 
 const Container = styled.div`
@@ -22,13 +21,13 @@ const Container = styled.div`
     height: 200px;
 `;
 
-const ReviewMainListSection = ({ hostId }: ReviewMainListSectionProps) => {
+const ProfileReviewItemList: FC<ProfileReviewItemListProps> = ({ role }) => {
     const reviewList = useSuspenseInfiniteQuery({
-        queryKey: [API_GET_HOST_REVIEW_LIST_KEY, { hostId: Number(hostId) }],
+        queryKey: [API_GET_REVIEW_LIST_KEY, { role }],
         queryFn: ({ pageParam = 0 }) =>
-            getHostReviewList({
+            getReviewList({
                 page: pageParam,
-                hostId: Number(hostId),
+                reviewType: role,
                 size: 5,
             }),
         initialPageParam: 0,
@@ -63,4 +62,4 @@ const ReviewMainListSection = ({ hostId }: ReviewMainListSectionProps) => {
     );
 };
 
-export default ReviewMainListSection;
+export default ProfileReviewItemList;

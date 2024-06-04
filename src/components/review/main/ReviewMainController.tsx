@@ -1,8 +1,11 @@
-import { FC } from 'react';
 import ReviewManiScreen from './ReviewMainScreen';
 
-interface ReviewMainControllerProps {}
+interface ReviewMainControllerProps {
+    hostId: string;
+}
 
-const ReviewMainController: FC<ReviewMainControllerProps> = () => <ReviewManiScreen />;
+const ReviewMainController = ({ hostId }: ReviewMainControllerProps) => {
+    return <ReviewManiScreen hostId={hostId} />;
+};
 
 export default ReviewMainController;

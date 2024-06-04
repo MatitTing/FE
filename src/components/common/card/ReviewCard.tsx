@@ -8,7 +8,7 @@ import styled from '@emotion/styled';
 import dayjs from 'dayjs';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import React, { FC, MouseEventHandler, useCallback, useState } from 'react';
+import React, { FC, MouseEventHandler, useCallback, useMemo, useState } from 'react';
 import { GetReviewListResponse } from 'types/review';
 
 interface ReviewCardProps {
@@ -87,6 +87,10 @@ const ReviewCard: FC<ReviewCardProps> = ({ data, onClickEditButton, onClickDelet
         push(`/review/${data.reviewId}`);
     };
 
+    const formattedImage = useMemo(() => {
+        return data.reviewImg.map((image) => ({ id: crypto.randomUUID(), imageUrl: image }));
+    }, [data.reviewImg]);
+
     return (
         <Container>
             <ContentsSection>
@@ -137,9 +141,9 @@ const ReviewCard: FC<ReviewCardProps> = ({ data, onClickEditButton, onClickDelet
                     <ReviewTextContainer>
                         <DefaultText text={data.content} size={13} />
                     </ReviewTextContainer>
-                    {data.reviewImg.length > 0 ? (
+                    {formattedImage.length > 0 ? (
                         <ReviewImageContainer>
-                            {data.reviewImg.map((reviewImage, index) => {
+                            {formattedImage.map((reviewImage, index) => {
                                 const handler = () => {
                                     onClickImage(index);
                                 };
@@ -173,7 +177,7 @@ const ReviewCard: FC<ReviewCardProps> = ({ data, onClickEditButton, onClickDelet
                         <DefaultModalContainer>
                             <PhotoGallery
                                 initialSlideNumber={selectedImageIndex}
-                                imageData={data.reviewImg}
+                                imageData={formattedImage}
                                 onClickCloseIcon={onCloseGallery}
                             />
                         </DefaultModalContainer>

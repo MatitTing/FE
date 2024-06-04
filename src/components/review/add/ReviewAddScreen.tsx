@@ -26,7 +26,7 @@ const ReviewAddScreen: FC<ReviewAddScreenProps> = ({ isEdit }) => (
             <ReviewAddTextArea />
             <ReviewAddImageInput />
         </Components.ContentsSection>
-        <ReviewPostFooterButton isEdit />
+        <ReviewPostFooterButton isEdit={isEdit} />
     </Components.Layout>
 );
 
