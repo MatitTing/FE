@@ -51,7 +51,7 @@ const navList = [
     },
     {
         title: '파티 채팅',
-        href: '/chat/list',
+        href: '/chat',
         icon: ChatIcon,
     },
     {

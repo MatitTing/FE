@@ -1,13 +1,13 @@
 export interface MapCoordinatet {
-  lat: number;
-  lng: number;
+    lat: number;
+    lng: number;
 }
 
 export interface Marker {
-  position: MapCoordinatet;
-  content: string;
+    position: MapCoordinatet;
+    content: string;
 }
 
 export type Place = {
-  placeName: string;
+    placeName: string;
 } & MapCoordinatet;

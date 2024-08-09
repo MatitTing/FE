@@ -1,25 +1,17 @@
-import { Dispatch, ReactNode, SetStateAction } from "react";
-import { Map } from "react-kakao-maps-sdk";
-import { MapCoordinatet } from "types/map";
+import { ReactNode, memo } from 'react';
+import { Map } from 'react-kakao-maps-sdk';
+import { MapCoordinatet } from 'types/map';
 
 interface KakaoMapProps {
-  center: MapCoordinatet;
-  children?: ReactNode;
-  zoom?: number;
-  onCreate?: Dispatch<SetStateAction<kakao.maps.Map | undefined>>;
+    center: MapCoordinatet;
+    children?: ReactNode;
+    zoom?: number;
 }
 
-const KakaoMap = ({ center, zoom = 3, children, onCreate }: KakaoMapProps) => {
-  return (
-    <Map
-      center={center}
-      level={zoom}
-      style={{ height: "100%" }}
-      onCreate={onCreate}
-    >
-      {children}
+const KakaoMap = ({ center, zoom = 3, children }: KakaoMapProps) => (
+    <Map center={{ lat: center.lat, lng: center.lng }} level={zoom} style={{ height: '100%' }}>
+        {children}
     </Map>
-  );
-};
+);
 
-export default KakaoMap;
+export default memo(KakaoMap);
