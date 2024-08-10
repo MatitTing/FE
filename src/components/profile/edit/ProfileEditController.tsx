@@ -38,8 +38,8 @@ const ProfileEditController = () => {
 
     const { mutate: patchProfileMutate } = useMutation({
         mutationFn: patchProfile,
-        onSuccess: () => {
-            queryClient.invalidateQueries({
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({
                 queryKey: [API_GET_PROFILE_KEY],
             });
             router.replace('/profile');
