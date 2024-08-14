@@ -2,7 +2,6 @@ import ChatHeader from '@components/chat/room/ChatHeader';
 import MessageList from '@components/chat/room/MessageList';
 import styled from '@emotion/styled';
 import { useQuery } from '@tanstack/react-query';
-import { MouseEvent, useState } from 'react';
 import getChatMessage, { API_GET_CHAT_MESSAGE_KEY } from 'src/api/getChatMessage';
 import getChatRoomInfo, { API_GET_CHAT_ROOM_INFO_KEY } from 'src/api/getChatRoomInfo';
 import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
@@ -71,7 +70,6 @@ const ChatRoom = ({ roomId }: ChattingRoomProps) => {
         ),
         mode: 'onSubmit',
     });
-    const [isOpenUserList, setIsOpenUserList] = useState(false);
 
     const { data: roomInfo } = useQuery({
         queryKey: [
@@ -97,11 +95,6 @@ const ChatRoom = ({ roomId }: ChattingRoomProps) => {
         },
     });
 
-    const handleOpenUserList = (e: MouseEvent<HTMLButtonElement>) => {
-        e.stopPropagation();
-        setIsOpenUserList(!isOpenUserList);
-    };
-
     const onSubmit: SubmitHandler<{ message: string }> = async ({
         message,
     }: {
@@ -119,13 +112,7 @@ const ChatRoom = ({ roomId }: ChattingRoomProps) => {
 
     return (
         <Wrapper>
-            {roomInfo ? (
-                <ChatHeader
-                    isOpenUserList={isOpenUserList}
-                    handleOpenUserList={handleOpenUserList}
-                    roomInfo={roomInfo}
-                />
-            ) : null}
+            {roomInfo ? <ChatHeader roomInfo={roomInfo} /> : null}
             <Contents>
                 {roomInfo ? (
                     <MessageList

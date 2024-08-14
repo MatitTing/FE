@@ -1,12 +1,11 @@
 import styled from '@emotion/styled';
-import router from 'next/router';
 import dayjs from 'dayjs';
 import { NextPage } from 'next';
 import { useQueryClient, useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import getChatRooms, { API_GET_CHAT_ROOMS_KEY } from 'src/api/getChatRooms';
 import { ObserverTrigger } from '@components/hoc/ObserverTrigger';
 import getSearchChatRooms, { API_GET_SEARCH_CHAT_ROOMS_KEY } from 'src/api/getSearchChatRooms';
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import ChatRoomItem from './ChatRoomItem';
 import { useForm } from 'react-hook-form';
 import SearchIcon from '@mui/icons-material/Search';
@@ -35,7 +34,7 @@ const SearchInput = styled.input`
     color: ${NewColor.text_secondary};
 `;
 
-const SearchButton = styled(SearchIcon)`
+const SearchButton = styled.button`
     color: ${NewColor.text_secondary};
     cursor: pointer;
 `;
@@ -45,7 +44,7 @@ const CloseButton = styled(CloseIcon)`
     cursor: pointer;
 `;
 
-const RoomList = styled.ul`
+const ChatRoomList = styled.ul`
     padding: 1rem 0;
     margin: 0 auto;
     list-style: none;
@@ -55,7 +54,10 @@ const RoomList = styled.ul`
 const ChatListPage: NextPage = () => {
     const queryClient = useQueryClient();
     const [isSearch, setIsSearch] = useState<boolean>(false);
-    const { register, getValues, setValue, handleSubmit } = useForm<{ searchText: string }>();
+    const { register, getValues, handleSubmit, reset, formState } = useForm<{
+        searchText: string;
+    }>();
+
     const { fetchNextPage, hasNextPage, data } = useSuspenseInfiniteQuery({
         queryKey: [API_GET_CHAT_ROOMS_KEY],
         queryFn: ({ pageParam = 0 }) => getChatRooms(pageParam),
@@ -68,7 +70,7 @@ const ChatListPage: NextPage = () => {
     const { data: searchData } = useSuspenseInfiniteQuery({
         queryKey: [API_GET_SEARCH_CHAT_ROOMS_KEY, getValues('searchText')],
         queryFn: ({ pageParam = 0 }) =>
-            getValues('searchText')?.length
+            formState.isValid
                 ? getSearchChatRooms({ title: getValues('searchText'), page: pageParam })
                 : null,
         initialPageParam: 0,
@@ -76,9 +78,13 @@ const ChatListPage: NextPage = () => {
             lastPage?.pageInfo.hasNext ? lastPage?.pageInfo.page + 1 : null,
     });
 
-    const handleClickReset = () => {
+    const close = () => {
         setIsSearch(false);
-        setValue('searchText', '');
+        reset();
+    };
+
+    const handleChangeSearch = (e: ChangeEvent<HTMLInputElement>) => {
+        if (!e.target.value.length) close();
     };
 
     const onSearch = async () => {
@@ -89,8 +95,6 @@ const ChatListPage: NextPage = () => {
         });
     };
 
-    const handleClickRouteRoom = (roomId: number) => router.push(`/chat/${roomId}`);
-
     const chatRooms = data.pages.map((page) => page.responseChatRoomDtoList).flat();
     const searchRooms = searchData.pages
         .map((page) => (page ? page?.responseChatRoomDtoList : []))
@@ -100,26 +104,27 @@ const ChatListPage: NextPage = () => {
     return (
         <Wrapper>
             <SearchhForm onSubmit={handleSubmit(onSearch)}>
-                <SearchInput {...register('searchText')} />
+                <SearchInput {...register('searchText')} onChange={handleChangeSearch} />
                 {isSearch ? (
-                    <CloseButton onClick={handleClickReset} />
+                    <CloseButton onClick={close} />
                 ) : (
-                    <SearchButton type="submit" />
+                    <SearchButton type="submit">
+                        <SearchIcon />
+                    </SearchButton>
                 )}
             </SearchhForm>
-            <RoomList>
+            <ChatRoomList>
                 <ObserverTrigger onObserve={onObserve} observerMinHeight={'30px'}>
                     <ChatRoomItem
-                        list={isSearch && searchRooms ? searchRooms : chatRooms}
+                        list={isSearch ? searchRooms : chatRooms}
                         noListText={
                             isSearch
                                 ? '해당 채팅방이 존재하지 않습니다.'
                                 : `채팅방이 존재하지 않습니다. \n 파티에 참여해보세요!`
                         }
-                        onClickRouteRoom={handleClickRouteRoom}
                     />
                 </ObserverTrigger>
-            </RoomList>
+            </ChatRoomList>
         </Wrapper>
     );
 };

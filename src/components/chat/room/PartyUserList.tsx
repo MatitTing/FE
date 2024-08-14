@@ -1,10 +1,8 @@
 import styled from '@emotion/styled';
-import router from 'next/router';
+import router, { Router } from 'next/router';
 import Image from 'next/image';
 import { ChatUserResponse } from 'types/chat/chatRooms';
-import deletePartyUser from 'src/api/deleteChatUser';
 import { NewColor } from 'styles/Color';
-import PersonIcon from '@mui/icons-material/Person';
 
 const Wrapper = styled.div<{ isOpenUserList: boolean }>`
     position: fixed;
@@ -16,6 +14,7 @@ const Wrapper = styled.div<{ isOpenUserList: boolean }>`
     color: ${NewColor.text_primary};
     transition: opacity 0.3s;
     opacity: ${({ isOpenUserList }) => (isOpenUserList ? 1 : 0)};
+    pointer-events: none;
 
     > div {
         transition: transform 0.3s;
@@ -36,6 +35,7 @@ const Contents = styled.div`
     border-top-right-radius: 40px;
     background-color: #fff;
     overflow: hidden;
+    pointer-events: all;
 `;
 
 const List = styled.ul`
@@ -94,35 +94,27 @@ const Label = styled.div`
 interface PartyUserListProps {
     isOpenUserList: boolean;
     chatUser: ChatUserResponse;
+    onClickUserExpulsion: (chatUserList: number) => void;
 }
 
-const PartyUserList = ({ chatUser, isOpenUserList }: PartyUserListProps) => {
-    const roomId = router.query.id;
-    const handleClickUserExpulsion = (chatUserId: number) => {
-        deletePartyUser({
-            roomId: String(roomId),
-            targetChatUserId: chatUserId,
-        });
-    };
+const PartyUserList = ({ chatUser, isOpenUserList, onClickUserExpulsion }: PartyUserListProps) => {
+    const { userProfileImg, nickname, role: userRole } = chatUser.myInfo;
 
     return (
         <Wrapper isOpenUserList={isOpenUserList}>
             <Contents>
                 <List>
                     <UserInfo>
-                        <ImageBox isMage={!!chatUser?.myInfo?.userProfileImg}>
+                        <ImageBox isMage={!!userProfileImg}>
                             <Image
-                                src={
-                                    chatUser?.myInfo?.userProfileImg ||
-                                    '/images/profile/profile_fill.webp'
-                                }
+                                src={userProfileImg || '/images/profile/profile_fill.webp'}
                                 fill
                                 style={{ objectFit: 'cover' }}
                                 alt="프로필 이미지"
                             />
                         </ImageBox>
                         <Label>나</Label>
-                        <NickName>{chatUser?.myInfo?.nickname}</NickName>
+                        <NickName>{nickname}</NickName>
                     </UserInfo>
                 </List>
 
@@ -145,8 +137,8 @@ const PartyUserList = ({ chatUser, isOpenUserList }: PartyUserListProps) => {
                                     {role === 'HOST' && <Label>방장</Label>}
                                     <NickName>{nickname}</NickName>
                                 </UserInfo>
-                                {chatUser.myInfo.role === 'HOST' && role !== 'HOST' && (
-                                    <Expulsion onClick={() => handleClickUserExpulsion(chatUserId)}>
+                                {userRole === 'HOST' && role !== 'HOST' && (
+                                    <Expulsion onClick={() => onClickUserExpulsion(chatUserId)}>
                                         강퇴
                                     </Expulsion>
                                 )}

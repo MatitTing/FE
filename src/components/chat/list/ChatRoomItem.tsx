@@ -1,6 +1,7 @@
 import { displayTime } from './ChatRoomList';
 import styled from '@emotion/styled';
 import Image from 'next/image';
+import router from 'next/router';
 import { NewColor } from 'styles/Color';
 import { ChatRoomList } from 'types/chat/chatRooms';
 
@@ -60,17 +61,16 @@ const NoList = styled.div`
 
 interface ChatRoomItemProps {
     list?: ChatRoomList[];
-    onClickRouteRoom: (roomId: number) => Promise<boolean>;
     noListText: string;
 }
 
-const ChatRoomItem = ({ list, onClickRouteRoom, noListText }: ChatRoomItemProps) => {
+const ChatRoomItem = ({ list, noListText }: ChatRoomItemProps) => {
     return list?.length ? (
         list?.map((item, index) => {
             const { roomId, title, lastMessageTime, lastMessage, thumbnail } = item;
 
             return (
-                <Room key={roomId + index} onClick={() => onClickRouteRoom(roomId)}>
+                <Room key={roomId + index} onClick={() => router.push(`/chat/${roomId}`)}>
                     <ImageBox>
                         <Image
                             fill
