@@ -17,6 +17,7 @@ const Input = styled.input<InputStyleProps>`
     height: 100%;
     padding: 10px 14px;
     color: ${NewColor.text_secondary};
+    outline: none;
     border: ${({ errorMessage }) =>
         errorMessage ? `1px solid red` : `1px solid ${NewColor.border}`};
     background: '#f9f9f9';

@@ -21,7 +21,7 @@ const ImageBox = styled.div`
     }
 `;
 
-const ImageAdd = styled.label`
+const ImageAdd = styled.label<{ isthumbnail: boolean }>`
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -30,16 +30,16 @@ const ImageAdd = styled.label`
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: rgba(000, 000, 000, 0.3);
+    background-color: ${({ isthumbnail }) => (isthumbnail ? ' rgba(000, 000, 000, 0.3)' : '#fff')};
     z-index: 99;
     padding: 5px;
     width: 100%;
     height: 100%;
     cursor: pointer;
-`;
 
-const ImageAddIcon = styled(AddCircleOutlineIcon)<{ isthumbnail: boolean }>`
-    color: ${({ isthumbnail }) => (isthumbnail ? '#fff' : NewColor.border)};
+    svg {
+        color: ${({ isthumbnail }) => (isthumbnail ? '#fff' : NewColor.border)};
+    }
 `;
 
 interface PartyThumbnailProps {
@@ -54,8 +54,8 @@ const PartyThumbnail = ({ onChangeThumbnail }: PartyThumbnailProps) => {
         <Container>
             <Title>대표 이미지</Title>
             <ImageBox>
-                <ImageAdd htmlFor="input-file">
-                    <ImageAddIcon isthumbnail={thumbnail} />
+                <ImageAdd htmlFor="input-file" isthumbnail={thumbnail}>
+                    <AddCircleOutlineIcon />
                 </ImageAdd>
                 <input
                     id="input-file"

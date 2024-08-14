@@ -17,8 +17,10 @@ export const NewColor = {
     light: '#F8F9FB',
 
     /* text */
-    text_primary: `#000000`,
+    text_primary: `#111B31`,
     text_secondary: `#5F6E80`,
+
+    LightBox: '#E0E6ED',
 };
 
 export const Color = {

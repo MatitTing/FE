@@ -1,9 +1,11 @@
-import { ReactElement, MouseEventHandler } from 'react';
+import { MouseEventHandler } from 'react';
 import PartyUserList from './PartyUserList';
-import ListIcon from '@mui/icons-material/List';
 import styled from '@emotion/styled';
 import { ChatRoomInfoResponse } from 'types/chat/chatRooms';
 import { HeaderBackButton } from '@components/common/HeaderBackButton';
+import { DefaultHeader } from '@components/common/DefaultHeader';
+import MenuIcon from '@mui/icons-material/Menu';
+import CloseIcon from '@mui/icons-material/Close';
 
 interface ChatHeaderProps {
     roomInfo: ChatRoomInfoResponse;
@@ -16,8 +18,6 @@ const Wrapper = styled.header`
     justify-content: space-between;
     align-items: center;
     position: relative;
-    padding: 0 2rem;
-    height: 50px;
     background-color: #ddd;
 `;
 
@@ -27,22 +27,26 @@ const MenuBtn = styled.button`
     padding: 0;
 `;
 
-const ChatTitle = styled.h3``;
-
-const ChatHeader = ({ roomInfo, isOpenUserList, handleOpenUserList }: ChatHeaderProps) => (
-    <Wrapper>
-        <HeaderBackButton />
-        <ChatTitle>{roomInfo?.chatRoomInfoRes.title}</ChatTitle>
+const ChatHeader = ({ roomInfo, isOpenUserList, handleOpenUserList }: ChatHeaderProps) => {
+    const menu = (
         <MenuBtn onClick={handleOpenUserList}>
-            <ListIcon fontSize="large" />
+            {isOpenUserList ? <CloseIcon /> : <MenuIcon />}
         </MenuBtn>
-        {isOpenUserList ? (
+    );
+
+    return (
+        <Wrapper>
+            <DefaultHeader
+                centerArea={roomInfo?.chatRoomInfoRes.title}
+                leftArea={<HeaderBackButton />}
+                rightArea={menu}
+            />
             <PartyUserList
                 isOpenUserList={isOpenUserList}
                 chatUser={roomInfo?.responseChatUserList}
             />
-        ) : null}
-    </Wrapper>
-);
+        </Wrapper>
+    );
+};
 
 export default ChatHeader;

@@ -1,4 +1,3 @@
-import TextInput from '@components/common/TextInput';
 import styled from '@emotion/styled';
 import router from 'next/router';
 import dayjs from 'dayjs';
@@ -10,23 +9,44 @@ import getSearchChatRooms, { API_GET_SEARCH_CHAT_ROOMS_KEY } from 'src/api/getSe
 import { useState } from 'react';
 import ChatRoomItem from './ChatRoomItem';
 import { useForm } from 'react-hook-form';
+import SearchIcon from '@mui/icons-material/Search';
+import CloseIcon from '@mui/icons-material/Close';
+import { NewColor } from 'styles/Color';
 
 const Wrapper = styled.div`
     padding: 2rem;
 `;
 
-const SearchBox = styled.div`
+const SearchhForm = styled.form`
     position: relative;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    padding: 5px 15px;
+    height: 34px;
+    border-radius: 25px;
+    border: 1px solid ${NewColor.border};
 `;
 
-const SearchButton = styled.button`
-    min-width: 50px;
+const SearchInput = styled.input`
+    border: none;
+    outline: none;
+    height: 100%;
+    width: 100%;
+    color: ${NewColor.text_secondary};
+`;
+
+const SearchButton = styled(SearchIcon)`
+    color: ${NewColor.text_secondary};
+    cursor: pointer;
+`;
+
+const CloseButton = styled(CloseIcon)`
+    color: ${NewColor.text_secondary};
+    cursor: pointer;
 `;
 
 const RoomList = styled.ul`
-    padding: 0;
+    padding: 1rem 0;
     margin: 0 auto;
     list-style: none;
     height: 100%;
@@ -35,7 +55,7 @@ const RoomList = styled.ul`
 const ChatListPage: NextPage = () => {
     const queryClient = useQueryClient();
     const [isSearch, setIsSearch] = useState<boolean>(false);
-    const { register, getValues, setValue } = useForm<{ searchText: string }>();
+    const { register, getValues, setValue, handleSubmit } = useForm<{ searchText: string }>();
     const { fetchNextPage, hasNextPage, data } = useSuspenseInfiniteQuery({
         queryKey: [API_GET_CHAT_ROOMS_KEY],
         queryFn: ({ pageParam = 0 }) => getChatRooms(pageParam),
@@ -60,7 +80,8 @@ const ChatListPage: NextPage = () => {
         setIsSearch(false);
         setValue('searchText', '');
     };
-    const handleOnClickSearch = async () => {
+
+    const onSearch = async () => {
         setIsSearch(true);
 
         await queryClient.invalidateQueries({
@@ -78,15 +99,14 @@ const ChatListPage: NextPage = () => {
 
     return (
         <Wrapper>
-            <SearchBox>
-                <TextInput
-                    {...register('searchText')}
-                    placeholder="파티 제목 검색"
-                    isReset={isSearch}
-                    onClickReset={handleClickReset}
-                />
-                <SearchButton onClick={handleOnClickSearch}>검색</SearchButton>
-            </SearchBox>
+            <SearchhForm onSubmit={handleSubmit(onSearch)}>
+                <SearchInput {...register('searchText')} />
+                {isSearch ? (
+                    <CloseButton onClick={handleClickReset} />
+                ) : (
+                    <SearchButton type="submit" />
+                )}
+            </SearchhForm>
             <RoomList>
                 <ObserverTrigger onObserve={onObserve} observerMinHeight={'30px'}>
                     <ChatRoomItem

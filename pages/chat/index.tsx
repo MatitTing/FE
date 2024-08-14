@@ -6,9 +6,12 @@ import QuerySuspenseErrorBoundary from '@components/hoc/QuerySuspenseErrorBounda
 import ChatRoomList from '@components/chat/list/ChatRoomList';
 
 const Wrapper = styled.div`
+    margin: 0 auto;
+    padding: 45px 0 75px 0;
     height: 100%;
     min-height: calc(100vh);
-    padding: 45px 0 75px 0;
+    max-width: 760px;
+    min-width: 320px;
 `;
 
 const NotList = styled.div`

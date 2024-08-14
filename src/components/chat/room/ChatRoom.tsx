@@ -8,15 +8,18 @@ import getChatRoomInfo, { API_GET_CHAT_ROOM_INFO_KEY } from 'src/api/getChatRoom
 import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import useChat from '@hooks/useChat';
-import TextInput from '@components/common/TextInput';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { NewColor } from 'styles/Color';
 
 const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    margin: 0 auto;
     height: 100%;
+    max-width: 760px;
+    min-width: 320px;
     overflow: hidden;
 `;
 
@@ -30,15 +33,28 @@ const Form = styled.form`
     display: flex;
     justify-content: space-between;
     gap: 10px;
-    padding: 1rem 2rem;
-    background-color: #ddd;
+    padding: 10px 1rem;
+    background-color: ${NewColor.primary};
 `;
 
 const SubmitButton = styled.button`
     width: 50px;
     border: none;
-    border-radius: 10px;
-    background-color: #efebec;
+    color: #fff;
+`;
+
+const TextArea = styled.textarea`
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
+    width: 100%;
+    font-size: 14px;
+    border-radius: 5px;
+    color: ${NewColor.text_primary};
+    line-height: 1.5;
+    outline: none;
+    border: none;
+    resize: none;
 `;
 
 interface ChattingRoomProps {
@@ -92,8 +108,9 @@ const ChatRoom = ({ roomId }: ChattingRoomProps) => {
         message: string;
     }) => {
         if (!roomInfo?.responseChatUserList.myInfo) return;
+        const { myInfo } = roomInfo?.responseChatUserList;
 
-        publish(roomInfo?.responseChatUserList.myInfo, message);
+        publish(myInfo, message);
         methods.reset();
     };
 
@@ -120,7 +137,7 @@ const ChatRoom = ({ roomId }: ChattingRoomProps) => {
                 ) : null}
                 <FormProvider {...methods}>
                     <Form onSubmit={methods.handleSubmit(onSubmit)}>
-                        <TextInput maxLength={20} {...methods.register('message')} />
+                        <TextArea {...methods.register('message')} rows={1} />
                         <SubmitButton type="submit">전송</SubmitButton>
                     </Form>
                 </FormProvider>

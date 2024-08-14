@@ -1,24 +1,27 @@
 import { displayTime } from './ChatRoomList';
 import styled from '@emotion/styled';
 import Image from 'next/image';
+import { NewColor } from 'styles/Color';
 import { ChatRoomList } from 'types/chat/chatRooms';
 
 const Room = styled.li`
     display: flex;
-    margin: 1rem 0;
-    padding: 1rem 0;
+    justify-content: space-between;
+    padding: 10px;
+    border-radius: 15px;
 `;
 
 const ImageBox = styled.div`
     position: relative;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
+    margin-right: 10px;
+    width: 10%;
+    aspect-ratio: 1/1;
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: 5%;
+    border-radius: 15px;
+    border: 1px solid ${NewColor.border};
 `;
 
 const RightBox = styled.div`
@@ -35,16 +38,20 @@ const TextBox = styled.div`
 `;
 
 const Title = styled.p`
-    margin: 0;
-    font-size: 18px;
+    margin-bottom: 5px;
+    font-size: 12px;
     font-weight: bold;
 `;
 
 const Message = styled.p`
     margin: 0;
+    color: ${NewColor.text_secondary};
+    font-size: 18px;
 `;
 
-const Recentime = styled.p``;
+const RecenTime = styled.p`
+    font-size: 12px;
+`;
 
 const NoList = styled.div`
     text-align: center;
@@ -77,7 +84,7 @@ const ChatRoomItem = ({ list, onClickRouteRoom, noListText }: ChatRoomItemProps)
                             <Title>{title}</Title>
                             <Message>{lastMessage}</Message>
                         </TextBox>
-                        <Recentime>{lastMessageTime ? displayTime(lastMessageTime) : ''}</Recentime>
+                        <RecenTime>{lastMessageTime ? displayTime(lastMessageTime) : ''}</RecenTime>
                     </RightBox>
                 </Room>
             );

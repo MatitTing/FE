@@ -25,7 +25,7 @@ const Form = styled.form`
     height: 100%;
     min-height: calc(100vh);
     margin: 0 auto;
-    padding: 45px 1rem 0 1rem;
+    padding: 60px 0 76px 0;
 `;
 
 export const partySchema = yup.object({

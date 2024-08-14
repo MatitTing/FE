@@ -1,10 +1,10 @@
 import styled from '@emotion/styled';
-import { ReactElement } from 'react';
 import { displayTime } from '../list/ChatRoomList';
 import { ChatMessagesType } from 'types/chat/chat';
 import { ObserverTrigger } from '@components/hoc/ObserverTrigger';
 import Image from 'next/image';
 import { MyInfo } from 'types/chat/chatRooms';
+import { NewColor } from 'styles/Color';
 
 const List = styled.ul`
     padding: 0 2rem;
@@ -17,57 +17,60 @@ const List = styled.ul`
     overflow-y: auto;
 `;
 
-const ListItem = styled.li<{ isChecked: boolean }>`
+const Wrapper = styled.li<{ isRight: boolean }>`
     display: flex;
     align-items: center;
-    flex-direction: ${(props) => (props.isChecked ? 'row-reverse' : 'row')};
-    margin: 1rem 0;
+    flex-direction: ${({ isRight }) => (isRight ? 'row-reverse' : 'row')};
 `;
 
-const ImageBox = styled.div<{ isChecked: boolean }>`
+const Chat = styled.div<{ isRight: boolean }>`
+    display: flex;
+    align-items: flex-start;
+    margin: 1rem 0;
+    padding: 10px 30px;
+    max-width: 80%;
+    min-height: 30px;
+    width: max-content;
+    border-radius: 25px;
+    min-width: ${({ isRight }) => (isRight ? '0' : '30%')};
+    padding-left: ${({ isRight }) => (isRight ? '30px' : '10px')};
+    background-color: ${({ isRight }) => (isRight ? NewColor.primary : NewColor.LightBox)};
+
+    svg {
+        color: ${NewColor.LightBox};
+    }
+`;
+
+const ImageBox = styled.div`
     position: relative;
-    width: 50px;
-    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    width: 30px;
+    aspect-ratio: 1/1;
     border-radius: 50%;
     overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: ${(props) => (props.isChecked ? 0 : '10px')};
-    margin-left: ${(props) => (props.isChecked ? '10px' : 0)};
+    background-color: #fff;
 `;
 
-const MessageBox = styled.div<{ isChecked: boolean }>`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    min-width: 20%;
-    background-color: ${(props) => (props.isChecked ? '#efebec' : '#efebec')};
-    border-radius: 10px;
+const NickName = styled.p`
+    font-size: 12px;
+    margin-bottom: 2px;
+    color: ${NewColor.text_secondary};
 `;
 
-const TextBox = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-`;
-
-const NickName = styled.p<{ isChecked: boolean }>`
-    margin-top: 0;
-    margin-bottom: 10px;
-    font-size: 14px;
-    font-weight: bold;
-`;
-
-const Message = styled.p`
+const Message = styled.p<{ isRight: boolean }>`
     margin: 0;
-    color: '#000';
+    line-height: 1.2;
+    white-space: pre-line;
+    color: ${({ isRight }) => (isRight ? '#fff' : NewColor.text_primary)};
 `;
 
-const ReadMark = styled.div<{ isChecked: boolean }>`
-    margin-left: ${(props) => (props.isChecked ? '0px' : '10px')};
-    margin-right: ${(props) => (props.isChecked ? '10px' : '0px')};
+const ReadMark = styled.div<{ isRight: boolean }>`
+    margin-left: ${({ isRight }) => (isRight ? '0px' : '10px')};
+    margin-right: ${({ isRight }) => (isRight ? '10px' : '0px')};
+    margin-bottom: 10px;
     align-self: flex-end;
     color: rosybrown;
 `;
@@ -83,35 +86,43 @@ interface MessageListProps {
     observerMinHeight: string;
 }
 
-const MessageList = ({ messages, onObserve, observerMinHeight, myInfo }: MessageListProps) => (
-    <List>
-        {messages.map(({ message, nickname, createAt, imgUrl, messageType }) => {
-            return messageType === 'TALK' ? (
-                <ListItem key={createAt} isChecked={nickname === myInfo.nickname}>
-                    <ImageBox isChecked={nickname === myInfo.nickname}>
-                        <Image
-                            src="/images/profile/profile.png"
-                            fill
-                            style={{ objectFit: 'cover' }}
-                            alt="프로필 이미지"
-                        />
-                    </ImageBox>
-                    <MessageBox isChecked={nickname === myInfo.nickname}>
-                        <TextBox>
-                            <NickName isChecked={nickname === myInfo.nickname}>{nickname}</NickName>
-                            <Message>{message}</Message>
-                        </TextBox>
-                    </MessageBox>
-                    <ReadMark isChecked={nickname === myInfo.nickname}>
-                        {createAt ? displayTime(String(createAt)) : ''}
-                    </ReadMark>
-                </ListItem>
-            ) : (
-                <Notification>{message}</Notification>
-            );
-        })}
-        <ObserverTrigger onObserve={onObserve} observerMinHeight={observerMinHeight} />
-    </List>
-);
+const MessageList = ({ messages, onObserve, observerMinHeight, myInfo }: MessageListProps) => {
+    return (
+        <List>
+            {messages.map(({ message, nickname, createAt, imgUrl, messageType }) => {
+                const isUser = nickname === myInfo.nickname;
+
+                return messageType === 'TALK' ? (
+                    <Wrapper key={createAt} isRight={isUser}>
+                        <Chat isRight={isUser}>
+                            {isUser ? null : (
+                                <ImageBox>
+                                    <Image
+                                        src={imgUrl || '/images/profile/profile.webp'}
+                                        fill
+                                        style={{ objectFit: 'cover' }}
+                                        alt="프로필 이미지"
+                                    />
+                                </ImageBox>
+                            )}
+                            <div>
+                                <div>
+                                    {!isUser && <NickName>{nickname}</NickName>}
+                                    <Message isRight={isUser}>{message}</Message>
+                                </div>
+                            </div>
+                        </Chat>
+                        <ReadMark isRight={isUser}>
+                            {createAt ? displayTime(String(createAt)) : ''}
+                        </ReadMark>
+                    </Wrapper>
+                ) : (
+                    <Notification>{message}</Notification>
+                );
+            })}
+            <ObserverTrigger onObserve={onObserve} observerMinHeight={observerMinHeight} />
+        </List>
+    );
+};
 
 export default MessageList;
