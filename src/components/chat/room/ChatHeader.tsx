@@ -1,6 +1,5 @@
-import PartyUserList from './PartyUserList';
 import styled from '@emotion/styled';
-import { ChatRoomInfoResponse } from 'types/chat/chatRooms';
+import { ChatUserResponse } from 'types/chat/chatRooms';
 import { HeaderBackButton } from '@components/common/HeaderBackButton';
 import { DefaultHeader } from '@components/common/DefaultHeader';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -9,39 +8,36 @@ import deletePartyUser from 'src/api/deleteChatUser';
 import { useState } from 'react';
 import router from 'next/router';
 import { useQueryClient } from '@tanstack/react-query';
-import { API_GET_CHAT_ROOM_INFO_KEY } from 'src/api/getChatRoomInfo';
-import { API_GET_CHAT_ROOMS_KEY } from 'src/api/getChatRooms';
+import { API_GET_CHAT_ROOM_INFO } from 'src/api/getChatRoomInfo';
+import ChatUserList from './ChatUserList';
 
 const Wrapper = styled.header`
     display: flex;
     justify-content: space-between;
     align-items: center;
     position: relative;
+    height: 65px;
     background-color: #ddd;
+    overflow: hidden;
 `;
 
-const MenuBtn = styled.button`
+const Menu = styled.button`
     border: none;
     background-color: transparent;
     padding: 0;
 `;
 
 interface ChatHeaderProps {
-    roomInfo: ChatRoomInfoResponse;
+    title: string;
+    chatInfo: ChatUserResponse;
 }
 
-const ChatHeader = ({ roomInfo }: ChatHeaderProps) => {
+const ChatHeader = ({ title, chatInfo }: ChatHeaderProps) => {
     const roomId = router.query.id;
     const queryClient = useQueryClient();
     const [isOpenUserList, setIsOpenUserList] = useState(false);
-    const { chatRoomId, title } = roomInfo.chatRoomInfoRes;
 
-    const handleClickBack = async () =>
-        await queryClient.invalidateQueries({
-            queryKey: [API_GET_CHAT_ROOMS_KEY],
-        });
-
-    const handleOpenUserList = async () => setIsOpenUserList(!isOpenUserList);
+    const handleOpenUserList = () => setIsOpenUserList(!isOpenUserList);
 
     const handleClickUserExpulsion = async (chatUserId: number) => {
         await deletePartyUser({
@@ -51,9 +47,9 @@ const ChatHeader = ({ roomInfo }: ChatHeaderProps) => {
 
         await queryClient.invalidateQueries({
             queryKey: [
-                API_GET_CHAT_ROOM_INFO_KEY,
+                API_GET_CHAT_ROOM_INFO,
                 {
-                    chatRoomId,
+                    chatRoomId: roomId,
                 },
             ],
         });
@@ -62,24 +58,16 @@ const ChatHeader = ({ roomInfo }: ChatHeaderProps) => {
     };
 
     const menu = (
-        <MenuBtn onClick={handleOpenUserList}>
-            {isOpenUserList ? <CloseIcon /> : <MenuIcon />}
-        </MenuBtn>
-    );
-
-    const back = (
-        <div onClick={handleClickBack}>
-            <HeaderBackButton />
-        </div>
+        <Menu onClick={handleOpenUserList}>{isOpenUserList ? <CloseIcon /> : <MenuIcon />}</Menu>
     );
 
     return (
         <Wrapper>
-            <DefaultHeader centerArea={title} leftArea={back} rightArea={menu} />
-            <PartyUserList
+            <DefaultHeader centerArea={title} leftArea={<HeaderBackButton />} rightArea={menu} />
+            <ChatUserList
                 onClickUserExpulsion={handleClickUserExpulsion}
                 isOpenUserList={isOpenUserList}
-                chatUser={roomInfo?.responseChatUserList}
+                chatUser={chatInfo}
             />
         </Wrapper>
     );

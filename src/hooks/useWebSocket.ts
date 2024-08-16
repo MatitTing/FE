@@ -1,12 +1,13 @@
 import { Client, IMessage } from '@stomp/stompjs';
 import { useQueryClient, InfiniteData } from '@tanstack/react-query';
-import { getCookie } from 'cookies-next';
+import { getCookie, setCookie } from 'cookies-next';
 import { useCallback, useEffect, useRef } from 'react';
 import { API_GET_CHAT_MESSAGE_KEY } from 'src/api/getChatMessage';
 import { InfinitePaginationChatDataType, ChatMessagesType } from 'types/chat/chat';
 import { MyInfo } from 'types/chat/chatRooms';
+import router from 'next/router';
 
-const useChat = (roomId: number) => {
+const useWebSocket = (roomId: number) => {
     const refreshToken = getCookie('refreshToken');
     const queryClient = useQueryClient();
     const client = useRef<Client | null>(null);
@@ -34,24 +35,27 @@ const useChat = (roomId: number) => {
     const subscribe = useCallback(() => {
         client.current?.subscribe(`/sub/chat/room/${Number(roomId)}`, async (res: IMessage) => {
             const LIST_QUERY_KEY = [API_GET_CHAT_MESSAGE_KEY, { roomId }];
+
             type LIST_QUERY_TYPE = InfiniteData<
                 InfinitePaginationChatDataType<'responseChatDtoList', ChatMessagesType | string>,
                 unknown
             >;
             await queryClient.cancelQueries({ queryKey: LIST_QUERY_KEY });
-            const regex = /chatUserId/g;
-            if (regex.test(res.body)) {
-                const { createAt, userImage, message, nickname, chatUserId } = JSON.parse(res.body);
+
+            const { createAt, userImage, message, nickname, chatUserId, type } = JSON.parse(
+                res.body,
+            );
+            if (type === 'TALK') {
                 await queryClient.setQueryData(LIST_QUERY_KEY, (prev: LIST_QUERY_TYPE) => {
                     let newList = prev;
-                    // last pages unshift
+
                     newList.pages[0].responseChatDtoList.unshift({
                         createAt,
                         message,
                         nickname,
                         chatId: createAt,
                         imgUrl: userImage,
-                        messageType: 'TALK',
+                        type: 'TALK',
                         senderId: chatUserId,
                     });
                     return newList;
@@ -59,7 +63,7 @@ const useChat = (roomId: number) => {
             } else {
                 await queryClient.setQueryData(LIST_QUERY_KEY, (prev: LIST_QUERY_TYPE) => {
                     let newList = prev;
-                    // last pages unshift
+
                     newList.pages[0].responseChatDtoList.unshift(res.body);
                     return newList;
                 });
@@ -73,7 +77,7 @@ const useChat = (roomId: number) => {
 
     const connect = useCallback(() => {
         client.current = new Client({
-            brokerURL: 'ws://localhost:8080/ws',
+            brokerURL: process.env.WEB_SOCKET_URL,
             connectHeaders: {
                 Authorization: String(refreshToken),
             },
@@ -81,6 +85,10 @@ const useChat = (roomId: number) => {
             heartbeatIncoming: 10000,
             heartbeatOutgoing: 10000,
             onConnect: () => subscribe(),
+            onStompError() {
+                alert('연결 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.');
+                router.replace('/');
+            },
         });
 
         client.current.activate();
@@ -97,4 +105,4 @@ const useChat = (roomId: number) => {
     return { publish };
 };
 
-export default useChat;
+export default useWebSocket;

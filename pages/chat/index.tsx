@@ -3,7 +3,7 @@ import { NextPage } from 'next';
 import { DefaultHeader } from '@components/common/DefaultHeader';
 import { DefaultText } from '@components/common/DefaultText';
 import QuerySuspenseErrorBoundary from '@components/hoc/QuerySuspenseErrorBoundary';
-import ChatRoomList from '@components/chat/list/ChatRoomList';
+import ChatList from '@components/chat/list/ChatList';
 
 const Wrapper = styled.div`
     margin: 0 auto;
@@ -26,7 +26,7 @@ const ChatListPage: NextPage = () => (
         <QuerySuspenseErrorBoundary
             errorFallback={() => <NotList>참여중인 방이 없습니다.</NotList>}
         >
-            <ChatRoomList />
+            <ChatList />
         </QuerySuspenseErrorBoundary>
     </Wrapper>
 );

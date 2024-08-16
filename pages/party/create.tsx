@@ -13,7 +13,7 @@ import { postUploadImage } from 'src/api/postUploadImage';
 import { useRecoilValue } from 'recoil';
 import { API_GET_MAIN_PAGE } from 'src/api/getPartyMainPage';
 import { PositionSate } from 'src/recoil-states/positionStates';
-import { API_GET_CHAT_ROOMS_KEY } from 'src/api/getChatRooms';
+import { API_GET_CHAT_ROOMS } from 'src/api/getChatRooms';
 import dayjs from 'dayjs';
 
 const Form = styled.form`
@@ -85,7 +85,7 @@ export const CreatePage = () => {
                     });
 
                     await queryClient.invalidateQueries({
-                        queryKey: [API_GET_CHAT_ROOMS_KEY],
+                        queryKey: [API_GET_CHAT_ROOMS],
                     });
 
                     router.replace(`/party/${data.partyId}`);

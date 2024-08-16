@@ -1,31 +1,19 @@
-import { displayTime } from './ChatRoomList';
 import styled from '@emotion/styled';
-import Image from 'next/image';
 import router from 'next/router';
 import { NewColor } from 'styles/Color';
 import { ChatRoomList } from 'types/chat/chatRooms';
+import ImageCard from '../ImageCard';
+import RecentTime from '../RecentTime';
 
-const Room = styled.li`
+const Wrapper = styled.li`
     display: flex;
     justify-content: space-between;
-    padding: 10px;
-    border-radius: 15px;
-`;
-
-const ImageBox = styled.div`
-    position: relative;
-    margin-right: 10px;
-    width: 10%;
-    aspect-ratio: 1/1;
-    overflow: hidden;
-    display: flex;
     align-items: center;
-    justify-content: center;
+    padding: 10px 0;
     border-radius: 15px;
-    border: 1px solid ${NewColor.border};
 `;
 
-const RightBox = styled.div`
+const DetailBox = styled.div`
     width: calc(100% - 60px);
     display: flex;
     justify-content: space-between;
@@ -47,11 +35,11 @@ const Title = styled.p`
 const Message = styled.p`
     margin: 0;
     color: ${NewColor.text_secondary};
-    font-size: 18px;
-`;
-
-const RecenTime = styled.p`
-    font-size: 12px;
+    font-size: 14px;
+    max-width: 50vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 `;
 
 const NoList = styled.div`
@@ -70,23 +58,16 @@ const ChatRoomItem = ({ list, noListText }: ChatRoomItemProps) => {
             const { roomId, title, lastMessageTime, lastMessage, thumbnail } = item;
 
             return (
-                <Room key={roomId + index} onClick={() => router.push(`/chat/${roomId}`)}>
-                    <ImageBox>
-                        <Image
-                            fill
-                            src={thumbnail}
-                            alt="thumbnail"
-                            style={{ objectFit: 'cover' }}
-                        />
-                    </ImageBox>
-                    <RightBox>
+                <Wrapper key={roomId + index} onClick={() => router.push(`/chat/${roomId}`)}>
+                    <ImageCard src={thumbnail} alt="대표 이미지" imageType="thumbnail" />
+                    <DetailBox>
                         <TextBox>
                             <Title>{title}</Title>
                             <Message>{lastMessage}</Message>
                         </TextBox>
-                        <RecenTime>{lastMessageTime ? displayTime(lastMessageTime) : ''}</RecenTime>
-                    </RightBox>
-                </Room>
+                        <RecentTime time={lastMessageTime} />
+                    </DetailBox>
+                </Wrapper>
             );
         })
     ) : (

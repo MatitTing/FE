@@ -1,8 +1,7 @@
 import styled from '@emotion/styled';
-import router, { Router } from 'next/router';
-import Image from 'next/image';
 import { ChatUserResponse } from 'types/chat/chatRooms';
 import { NewColor } from 'styles/Color';
+import ImageCard from '../ImageCard';
 
 const Wrapper = styled.div<{ isOpenUserList: boolean }>`
     position: fixed;
@@ -22,7 +21,7 @@ const Wrapper = styled.div<{ isOpenUserList: boolean }>`
     }
 `;
 
-const Contents = styled.div`
+const ListContainer = styled.div`
     position: fixed;
     bottom: 0;
     left: 0;
@@ -55,20 +54,10 @@ const UserInfo = styled.div`
     align-items: center;
 `;
 
-const ImageBox = styled.div<{ isMage: boolean }>`
-    position: relative;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 10px;
-    border: 1px solid ${({ isMage }) => (isMage ? NewColor.border : NewColor.primary)};
+const NickName = styled.p`
+    font-size: 14px;
+    font-weight: 500;
 `;
-
-const NickName = styled.p``;
 
 const Expulsion = styled.button`
     padding: 5px 20px;
@@ -88,31 +77,28 @@ const Label = styled.div`
     font-size: 8px;
     font-weight: bold;
     color: #fff;
-    background-color: #6c6c6c;
+    background-color: ${NewColor.primary};
 `;
 
-interface PartyUserListProps {
+interface ChatUserListProps {
     isOpenUserList: boolean;
     chatUser: ChatUserResponse;
     onClickUserExpulsion: (chatUserList: number) => void;
 }
 
-const PartyUserList = ({ chatUser, isOpenUserList, onClickUserExpulsion }: PartyUserListProps) => {
+const ChatUserList = ({ chatUser, isOpenUserList, onClickUserExpulsion }: ChatUserListProps) => {
     const { userProfileImg, nickname, role: userRole } = chatUser.myInfo;
 
     return (
         <Wrapper isOpenUserList={isOpenUserList}>
-            <Contents>
+            <ListContainer>
                 <List>
                     <UserInfo>
-                        <ImageBox isMage={!!userProfileImg}>
-                            <Image
-                                src={userProfileImg || '/images/profile/profile_fill.webp'}
-                                fill
-                                style={{ objectFit: 'cover' }}
-                                alt="프로필 이미지"
-                            />
-                        </ImageBox>
+                        <ImageCard
+                            src={userProfileImg}
+                            alt="프로필 이미지"
+                            imageType="chatUserListprofile"
+                        />
                         <Label>나</Label>
                         <NickName>{nickname}</NickName>
                     </UserInfo>
@@ -123,17 +109,11 @@ const PartyUserList = ({ chatUser, isOpenUserList, onClickUserExpulsion }: Party
                         ({ nickname, userProfileImg, role, chatUserId }) => (
                             <ListItem key={nickname}>
                                 <UserInfo>
-                                    <ImageBox isMage={!!userProfileImg}>
-                                        <Image
-                                            src={
-                                                userProfileImg ||
-                                                '/images/profile/profile_fill.webp'
-                                            }
-                                            fill
-                                            style={{ objectFit: 'cover' }}
-                                            alt="프로필 이미지"
-                                        />
-                                    </ImageBox>
+                                    <ImageCard
+                                        src={userProfileImg}
+                                        alt="프로필 이미지"
+                                        imageType="chatUserListprofile"
+                                    />
                                     {role === 'HOST' && <Label>방장</Label>}
                                     <NickName>{nickname}</NickName>
                                 </UserInfo>
@@ -146,9 +126,9 @@ const PartyUserList = ({ chatUser, isOpenUserList, onClickUserExpulsion }: Party
                         ),
                     )}
                 </List>
-            </Contents>
+            </ListContainer>
         </Wrapper>
     );
 };
 
-export default PartyUserList;
+export default ChatUserList;

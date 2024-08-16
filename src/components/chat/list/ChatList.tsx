@@ -2,11 +2,11 @@ import styled from '@emotion/styled';
 import dayjs from 'dayjs';
 import { NextPage } from 'next';
 import { useQueryClient, useSuspenseInfiniteQuery } from '@tanstack/react-query';
-import getChatRooms, { API_GET_CHAT_ROOMS_KEY } from 'src/api/getChatRooms';
+import getChatRooms, { API_GET_CHAT_ROOMS } from 'src/api/getChatRooms';
 import { ObserverTrigger } from '@components/hoc/ObserverTrigger';
 import getSearchChatRooms, { API_GET_SEARCH_CHAT_ROOMS_KEY } from 'src/api/getSearchChatRooms';
 import { ChangeEvent, useState } from 'react';
-import ChatRoomItem from './ChatRoomItem';
+import ChatRoomItem from './ChatItem';
 import { useForm } from 'react-hook-form';
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
@@ -51,7 +51,7 @@ const ChatRoomList = styled.ul`
     height: 100%;
 `;
 
-const ChatListPage: NextPage = () => {
+const ChatList: NextPage = () => {
     const queryClient = useQueryClient();
     const [isSearch, setIsSearch] = useState<boolean>(false);
     const { register, getValues, handleSubmit, reset, formState } = useForm<{
@@ -59,7 +59,7 @@ const ChatListPage: NextPage = () => {
     }>();
 
     const { fetchNextPage, hasNextPage, data } = useSuspenseInfiniteQuery({
-        queryKey: [API_GET_CHAT_ROOMS_KEY],
+        queryKey: [API_GET_CHAT_ROOMS],
         queryFn: ({ pageParam = 0 }) => getChatRooms(pageParam),
         initialPageParam: 0,
         getNextPageParam: (lastPage) => {
@@ -129,7 +129,7 @@ const ChatListPage: NextPage = () => {
     );
 };
 
-export default ChatListPage;
+export default ChatList;
 
 export const displayTime = (time: string) => {
     const lastMessageTime = dayjs(time).format('YYYY.MM.DD');

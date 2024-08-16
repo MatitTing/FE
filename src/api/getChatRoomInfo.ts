@@ -5,12 +5,12 @@ interface ChatRoomInfoParams {
     chatRoomId: number;
 }
 
-export const API_GET_CHAT_ROOM_INFO_KEY = '/api/chat-rooms';
+export const API_GET_CHAT_ROOM_INFO = '/api/chat-rooms';
 
 const getChatRoomInfo = async ({
     chatRoomId,
 }: ChatRoomInfoParams): Promise<ChatRoomInfoResponse> => {
-    const { data } = await defaultRequest.get(`${API_GET_CHAT_ROOM_INFO_KEY}/${chatRoomId}`);
+    const { data } = await defaultRequest.get(`${API_GET_CHAT_ROOM_INFO}/${chatRoomId}`);
 
     return data;
 };

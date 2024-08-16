@@ -29,12 +29,12 @@ const Container = styled.div<{ isSelected: boolean }>`
     cursor: pointer;
 
     svg {
-        fill: ${({ isSelected }) => (isSelected ? NewColor.primary : NewColor.dark)};
+        fill: ${({ isSelected }) => (isSelected ? NewColor.primary : NewColor.text_primary)};
     }
 `;
 
 const TitleText = styled.span<{ isSelected: boolean }>`
-    color: ${({ isSelected }) => (isSelected ? NewColor.primary : NewColor.dark)};
+    color: ${({ isSelected }) => (isSelected ? NewColor.primary : NewColor.text_primary)};
     font-size: 12px;
 `;
 
