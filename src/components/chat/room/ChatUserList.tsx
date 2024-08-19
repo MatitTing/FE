@@ -1,7 +1,8 @@
 import styled from '@emotion/styled';
-import { ChatUserResponse } from 'types/chat/chatRooms';
 import { NewColor } from 'styles/Color';
 import ImageCard from '../ImageCard';
+import { UserInfoContext } from '@contexts/ChatProvider';
+import { useContext } from 'react';
 
 const Wrapper = styled.div<{ isOpenUserList: boolean }>`
     position: fixed;
@@ -82,12 +83,11 @@ const Label = styled.div`
 
 interface ChatUserListProps {
     isOpenUserList: boolean;
-    chatUser: ChatUserResponse;
     onClickUserExpulsion: (chatUserList: number) => void;
 }
 
-const ChatUserList = ({ chatUser, isOpenUserList, onClickUserExpulsion }: ChatUserListProps) => {
-    const { userProfileImg, nickname, role: userRole } = chatUser.myInfo;
+const ChatUserList = ({ isOpenUserList, onClickUserExpulsion }: ChatUserListProps) => {
+    const chatInfo = useContext(UserInfoContext)?.responseChatUserList;
 
     return (
         <Wrapper isOpenUserList={isOpenUserList}>
@@ -95,17 +95,17 @@ const ChatUserList = ({ chatUser, isOpenUserList, onClickUserExpulsion }: ChatUs
                 <List>
                     <UserInfo>
                         <ImageCard
-                            src={userProfileImg}
+                            src={chatInfo?.myInfo.userProfileImg || ''}
                             alt="프로필 이미지"
                             imageType="chatUserListprofile"
                         />
                         <Label>나</Label>
-                        <NickName>{nickname}</NickName>
+                        <NickName>{chatInfo?.myInfo.nickname}</NickName>
                     </UserInfo>
                 </List>
 
                 <List>
-                    {chatUser?.chatRoomUserDto.map(
+                    {chatInfo?.chatRoomUserDto.map(
                         ({ nickname, userProfileImg, role, chatUserId }) => (
                             <ListItem key={nickname}>
                                 <UserInfo>
@@ -117,7 +117,7 @@ const ChatUserList = ({ chatUser, isOpenUserList, onClickUserExpulsion }: ChatUs
                                     {role === 'HOST' && <Label>방장</Label>}
                                     <NickName>{nickname}</NickName>
                                 </UserInfo>
-                                {userRole === 'HOST' && role !== 'HOST' && (
+                                {chatInfo?.myInfo.role === 'HOST' && role !== 'HOST' && (
                                     <Expulsion onClick={() => onClickUserExpulsion(chatUserId)}>
                                         강퇴
                                     </Expulsion>

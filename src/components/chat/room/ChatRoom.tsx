@@ -1,15 +1,14 @@
 import ChatHeader from '@components/chat/room/ChatHeader';
 import ChatMessage from '@components/chat/room/ChatMessage';
 import styled from '@emotion/styled';
-import { useQuery } from '@tanstack/react-query';
 import getChatMessage, { API_GET_CHAT_MESSAGE_KEY } from 'src/api/getChatMessage';
-import getChatRoomInfo, { API_GET_CHAT_ROOM_INFO } from 'src/api/getChatRoomInfo';
 import { useForm, FormProvider, SubmitHandler, FieldValues } from 'react-hook-form';
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import useWebSocket from '@hooks/useWebSocket';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import ChatForm from './ChatForm';
+import { ObserverTrigger } from '@components/hoc/ObserverTrigger';
 
 const Wrapper = styled.div`
     display: flex;
@@ -22,12 +21,19 @@ const Wrapper = styled.div`
     overflow: hidden;
 `;
 
-interface ChattingRoomProps {
-    roomId: number;
-}
+const List = styled.ul`
+    padding: 0 2rem;
+    margin: 0 auto;
+    list-style: none;
+    width: 100%;
+    height: calc(100vh - 60px);
+    display: flex;
+    flex-direction: column-reverse;
+    overflow-y: auto;
+`;
 
-const ChatRoom = ({ roomId }: ChattingRoomProps) => {
-    const { publish } = useWebSocket(roomId);
+const ChatRoom = () => {
+    const { chatInfo, roomId, publish, isError } = useWebSocket();
     const methods = useForm<{ message: string }>({
         resolver: yupResolver(
             yup.object({
@@ -37,62 +43,43 @@ const ChatRoom = ({ roomId }: ChattingRoomProps) => {
         mode: 'onSubmit',
     });
 
-    const { data: chatInfo } = useQuery({
-        queryKey: [
-            API_GET_CHAT_ROOM_INFO,
-            {
-                chatRoomId: roomId,
-            },
-        ],
-        queryFn: () =>
-            getChatRoomInfo({
-                chatRoomId: roomId,
-            }),
-    });
-
     const {
         fetchNextPage,
         hasNextPage,
         data: chatMessages,
     } = useSuspenseInfiniteQuery({
         queryKey: [API_GET_CHAT_MESSAGE_KEY, { roomId }],
-        queryFn: ({ pageParam = 0 }) => getChatMessage({ roomId, page: pageParam }),
+        queryFn: ({ pageParam = 0 }) =>
+            roomId ? getChatMessage({ roomId, page: pageParam }) : null,
         initialPageParam: 0,
         getNextPageParam: (lastPage) => {
-            if (lastPage.pageInfo?.hasNext) {
-                return lastPage.pageInfo.page + 1;
+            if (lastPage?.pageInfo?.hasNext) {
+                return lastPage?.pageInfo.page + 1;
             }
         },
     });
 
     const handleSubmit: SubmitHandler<FieldValues> = async (formData) => {
-        if (!chatInfo?.responseChatUserList.myInfo) return;
-        const { myInfo } = chatInfo?.responseChatUserList;
-
-        publish(myInfo, formData.message);
+        publish(formData.message);
         methods.reset();
     };
 
     const onObserve = () => hasNextPage && fetchNextPage();
-    const messages = chatMessages.pages.map((page) => page.responseChatDtoList).flat();
+    const messages = chatMessages.pages.map((page) => page?.responseChatDtoList || []).flat();
+    const userName = chatInfo?.responseChatUserList.myInfo.nickname;
+
+    if (isError) return <></>;
 
     return (
         <FormProvider {...methods}>
             <Wrapper>
-                {chatInfo ? (
-                    <>
-                        <ChatHeader
-                            chatInfo={chatInfo?.responseChatUserList}
-                            title={chatInfo?.chatRoomInfoRes?.title}
-                        />
-                        <ChatMessage
-                            userNickname={chatInfo?.responseChatUserList.myInfo?.nickname}
-                            messages={messages}
-                            onObserve={onObserve}
-                            observerMinHeight="10px"
-                        />
-                    </>
-                ) : null}
+                <ChatHeader />
+                <List>
+                    {userName && messages ? (
+                        <ChatMessage messages={messages} userName={userName} />
+                    ) : null}
+                    <ObserverTrigger onObserve={onObserve} observerMinHeight="10px" />
+                </List>
                 <ChatForm onSubmit={handleSubmit} />
             </Wrapper>
         </FormProvider>

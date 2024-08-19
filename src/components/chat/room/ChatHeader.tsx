@@ -5,11 +5,12 @@ import { DefaultHeader } from '@components/common/DefaultHeader';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 import deletePartyUser from 'src/api/deleteChatUser';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import router from 'next/router';
 import { useQueryClient } from '@tanstack/react-query';
 import { API_GET_CHAT_ROOM_INFO } from 'src/api/getChatRoomInfo';
 import ChatUserList from './ChatUserList';
+import { UserInfoContext } from '@contexts/ChatProvider';
 
 const Wrapper = styled.header`
     display: flex;
@@ -32,9 +33,10 @@ interface ChatHeaderProps {
     chatInfo: ChatUserResponse;
 }
 
-const ChatHeader = ({ title, chatInfo }: ChatHeaderProps) => {
+const ChatHeader = () => {
     const roomId = router.query.id;
     const queryClient = useQueryClient();
+    const chatInfo = useContext(UserInfoContext);
     const [isOpenUserList, setIsOpenUserList] = useState(false);
 
     const handleOpenUserList = () => setIsOpenUserList(!isOpenUserList);
@@ -63,11 +65,14 @@ const ChatHeader = ({ title, chatInfo }: ChatHeaderProps) => {
 
     return (
         <Wrapper>
-            <DefaultHeader centerArea={title} leftArea={<HeaderBackButton />} rightArea={menu} />
+            <DefaultHeader
+                centerArea={chatInfo?.chatRoomInfoRes.title || ''}
+                leftArea={<HeaderBackButton />}
+                rightArea={menu}
+            />
             <ChatUserList
                 onClickUserExpulsion={handleClickUserExpulsion}
                 isOpenUserList={isOpenUserList}
-                chatUser={chatInfo}
             />
         </Wrapper>
     );
