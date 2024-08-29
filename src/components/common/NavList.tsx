@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
 import { BottomIconProps } from 'types/layout';
 import Link from 'next/link';
+import { NewColor } from 'styles/Color';
 interface NavListProps {
     item: {
         title: string;
@@ -13,7 +14,7 @@ interface NavListProps {
     };
 }
 
-const Container = styled.div`
+const Container = styled.div<{ isSelected: boolean }>`
     width: 100%;
     max-width: calc(100% / 5) px;
     height: 100%;
@@ -26,12 +27,14 @@ const Container = styled.div`
     border-radius: 8px;
     transition: all 0.1s;
     cursor: pointer;
-    &:hover {
-        background-color: #dddddd;
+
+    svg {
+        fill: ${({ isSelected }) => (isSelected ? NewColor.primary : NewColor.text_primary)};
     }
 `;
 
-const TitleText = styled.span`
+const TitleText = styled.span<{ isSelected: boolean }>`
+    color: ${({ isSelected }) => (isSelected ? NewColor.primary : NewColor.text_primary)};
     font-size: 12px;
 `;
 
@@ -42,9 +45,9 @@ const NavList = ({ item }: NavListProps) => {
 
     return (
         <Link href={{ pathname: href, query: query }}>
-            <Container>
+            <Container isSelected={selected}>
                 {icon({ selected })}
-                <TitleText>{title}</TitleText>
+                <TitleText isSelected={selected}>{title}</TitleText>
             </Container>
         </Link>
     );

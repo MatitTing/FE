@@ -10,6 +10,7 @@ const nextConfig = {
         MATITTING_HOST_URL: process.env.MATITTING_HOST_URL,
         NAVER_CLIENT_ID: process.env.NAVER_CLIENT_ID, //ClientID
         SNS_CALLBACK_URL: process.env.SNS_CALLBACK_URL, // Callback URL
+        WEB_SOCKET_URL: process.env.WEB_SOCKET_URL,
     },
     images: {
         domains: [
