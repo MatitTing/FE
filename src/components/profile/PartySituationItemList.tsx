@@ -1,6 +1,6 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { FC } from 'react';
-import getPartyStatus, { API_GET_PARTY_STATUS_KEY } from 'src/api/getPartyStatus';
+import getPartyStatus, { API_GET_PARTY_STATUS_KEY } from 'src/api/getPartyCurrentSituation';
 import { PartySituationRole } from './PartySituation';
 import PartyList from './PartyList';
 import { DefaultText } from '@components/common/DefaultText';

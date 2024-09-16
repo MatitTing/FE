@@ -41,7 +41,7 @@ export const HomeList: FC = () => {
                   })
                 : Promise.resolve(null),
         initialPageParam: 0,
-        getNextPageParam: (lastPage) => lastPage?.pageInfo?.lastPartyId,
+        getNextPageParam: (lastPage) => lastPage?.pageInfo?.page,
     });
 
     const onClickPartyCard = (id: number) => {
