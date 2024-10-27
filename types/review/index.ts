@@ -9,6 +9,16 @@ export interface GetReviewListResponse {
     nickname: string;
     rating: number;
     content: string;
-    reviewImg: ImageType[];
+    reviewImg: string[];
     createdAt: string | Date;
+}
+
+export interface GetReviewDetailResponse {
+    reviewId: number;
+    nickname: string;
+    rating: number;
+    content: string;
+    reviewImg: string[];
+    createdAt: string | Date;
+    isSelfReview: boolean;
 }

@@ -1,13 +1,19 @@
+export type UserGender = 'ALL' | 'MALE' | 'FEMALE' | 'UNKNOWN';
+
+export type OauthProvider = 'KAKAO' | 'NAVER';
+export type UserRole = 'GUEST' | 'USER' | 'VOLUNTEER' | 'HOST';
+
 export interface UserProfileResponse {
-  createDate: string;
-  modifiedDate: string;
-  id: number;
-  socialId: string;
-  socialType: string;
-  email: string;
-  nickname: string;
-  age: number;
-  imgUrl: string;
-  gender: string;
-  role: string;
+    userId: number;
+    socialId: string;
+    oauthProvider: string;
+    email: string;
+    nickname: string;
+    age: number;
+    imgUrl: string;
+    gender: UserGender;
+    role: UserRole;
+    rating: number;
+    positiveReviewCount: number;
+    negativeReviewCount: number;
 }
